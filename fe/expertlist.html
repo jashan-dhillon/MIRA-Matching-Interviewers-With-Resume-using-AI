@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert List - Indian Experts in Diverse Fields</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/DRDO-logo.png/800px-DRDO-logo.png" type="image/png">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(49deg, rgba(0, 86, 179, 0.8), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6));
+            background-size: 300% 300%;
+            animation: color 12s ease-in-out infinite; 
+        }
+
+        @keyframes color {
+            0% {
+                background-position: 0 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0 50%;
+            }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #0056b3;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        /* Search and filter container styles */
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        /* Input search bar styles */
+        #searchBar {
+            flex: 1;
+            padding: 10px;
+            font-size: 1.1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        /* Dropdown filter styles */
+        #postFilter {
+            flex: 1;
+            padding: 10px;
+            font-size: 1.1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            color: #0056b3;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Highlighting */
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CIAR - Experts</h1>
+            <p>Centre for Artificial Intelligence and Robotics</p>
+        </header>
+
+        <!-- Search and filter options -->
+        <div class="filter-container">
+            <input type="text" id="searchBar" placeholder="Search by name or department..." onkeyup="filterExperts()">
+            <select id="postFilter" onchange="filterExperts()">
+                <option value="">Filter by post...</option>
+                <option value="Director">Director</option>
+                <option value="Chief Scientist">Chief Scientist</option>
+                <option value="Senior Scientist">Senior Scientist</option>
+                <option value="Principal Scientist">Principal Scientist</option>
+                <option value="Research Scientist">Research Scientist</option>
+                <option value="Senior Engineer">Senior Engineer</option>
+                <option value="Engineer">Engineer</option>
+                <option value="Data Scientist">Data Scientist</option>
+                <option value="Technical Advisor">Technical Advisor</option>
+                <option value="Project Manager">Project Manager</option>
+            </select>
+        </div>
+
+        <!-- Expert table -->
+        <table id="expertTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Post</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dr. Arjun Mehta</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Director</td>
+                </tr>
+                <tr>
+                    <td>Dr. Ritu Sharma</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Chief Scientist</td>
+                </tr>
+                
+
+            
+                <tr>
+                    <td>Dr. Harish Patel</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Senior Engineer</td>
+                </tr>
+                <tr>
+                    <td>Dr. Sneha Mehta</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Senior Engineer</td>
+               </tr>
+                <tr>
+                    <td>Dr. Aakash Gupta</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Engineer</td>
+                </tr>
+                <tr>
+                    <td>Dr. Swati Verma</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Engineer</td>
+                </tr>
+                <tr>
+                    <td>Dr. Arvind Sinha</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Data Scientist</td>
+               </tr>
+               <tr>
+                    <td>Dr. Meera Joshi</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Data Scientist</td>
+                </tr>
+                <tr>
+                    <td>Dr. Ravi Kumar</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Technical Advisor</td>
+                </tr>
+                <tr>
+                    <td>Dr. Anjali Kapoor</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Technical Advisor</td>
+                </tr>
+                <tr>
+                    <td>Dr. Rahul Sharma</td>
+                    <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Project Manager</td>
+                </tr>
+                <tr>
+                    <td>Dr. Kiran Reddy</td>
+                        <td>Centre for Artificial Intelligence and Robotics</td>
+                    <td>Project Manager</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filterExperts() {
+            let searchInput = document.getElementById('searchBar').value.toLowerCase();
+            let postFilter = document.getElementById('postFilter').value;
+            let table = document.getElementById('expertTable');
+            let rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                let nameCell = rows[i].getElementsByTagName('td')[0];
+                let deptCell = rows[i].getElementsByTagName('td')[1];
+                let postCell = rows[i].getElementsByTagName('td')[2];
+
+                let nameText = nameCell.textContent.toLowerCase();
+                let deptText = deptCell.textContent.toLowerCase();
+                let postText = postCell.textContent;
+
+                let nameHighlighted = highlightText(nameText, searchInput);
+                let deptHighlighted = highlightText(deptText, searchInput);
+
+                if ((nameText.indexOf(searchInput) > -1 || deptText.indexOf(searchInput) > -1) &&
+                    (postFilter === "" || postText === postFilter)) {
+                    rows[i].style.display = "";
+                    nameCell.innerHTML = nameHighlighted;
+                    deptCell.innerHTML = deptHighlighted;
+                } else {
+                    rows[i].style.display = "none";
+                    nameCell.innerHTML = nameText;
+                    deptCell.innerHTML = deptText;
+                }
+            }
+        }
+
+        function highlightText(text, search) {
+            if (!search) return text;
+            let regex = new RegExp('(' + search + ')', 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+    </script>
+</body>
+</html>

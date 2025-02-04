@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIRA - Interview Panel Maker</title>
+    <link rel="icon" href="miralogo.jpg" type="image/png">
+
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fonts and color palette */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            scroll-behavior: smooth; /* Enables smooth scrolling */
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .navbar.scrolled {
+            background-color: #0056b3;
+        }
+
+        .navbar.scrolled .nav-links a {
+            color: white;
+            box-shadow: none;
+        }
+
+        .navbar.scrolled .login-btn {
+            background-color: white;
+            color: #0056b3;
+            box-shadow: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        /* Animating h1 */
+        h1 {
+            font-size: 24px;
+            color: #0056b3;
+            animation: floating 3s infinite ease-in-out; /* Continuous animation */
+        }
+
+        /* Floating effect for the h1 next to logo */
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #0056b3;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            display: inline-block;
+            padding: 8px 16px;
+            transition: all 0.4s ease-in-out;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            color: #003f8a;
+            background-color: rgba(0, 86, 179, 0.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            border-bottom: 2px solid #003f8a;
+            padding: 12px 16px;
+            transition: all 0.4s ease-in-out;
+        }
+
+        .login-btn {
+            background-color: white;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #0056b3;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main content */
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 120px 40px;
+            height: 100vh; /* Full screen height */
+            background-color: #e6f0ff;
+        }
+
+        .text-box {
+            max-width: 50%;
+        }
+
+        .text-box h2 {
+            font-size: 42px;
+            color: #003f8a;
+            margin-bottom: 20px;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .text-box p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .cta-button {
+            padding: 10px 30px;
+            background-color: #0056b3;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            animation: bounce 2s infinite ease-out;
+        }
+
+        .cta-button:hover {
+            background-color: #003f8a;
+        }
+
+        .animated-img {
+            max-width: 40%;
+            animation: fadeInRight 1s ease-out;
+        }
+
+        .animated-img img {
+            width: 100%;
+        }
+
+        /* Section styles */
+        section {
+            padding: 80px 40px;
+            height: 100vh; /* Full screen height for each section */
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+            color: #003f8a;
+        }
+
+        /* About Section */
+        .about {
+            background-color: #f0f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Aim Section */
+        .aim {
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .aim p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Features section */
+        .features {
+            background-color: #ffffff;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .features-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .feature {
+            background-color: #e6f0ff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            height: 250px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 10px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 1s ease, transform 1s ease;
+            text-align: center;
+        }
+
+        .feature.fade-in {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Keyframe animations */
+        @keyframes slideInLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInRight {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar with branding and login -->
+    <header class="navbar">
+        <div class="logo">
+            <img src="miralogo.jpg" alt="MIRA" class="logo-img">
+            <h1>MIRA</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#aim">Aim</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#home" class="login-btn" style="color: #0056b3;">Home</a>
+
+            <!-- <a href="login.html" class="login-btn" style="color: #0056b3;">Login</a> -->
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <section id="home" class="home"></section>>
+        <div class="text-box">
+            
+            <h2>Expert Interview Panels Made Easy</h2>
+            <p>Effortlessly match interview boards with candidates based on subject expertise.Revolutionizing the interview process with AI-driven panel matching. Get started now to experience a new way of managing interview panels.</p>
+            <a href="organisation.html" class="cta-button">Get Started</a>
+        </div>
+        <div class="animated-img">
+            <img src="home.png" alt="Hero Image">
+        </div>
+    </section>
+    </div>
+
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        
+        <h2 class="section-title">About MIRA</h2>
+        <p>MIRA is an AI-driven web app designed to help match interview panels with the right candidates by analyzing resumes and identifying suitable panelists for each candidate.</p>
+    </section>
+
+    <!-- Aim Section -->
+    <section id="aim" class="aim">
+        <h2 class="section-title">Our Aim</h2>
+        <p>We aim to streamline the interview process, ensuring that the right experts are paired with the right candidates, saving time and improving interview outcomes.</p>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 class="section-title">Features</h2>
+        <div class="features-container">
+            <div class="feature fade-in">Smart Matching Algorithm</div>
+            <div class="feature fade-in">AI-Powered Resume Analysis</div>
+            <div class="feature fade-in">Panel Recommendations</div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <h2 class="section-title">Pricing Plans</h2>
+        <!-- Content for pricing section -->
+    </section>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIRA - Interview Panel Maker</title>
+    <link rel="icon" href="miralogo.jpg" type="image/png">
+
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Fonts and color palette */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .navbar.scrolled {
+            background-color: #0056b3;
+        }
+
+        .navbar.scrolled .nav-links a {
+            color: white;
+            box-shadow: none;
+        }
+
+        .navbar.scrolled .login-btn {
+            background-color: white;
+            color: #0056b3;
+            box-shadow: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #0056b3;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* .nav-links a {
+            color: #0056b3;
+            font-size: 16px;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out, box-shadow 0.3s ease;
+        } */
+        
+        .nav-links a {
+            color: #0056b3;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 8px;
+           display: inline-block; /* Ensure the element respects padding and height */
+            padding: 8px 16px; /* Initial padding for default state */
+            transition: all 0.4s ease-in-out; /* Smooth transition on hover */
+            border-bottom: 2px solid transparent; /* Invisible border to prevent layout shift */
+        }
+
+        .nav-links a:hover {
+            color: #003f8a; /* Darker blue for hover */
+            background-color: rgba(0, 86, 179, 0.1); /* Subtle background color */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Increased shadow for more depth */
+            font-weight: bold; /* Bold text for emphasis */
+            text-decoration: none; /* Ensures no underline by default */
+            border-bottom: 2px solid #003f8a; /* Adds underline effect */
+            padding: 12px 16px; /* Increase padding to enlarge background */
+            transition: all 0.4s ease-in-out; /* Smooth transition for background and padding */
+        }
+
+
+        /* .nav-links a:hover {
+            color: #003f8a;
+            box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+        } */
+
+        .login-btn {
+            background-color: white;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #0056b3;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main content */
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 120px 40px;
+            background-color: #e6f0ff;
+        }
+
+        .text-box {
+            max-width: 50%;
+        }
+
+        .text-box h2 {
+            font-size: 42px;
+            color: #003f8a;
+            margin-bottom: 20px;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .text-box p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .cta-button {
+            padding: 10px 30px;
+            background-color: #0056b3;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            animation: bounce 2s infinite ease-out;
+        }
+
+        .cta-button:hover {
+            background-color: #003f8a;
+        }
+
+        .animated-img {
+            max-width: 40%;
+            animation: fadeInRight 1s ease-out;
+        }
+
+        .animated-img img {
+            width: 100%;
+        }
+
+        /* Section styles */
+        section {
+            padding: 80px 40px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+            color: #003f8a;
+        }
+
+        /* About Section */
+        .about {
+            background-color: #f0f4f8;
+        }
+
+        .about p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Aim Section */
+        .aim {
+            background-color: white;
+        }
+
+        .aim p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Features section */
+        .features {
+            background-color: #ffffff;
+            padding: 40px 20px;
+            overflow-x: auto; /* Allow horizontal scrolling */
+            overflow-y: hidden; /* Hide vertical overflow */
+            white-space: nowrap; /* Ensure children align horizontally */
+        }
+
+        .features-container {
+            display: flex; /* Align items horizontally */
+            gap: 20px;
+            padding: 10px;
+        }
+
+        .feature {
+            background-color: #e6f0ff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            height: 250px; /* Increase height for more emphasis */
+            width: 300px; /* Adjust width */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            align-items: center;
+            margin: 0 10px; /* Margin for spacing between features */
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 1s ease, transform 1s ease;
+            text-align: center; /* Center text */
+        }
+
+        .feature.fade-in {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Keyframe animations */
+        @keyframes slideInLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInRight {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+    </style>
+</head>
+<body>\
+    <header class="navbar">
+        <div class="logo">
+            <img src="miralogo.jpg" alt="MIRA" class="logo-img">
+            <h1>MIRA</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#aim">Aim</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="login.html" class="login-btn" style="color: #0056b3;">Login</a>
+        </div>
+    </header>
+
+    <section class="main-content" id="home">
+        <div class="text-box">
+            <h2>Expert Interview Panels Made Easy</h2>
+            <p>Effortlessly match interview boards with candidates based on subject expertise.</p>
+            <a href="organisation.html" class="cta-button">Get Started</a>
+        </div>
+        <div class="animated-img">
+            <img src="https://img.freepik.com/free-vector/hand-drawn-business-people-illustration_52683-66661.jpg?ga=GA1.1.739807229.1700507008&semt=ais_hybrid" alt="Expert matching animation">
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <h2 class="section-title">About MIRA</h2>
+        <p>MIRA is a cutting-edge platform designed to streamline interview panel creation by matching experts to relevant interview subjects and candidate areas of expertise. This tool ensures that every interview panel is perfectly tailored to the needs of the job and the skills of the candidates.</p>
+    </section>
+
+    <section class="aim" id="aim">
+        <h2 class="section-title">Our Aim</h2>
+        <p>We aim to bridge the gap between expert interviewers and candidates, ensuring each interview is both relevant and insightful for all parties involved.</p>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="section-title">Features</h2>
+        <div class="features-container">
+            <div class="feature">
+                <h3>Expert Matching</h3>
+                <p>Automated matching of experts with candidates based on subject expertise.</p>
+            </div>
+            <div class="feature">
+                <h3>Real-Time Collaboration</h3>
+                <p>Collaborate with panel members in real-time to create effective interview panels.</p>
+            </div>
+            <div class="feature">
+                <h3>Comprehensive Reports</h3>
+                <p>Receive detailed reports on panel performance and candidate assessments.</p>
+            </div>
+            <div class="feature">
+                <h3>Easy Scheduling</h3>
+                <p>Streamlined scheduling and reminders for upcoming interviews.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add scroll behavior to change navbar background and text colors
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animation for feature boxes
+        const features = document.querySelectorAll('.feature');
+        window.addEventListener('scroll', function () {
+            const triggerBottom = window.innerHeight * 0.8;
+            features.forEach(feature => {
+                const featureTop = feature.getBoundingClientRect().top;
+                if (featureTop < triggerBottom) {
+                    feature.classList.add('fade-in');
+                } else {
+                    feature.classList.remove('fade-in');
+                }
+            });
+        });
+    </script>
+</body>
+</html> -->

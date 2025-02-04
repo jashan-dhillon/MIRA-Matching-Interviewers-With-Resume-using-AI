@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIRA - Profile Settings</title>
+    <style>
+       body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Updated font for a modern feel */
+    background-color: #f4f7fa; /* Slightly lighter background for a soft feel */
+}
+
+/* Header styling */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #00509e; /* MIRA's primary color */
+    color: white;
+    padding: 20px 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.logo-container .logo-text {
+    margin-left: 10px;
+    font-size: 22px;
+    font-weight: 600; /* Slightly bolder font */
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px; /* Increased padding for better clickability */
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-links a:hover {
+    background-color: rgba(0, 80, 158, 0.15); /* Lighter shade */
+    box-shadow: 0 4px 12px rgba(0, 80, 158, 0.3); /* Softer glow effect */
+    color: #ffcc00; /* Golden color for text */
+}
+
+.nav-links a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: -1;
+}
+
+.nav-links a:hover::before {
+    opacity: 1;
+}
+
+/* Main content styling */
+.main-container {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Section styling */
+.section {
+    background-color: white;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+    padding: 40px;
+}
+
+/* Profile Section */
+.profile-picture-container {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.profile-picture {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    background-color: #ddd;
+    overflow: hidden;
+    border: 2px solid #00509e; /* Border around profile picture */
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-btn, .save-btn {
+    background-color: #00509e; /* MIRA's primary color */
+    color: white;
+    border: none;
+    padding: 12px 25px; /* Slightly larger padding */
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.edit-btn:hover, .save-btn:hover {
+    background-color: #003366;
+    transform: translateY(-2px); /* Button elevation effect */
+}
+
+/* Details container */
+.details-container label {
+    display: block;
+    font-weight: 600;
+    margin-top: 20px;
+    color: #333;
+}
+
+.details-container input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.details-container input:focus {
+    border-color: #00509e; /* Highlight input on focus */
+    outline: none;
+}
+
+/* Account Settings Section */
+.account-settings {
+    margin-top: 30px;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.toggle-container .toggle-btn {
+    width: 45px;
+    height: 22px;
+    background-color: #ddd;
+    border-radius: 22px;
+    cursor: pointer;
+    position: relative;
+}
+
+.toggle-btn.active {
+    background-color: #28a745;
+}
+
+.toggle-btn::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    transition: 0.3s;
+}
+
+.toggle-btn.active::after {
+    left: 24px;
+}
+
+.deactivate-btn {
+    background-color: #dc3545; /* Red color for deactivate button */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 30px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.deactivate-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    background-color: #00509e;
+    color: white;
+    padding: 15px;
+    font-size: 14px;
+    border-top: 1px solid #333; /* Subtle line to separate footer */
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <img src="miralogo.jpg" alt="Logo">
+            <div class="logo-text">MIRA</div>
+        </div>
+        <nav class="nav-links">
+           
+            <a href="Applicant_dashboard.html">Home</a>
+            <a href="applicant_application.html">Application</a>
+            <a href="Applicant_Profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+            
+            
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <div class="main-container">
+        <!-- Profile Section -->
+        <div class="section">
+            <div class="profile-picture-container">
+                <div class="profile-picture" id="profile-pic">
+                    <img src="default-profile.jpg"  id="profile-pic-preview">
+                </div>
+                <button class="edit-btn" onclick="editProfile()">Edit</button>
+                <button class="edit-btn" onclick="editProfilePicture()">Edit Profile Picture</button>
+            </div>
+            <input type="file" id="profile-pic-input" style="display: none;" accept="image/*" onchange="previewProfilePicture()">
+            <div class="details-container">
+                <label for="name">Name:</label>
+                <input type="text" id="name" value="suraj" disabled>
+
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" value="diwaker" disabled>
+
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" value="1234567890" disabled>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" value="suraj@gmail.com" disabled>
+
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" value="2000-01-01" disabled>
+
+                <button class="save-btn" onclick="saveProfile()">Save</button>
+            </div>
+        </div>
+
+        <!-- Account Settings Section -->
+        <div class="section account-settings">
+            <label for="password">Password:</label>
+            <input type="password" id="password" value="******" disabled>
+            <button class="edit-btn" onclick="updatePassword()">Update</button>
+
+            <div class="toggle-container">
+                <span>Notifications:</span>
+                <div class="toggle-btn" onclick="toggleNotifications()"></div>
+            </div>
+
+            <button class="deactivate-btn">Deactivate Account</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        Emergency: 123-456-789 | Email: mira@support.com | © Copyright Reserved for MIRA
+    </footer>
+
+    <script>
+        function editProfile() {
+            document.querySelectorAll('.details-container input').forEach(input => input.disabled = false);
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('name').value;
+            const lastName = document.getElementById('last-name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const dob = document.getElementById('dob').value;
+
+            alert(`Profile updated:\nName: ${name}\nLast Name: ${lastName}\nPhone: ${phone}\nEmail: ${email}\nDOB: ${dob}`);
+            document.querySelectorAll('.details-container input').forEach(input => input.disabled = true);
+        }
+
+        function updatePassword() {
+            const password = prompt('Enter new password:');
+            if (password) {
+                document.getElementById('password').value = password;
+                alert('Password updated!');
+            }
+        }
+
+        function toggleNotifications() {
+            const toggle = document.querySelector('.toggle-btn');
+            toggle.classList.toggle('active');
+        }
+
+        function editProfilePicture() {
+            document.getElementById('profile-pic-input').click();
+        }
+
+        function previewProfilePicture() {
+            const input = document.getElementById('profile-pic-input');
+            const preview = document.getElementById('profile-pic-preview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>

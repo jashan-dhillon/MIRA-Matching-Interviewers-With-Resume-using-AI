@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post 1 - DRDO HR Panel Selection</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/mai/3/3e/DRDO-logo.png" type="image/png">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(49deg, rgba(0, 86, 179, 0.8), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6));
+            background-size: 300% 300%;
+            animation: color 12s ease-in-out infinite;
+            overflow-y: auto;
+        }
+
+        @keyframes color {
+            0% { background-position: 0 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0 50%; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #0056b3;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        /* Input area */
+        .input-area {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-area input {
+            padding: 8px;
+            width: 50px;
+            font-size: 16px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .input-area button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .input-area button:hover {
+            background-color: #004494;
+        }
+
+        /* Expert List Layout */
+        .expert-list {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .expert-item {
+            width: 300px;
+            min-height: 180px;
+            background-color: #e6f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .expert-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .expert-info h3 {
+            font-size: 1.5em;
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
+
+        .expert-info p {
+            margin-bottom: 8px;
+        }
+
+        .relevance {
+            font-weight: bold;
+            color: #2a9d8f;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .chart-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .more-btn {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .more-btn:hover {
+            background-color: #004494;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Post - Artificial Intelligence & Machine Learning</h1>
+        <p>Expertise Area: AI, Deep learning, Image-processing</p>
+    </header>
+
+    <div class="input-area">
+        <label for="expertCount">Number of Experts to Display:</label>
+        <input type="number" id="expertCount" min="1" value="5">
+        <button onclick="updateExpertsToShow()">Set</button>
+    </div>
+
+    <ul class="expert-list" id="expertList">
+        <!-- Experts will be listed here -->
+    </ul>
+
+    <button class="more-btn" id="moreButton" onclick="loadMoreExperts()">Show More Experts</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let expertsData = [];
+    let expertsToShow = 5;
+
+    fetch('http://127.0.0.1:8000/api/experts')
+        .then(response => response.json())
+        .then(data => {
+            expertsData = data;
+            displayExperts();
+        })
+        .catch(error => {
+            console.error('Error fetching expert data:', error);
+        });
+
+    function displayExperts() {
+        const expertList = document.getElementById('expertList');
+        expertList.innerHTML = '';
+
+        const sortedExperts = expertsData.sort((a, b) => b.relevance - a.relevance);
+
+        for (let i = 0; i < expertsToShow; i++) {
+            if (i < sortedExperts.length) {
+                const expert = sortedExperts[i];
+                const expertItem = document.createElement('li');
+                expertItem.classList.add('expert-item');
+                expertItem.innerHTML = `
+                    <div class="expert-info">
+                        <h3>${expert.name}</h3>
+                        <p>Skills: ${expert.skills}</p>
+                        <p class="relevance">Relevance Score: ${expert.relevance}</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chart-${i}"></canvas>
+                        <div class="chart-label">${expert.relevance}%</div>
+                    </div>
+                `;
+                expertList.appendChild(expertItem);
+
+                const ctx = document.getElementById(`chart-${i}`).getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [expert.relevance, 100 - expert.relevance],
+                            backgroundColor: ['#0056b3', '#e6f7ff']
+                        }],
+                        labels: ['Relevance', 'Remaining']
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    function loadMoreExperts() {
+        expertsToShow += 5;
+        displayExperts();
+
+        if (expertsToShow >= expertsData.length) {
+            document.getElementById('moreButton').style.display = 'none';
+        }
+    }
+
+    function updateExpertsToShow() {
+        const input = document.getElementById('expertCount').value;
+        expertsToShow = parseInt(input, 10) || 5;
+        displayExperts();
+
+        if (expertsToShow < expertsData.length) {
+            document.getElementById('moreButton').style.display = 'block';
+        } else {
+            document.getElementById('moreButton').style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
+

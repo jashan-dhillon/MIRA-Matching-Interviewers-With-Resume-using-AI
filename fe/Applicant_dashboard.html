@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Adding Tailwind animations */
+        @keyframes bounce-in {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-bounce-in {
+            animation: bounce-in 1s ease-in-out infinite;
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 1.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-800 via-blue-700 to-blue-800 text-gray-900">
+
+
+<header class="bg-gray-800 text-white shadow-lg p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center">
+            <img src="miralogo.jpg" alt="MIRA Logo" class="w-12 h-12 mr-3 animate-fade-in">
+            <p class="text-2xl font-bold tracking-wide">MIRA</p>
+        </div>
+        <nav>
+            <ul class="flex space-x-6">
+                <li>
+                    <a href="Applicant_dashboard.html" 
+                        class="hover:text-yellow-400 transition transform hover:scale-110">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="applicant_application.html" 
+                        class="hover:text-yellow-400 transition transform hover:scale-110">
+                        Application
+                    </a>
+                </li>
+                <li>
+                    <a href="Applicant_Profile.html" 
+                        class="flex items-center hover:text-yellow-400 transition transform hover:scale-110">
+                        <i class="fas fa-user-circle mr-1"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="mx-12 px-16 ">
+
+
+<div class="container mx-auto p-6 grid md:grid-cols-2 gap-8">
+   
+    <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition animate-fade-in">
+        <h3 class="text-xl font-semibold border-b pb-2 mb-4">Recent Notifications</h3>
+        <div class="max-h-72 overflow-y-auto space-y-4" id="notifications">
+            <p class="bg-blue-100 text-blue-800 p-4 rounded-lg hover:bg-blue-200 transition">
+                Sample Notification 1
+            </p>
+            <p class="bg-blue-100 text-blue-800 p-4 rounded-lg hover:bg-blue-200 transition">
+                Sample Notification 2
+            </p>
+        </div>
+    </div>
+
+   
+    <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition animate-fade-in">
+        <h3 class="text-xl font-semibold border-b pb-2 mb-4">Current Status</h3>
+        <div class="text-center border-2 border-green-500 bg-green-100 p-4 rounded-lg hover:bg-green-200 transition">
+            <p class="font-bold text-green-700 mb-2" id="status-text">Submitted</p>
+            <p><strong>Status will be updated soon!</strong></p>
+        </div>
+       
+        <div class="mt-6 bg-yellow-50 p-6 rounded-lg border border-yellow-400 shadow-md transform hover:bg-yellow-100 transition">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <h3 class="font-semibold">Interview Date:</h3>
+                    <p>2024-11-25</p>
+                    <h3 class="font-semibold">Location:</h3>
+                    <p>Company Headquarters</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold">Interview Time:</h3>
+                    <p>10:00 AM</p>
+                    <h3 class="font-semibold">Interviewer Type:</h3>
+                    <p>Offline</p>
+                </div>
+            </div>
+            <div class="text-center">
+                <h3 class="font-semibold mb-2">Preparation Materials</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-blue-600 hover:text-yellow-600">Resume Tips</a></li>
+                    <li><a href="#" class="text-blue-600 hover:text-yellow-600">Common Interview Questions</a></li>
+                    <li><a href="#" class="text-blue-600 hover:text-yellow-600">Company Overview</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mx-auto p-6">
+    <div class="bg-white p-6 rounded-lg shadow-lg animate-fade-in">
+        <h3 class="text-xl font-semibold border-b pb-2 mb-4 text-center">Application Timeline</h3>
+        <div class="flex items-center justify-center space-x-4">
+           
+            <div class="text-center relative hover:scale-110 transition transform">
+                <div class="w-8 h-8 rounded-full bg-green-500 border-4 border-blue-800 mx-auto"></div>
+                <p class="mt-2">App Submission<br>Nov 5, 2024</p>
+            </div>
+         
+            <div class="w-16 h-1 bg-blue-800"></div>
+        
+            <div class="text-center relative hover:scale-110 transition transform">
+                <div class="w-8 h-8 rounded-full bg-green-500 border-4 border-blue-800 mx-auto"></div>
+                <p class="mt-2">Interview Scheduled<br>Nov 18, 2024</p>
+            </div>
+            
+            <div class="w-16 h-1 bg-blue-800"></div>
+        
+            <div class="text-center relative hover:scale-110 transition transform">
+                <div class="w-8 h-8 rounded-full bg-white border-4 border-blue-800 mx-auto"></div>
+                <p class="mt-2">Final Review<br>Pending</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(49deg, rgba(0, 86, 179, 0.8), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6));
+            background-size: 300% 300%;
+            animation: color 12s ease-in-out infinite;
+            overflow-y: auto;
+        }
+
+        @keyframes color {
+            0% { background-position: 0 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0 50%; }
+        }
+
+        header {
+    background-color: #232F3E;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 40px; /* Reduced vertical padding */
+    color: #ffffff;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin: 1px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 45px;
+            margin-right: 12px;
+        }
+
+        .logo p {
+            font-size: 1.6rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            
+        }
+
+        /* Define color variables */
+:root {
+    --primary-color: rgb(3, 58, 113); /* MIRA's primary color */
+    --hover-bg-color: rgba(0, 80, 158, 0.2);
+    --hover-shadow-color: rgba(5, 45, 86, 0.674);
+    --golden-color: #101858; /* Golden text color on hover */
+    --link-text-color: #ffffff;
+    --glow-color: rgba(255, 255, 255, 0.5); /* Glowing effect color */
+}
+
+/* Styling for the nav ul */
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Styling for individual list items in nav */
+nav ul li {
+    margin-left: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    position: relative;
+}
+
+/* Styling for the anchor links inside the list items */
+nav ul li a {
+    text-decoration: none;
+    color: var(--link-text-color);
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    position: relative; /* For glowing effect positioning */
+}
+
+/* Hover effects for anchor links */
+nav ul li a:hover {
+    background-color: var(--hover-bg-color); /* Light shade of primary color */
+    box-shadow: 0 0 10px var(--hover-shadow-color); /* Glowing effect */
+    color: var(--golden-color); /* Golden color for text when hovered */
+    text-decoration: none; /* No underline */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Glowing effect before pseudo element */
+nav ul li a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 5px;
+    background: var(--glow-color);
+    box-shadow: 0 0 15px var(--glow-color);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out; /* Fade in the glow */
+    z-index: -1; /* Behind the link */
+}
+
+/* When hovering, make the glow effect appear */
+nav ul li a:hover::before {
+    opacity: 1;
+}
+
+/* Additional hover effect for list items */
+nav ul li:hover a {
+    color: var(--golden-color); /* Golden text color on hover */
+}
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            padding: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .panel:hover {
+            transform: scale(1.03);
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #00509e;
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .scrollable {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 15px;
+            margin-top: 10px;
+        }
+
+        .scrollable p {
+            background-color: #e7efff;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .scrollable p:hover {
+            background-color: #d3e1ff;
+            cursor: pointer;
+        }
+
+        .status-item {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            background-color: #f0f7ef;
+        }
+
+        .status-item p {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        .upcoming-interview {
+            margin-top: 5px;
+    padding: 40px;
+    background-color: #f8f3db; /* Soft beige, with a gentle tone */
+
+    border: 2px solid #b59e4e; /* Green border like in status box */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+
+.interview-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.left-details, .right-details {
+    width: 45%;
+}
+
+.left-details h3, .right-details h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.left-details p, .right-details p {
+    font-size: 16px;
+}
+
+.preparation-material {
+    text-align: center;
+}
+
+.preparation-material h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.preparation-material ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.preparation-material ul li {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.preparation-material ul li a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.preparation-material ul li a:hover {
+    text-decoration: none;
+    color: #101858;
+}
+
+
+
+        .panel-box {
+            background-color: #ffecb3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .panel-box p {
+            font-weight: 600;
+            color: #8c7000;
+        }
+
+        .timeline-container {
+    display: flex;
+    justify-content: center; /* Centering the container */
+    align-items: center; /* Align items in the center vertically */
+    position: relative;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    width: 80%; /* Elongating horizontally */
+    margin: 0 auto; /* Centering the entire container */
+}
+
+.timeline-container:hover {
+    transform: scale(1.01);
+}
+
+.step {
+    text-align: center;
+    position: relative;
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-bottom: 10px;
+    border: 3px solid #00509e;
+    background-color: #ffffff;
+    position: relative;
+    z-index: 2;
+}
+.green {
+    background-color: #4caf50;
+}
+.timeline-container .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 100%; /* Extend the line between the circles */
+    height: 3px;
+    background-color: #00509e; /* Blue line connecting the dots */
+    z-index: 1;
+    margin-left: 10px; /* Adds some space between the dot and line */
+    transform: translateY(-50%); /* Centers the line vertically with respect to the circle */
+}
+        .circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-bottom: 10px;
+            border: 3px solid #00509e;
+            background-color: #ffffff;
+            position: relative;
+            z-index: 2;
+        }
+
+        .green {
+            background-color: #4caf50;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="miralogo.jpg" alt="MIRA Logo">
+        <p style="margin: 10px;">MIRA</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="Applicant_dashboard.html">Home</a></li>
+            <li><a href="applicant_application.html">Application</a></li>
+            <li><a href="Applicant_Profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="dashboard">
+    <div class="panel notifications">
+        <h3>Recent Notifications</h3>
+        <div class="scrollable" id="notifications"></div>
+    </div>
+
+    <div class="panel">
+        <h3>Current Status</h3>
+        <div id="current-status" class="status-item">
+            <div class="status-icon"><i class="fas fa-clipboard-check"></i></div>
+            <p id="status-text">Submitted</p>
+            <p><strong>Status will be updated soon!</strong></p> 
+        </div>
+        <div class="upcoming-interview" style="margin-top: 12px;">
+            <div class="interview-details">
+                <div class="left-details">
+                    <h3>Interview Date:</h3>
+                    <p>2024-11-25</p>
+                    <h3>Location:</h3>
+                    <p>Company Headquarters</p>
+                </div>
+                <div class="right-details">
+                    <h3>Interview Time:</h3>
+                    <p>10:00 AM</p>
+                    <h3>Interviewer Type:</h3>
+                    <p>Ofline</p>
+                </div>
+            </div>
+        
+            <div class="preparation-material">
+                <h3>Preparation Materials</h3>
+                <ul>
+                    <li><a href="#">Resume Tips</a></li>
+                    <li><a href="#">Common Interview Questions</a></li>
+                    <li><a href="#">Company Overview</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        
+    </div>
+
+    <div class="timeline-section">
+        <div class="timeline-container">
+            <div class="timeline-label">Application Timeline</div>
+            <div class="step">
+                <span class="circle green"></span>
+                <p>App Submission<br>Nov 5, 2024</p>
+            </div>
+            <div class="step">
+                <span class="circle green"></span>
+                <p>Interview Scheduled<br>Nov 18, 2024</p>
+            </div>
+            <div class="step">
+                <span class="circle"></span>
+                <p>Interview Outcome<br>Nov 30, 2024</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const notifications = [
+        "You have an interview scheduled.",
+        "Your application is under review.",
+        "New message from panelist.",
+        "Update on your application.",
+        "You have a meeting tomorrow."
+    ];
+
+    const currentStatus = 'In Review';
+
+    const notificationContainer = document.getElementById('notifications');
+    notifications.forEach(notification => {
+        const p = document.createElement('p');
+        p.textContent = notification;
+        notificationContainer.appendChild(p);
+    });
+
+    const statusText = document.getElementById('status-text');
+    statusText.textContent = currentStatus;
+</script>
+
+</body>
+</html> -->
+

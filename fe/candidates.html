@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departmental Candidates List - Indian Professionals</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/DRDO-logo.png/800px-DRDO-logo.png" type="image/png">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(49deg, rgba(0, 86, 179, 0.8), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6));
+            background-size: 300% 300%;
+            animation: color 12s ease-in-out infinite; 
+        }
+
+        @keyframes color {
+            0% { background-position: 0 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0 50%; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #0056b3;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #555;
+            margin: 5px 0 0;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        #searchBar, #postFilter {
+            padding: 10px;
+            font-size: 1.1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #searchBar {
+            flex: 2;
+            margin-right: 10px;
+        }
+
+        #postFilter {
+            flex: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            color: #0056b3;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CIAR - Candidates</h1>
+            <p>Centre for Artificial Intelligence and Robotics</p>
+        </header>
+
+        <div class="filter-container">
+            <input type="text" id="searchBar" placeholder="Search by name or department..." onkeyup="filterRows()">
+            <select id="postFilter" onchange="filterRows()">
+                <option value="">Filter by role...</option>
+                <option value="Senior Research Scientist">Senior Research Scientist</option>
+                <option value="Project Manager">Project Manager</option>
+                <option value="Data Analyst">Data Analyst</option>
+                <option value="Software Engineer">Software Engineer</option>
+                <option value="Systems Architect">Systems Architect</option>
+                <option value="Technical Writer">Technical Writer</option>
+                <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+                <option value="AI Specialist">AI Specialist</option>
+                <option value="Chief Scientist">Chief Scientist</option>
+            </select>
+        </div>
+
+        <table id="candidateTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ravi Sharma</td>
+                    <td>CIAR</td>
+                    <td>Senior Research Scientist</td>
+                </tr>
+                <tr>
+                    <td>Priya Singh</td>
+                    <td>CIAR</td>
+                    <td>Project Manager</td>
+                </tr>
+                <tr>
+                    <td>Akash Patel</td>
+                    <td>CIAR</td>
+                    <td>Data Analyst</td>
+                </tr>
+                <tr>
+                    <td>Anita Rao</td>
+                    <td>CIAR</td>
+                    <td>Software Engineer</td>
+                </tr>
+                <tr>
+                    <td>Rajiv Kumar</td>
+                    <td>CIAR</td>
+                    <td>Systems Architect</td>
+                </tr>
+                <tr>
+                    <td>Sunita Sharma</td>
+                    <td>CIAR</td>
+                    <td>Technical Writer</td>
+                </tr>
+                <tr>
+                    <td>Meera Joshi</td>
+                    <td>CIAR</td>
+                    <td>Machine Learning Engineer</td>
+                </tr>
+                <tr>
+                    <td>Amit Kaur</td>
+                    <td>CIAR</td>
+                    <td>AI Specialist</td>
+                </tr>
+                <tr>
+                    <td>Rohan Gupta</td>
+                    <td>CIAR</td>
+                    <td>Chief Scientist</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filterRows() {
+            let searchInput = document.getElementById('searchBar').value.toLowerCase();
+            let postFilter = document.getElementById('postFilter').value;
+            let table = document.getElementById('candidateTable');
+            let rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                let cells = rows[i].getElementsByTagName('td');
+                let nameText = cells[0].textContent.toLowerCase();
+                let deptText = cells[1].textContent.toLowerCase();
+                let roleText = cells[2].textContent;
+
+                let matchesSearch = nameText.includes(searchInput) || deptText.includes(searchInput);
+                let matchesPostFilter = postFilter === "" || roleText === postFilter;
+
+                if (matchesSearch && matchesPostFilter) {
+                    rows[i].style.display = "";
+                    cells[0].innerHTML = highlightText(cells[0].textContent, searchInput);
+                    cells[1].innerHTML = highlightText(cells[1].textContent, searchInput);
+                } else {
+                    rows[i].style.display = "none";
+                    cells[0].innerHTML = cells[0].textContent;
+                    cells[1].innerHTML = cells[1].textContent;
+                }
+            }
+        }
+
+        function highlightText(text, search) {
+            if (!search) return text;
+            let regex = new RegExp('(' + search + ')', 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+    </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departmental Candidates List - Indian Professionals</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/DRDO-logo.png/800px-DRDO-logo.png" type="image/png">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(49deg, rgba(0, 86, 179, 0.8), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6));
+            background-size: 300% 300%;
+            animation: color 12s ease-in-out infinite; 
+        }
+
+        @keyframes color {
+            0% { background-position: 0 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0 50%; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #0056b3;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #555;
+            margin: 5px 0 0;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        #searchBar, #postFilter {
+            padding: 10px;
+            font-size: 1.1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #searchBar {
+            flex: 2;
+            margin-right: 10px;
+        }
+
+        #postFilter {
+            flex: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            color: #0056b3;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Departmental Candidates List</h1>
+            <p>Indian Professionals Across Various Departments</p>
+        </header>
+
+        <div class="filter-container">
+            <input type="text" id="searchBar" placeholder="Search by name or department..." onkeyup="filterRows()">
+            <select id="postFilter" onchange="filterRows()">
+                <option value="">Filter by role...</option>
+                <option value="Director">Director</option>
+                <option value="Chief Scientist">Chief Scientist</option>
+                <option value="Senior Scientist">Senior Scientist</option>
+                <option value="Principal Scientist">Principal Scientist</option>
+                <option value="Research Scientist">Research Scientist</option>
+                <option value="Senior Engineer">Senior Engineer</option>
+                <option value="Engineer">Engineer</option>
+                <option value="Data Scientist">Data Scientist</option>
+                <option value="Technical Advisor">Technical Advisor</option>
+                <option value="Project Manager">Project Manager</option>
+            </select>
+        </div>
+
+        <table id="candidateTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ravi Sharma</td>
+                    <td>CIAR</td>
+                    <td>Senior Research Scientist</td>
+                </tr>
+                <tr>
+                    <td>Priya Singh</td>
+                    <td>CIAR</td>
+                    <td>Project Manager</td>
+                </tr>
+                <tr>
+                    <td>Akash Patel</td>
+                    <td>CIAR</td>
+                    <td>Data Analyst</td>
+                </tr>
+                <tr>
+                    <td>Anita Rao</td>
+                    <td>CIAR</td>
+                    <td>Software Engineer</td>
+                </tr>
+                <tr>
+                    <td>Rajiv Kumar</td>
+                    <td>CIAR</td>
+                    <td>Systems Architect</td>
+                </tr>
+                <tr>
+                    <td>Sunita Sharma</td>
+                    <td>CIAR</td>
+                    <td>Technical Writer</td>
+                </tr>
+                <tr>
+                    <td>Meera Joshi</td>
+                    <td>CIAR</td>
+                    <td>Machine Learning Engineer</td>
+                </tr>
+                <tr>
+                    <td>Amit Kaur</td>
+                    <td>CIAR</td>
+                    <td>AI Specialist</td>
+                </tr>
+                <tr>
+                    <td>Rohan Gupta</td>
+                    <td>CIAR</td>
+                    <td>Chief Scientist</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filterRows() {
+            let searchInput = document.getElementById('searchBar').value.toLowerCase();
+            let postFilter = document.getElementById('postFilter').value;
+            let table = document.getElementById('candidateTable');
+            let rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                let cells = rows[i].getElementsByTagName('td');
+                let nameText = cells[0].textContent.toLowerCase();
+                let deptText = cells[1].textContent.toLowerCase();
+                let roleText = cells[2].textContent;
+
+                let matchesSearch = nameText.includes(searchInput) || deptText.includes(searchInput);
+                let matchesPostFilter = postFilter === "" || roleText === postFilter;
+
+                if (matchesSearch && matchesPostFilter) {
+                    rows[i].style.display = "";
+                    cells[0].innerHTML = highlightText(cells[0].textContent, searchInput);
+                    cells[1].innerHTML = highlightText(cells[1].textContent, searchInput);
+                } else {
+                    rows[i].style.display = "none";
+                    cells[0].innerHTML = cells[0].textContent;
+                    cells[1].innerHTML = cells[1].textContent;
+                }
+            }
+        }
+
+        function highlightText(text, search) {
+            if (!search) return text;
+            let regex = new RegExp('(' + search + ')', 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+    </script>
+</body>
+</html> -->

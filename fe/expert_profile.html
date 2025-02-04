@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert's Profile</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/mai/3/3e/DRDO-logo.png" type="image/png">
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js"></script> <!-- For password encryption -->
+
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(49deg, rgba(0, 86, 179, 0.8), rgba(0, 68, 148, 0.7), rgba(0, 86, 179, 0.6));
+            background-size: 300% 300%;
+            animation: backgroundAnimation 10s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            width: 100%;
+            background-color: #232F3E;;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .header .logo-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .header img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header .menu {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .header .menu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .header .menu a:hover {
+            color: #ffc107;
+        }
+
+        .header .profile-icon {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .header .profile-icon img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-left: 10px;
+            border: 2px solid #fff;
+        }
+
+        /* Container styling */
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 100%;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        /* Left Side Styles */
+        .left-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            background-color: #f5f7fa;
+            border-right: 1px solid #ddd;
+        }
+
+        .profile-details {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #0056b3;
+            object-fit: cover;
+            margin-right: 30px;
+        }
+
+        .info h1 {
+            font-size: 32px;
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
+
+        .info p {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .skill-chart-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: #e9efff;
+            border-radius: 12px;
+        }
+
+        .skill-chart-container h2 {
+            font-size: 24px;
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+        }
+
+        /* Right Side Styles */
+        .right-side {
+            flex: 1;
+            padding: 30px;
+            background-color: #f0f4ff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .skills, .working-on {
+            margin-bottom: 30px;
+        }
+
+        .skills h2, .working-on h2 {
+            font-size: 24px;
+            color: #0056b3;
+            margin-bottom: 15px;
+        }
+
+        .skills ul, .working-on ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .skills li, .working-on li {
+            background-color: #dbe3f0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Password Section */
+        .password-section {
+            margin-top: 30px;
+        }
+
+        .password-section input {
+            padding: 10px;
+            font-size: 16px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .update-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .update-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Notifications Toggle */
+        .notification-toggle {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .toggle-btn {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #ffc107;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Deactivate Button */
+        .deactivate-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .deactivate-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .edit-btns {
+            margin-left: 20px;
+        }
+
+        .edit-btn {
+            padding: 5px 10px;
+            background-color: #ffc107;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 16px;
+        }
+
+        .edit-btn:hover {
+            background-color: #ffca2c;
+        }
+
+        /* File Upload Button */
+        .file-input {
+            display: none;
+        }
+
+        .file-upload-btn {
+            padding: 5px 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .file-upload-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Toggle Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(14px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-section">
+            <img src="miralogo.jpg" alt="Logo">
+            <h1>MIRA</h1>
+        </div>
+        <div class="menu">
+            <a href="expert_dashboard.HTML">Home</a>
+            <a href="expert_profile.html">Profile</a>
+        </div>
+        <div class="profile-icon">
+            <img src="https://www.w3schools.com/w3images/team2.jpg" alt="Profile Icon">
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Left Side -->
+        <div class="left-side">
+            <div class="profile-details">
+                <img id="profilePic" class="profile-pic" src="https://www.w3schools.com/w3images/team2.jpg" alt="Profile Picture">
+                <div class="info">
+                    <h1 id="expertName">John Doe</h1>
+                    <p id="expertDesignation">Cybersecurity Expert</p>
+                    <div class="edit-btns">
+                        <button class="edit-btn" onclick="editExpertInfo()">Edit</button>
+                        <button class="edit-btn" onclick="editProfilePicture()">Edit Profile Picture</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-chart-container">
+                <h2>Skills Overview</h2>
+                <div class="chart-wrapper">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="right-side">
+            <div class="skills">
+                <h2>Expertise Areas</h2>
+                <ul id="skillsList">
+                    <li>
+                        <span>Ethical Hacking</span>
+                        <button class="edit-btn" onclick="removeSkill(this)">Remove</button>
+                    </li>
+                    <li>
+                        <span>Penetration Testing</span>
+                        <button class="edit-btn" onclick="removeSkill(this)">Remove</button>
+                    </li>
+                    <li>
+                        <span>Cyber Forensics</span>
+                        <button class="edit-btn" onclick="removeSkill(this)">Remove</button>
+                    </li>
+                </ul>
+                <input type="text" id="newSkillInput" placeholder="Add new skill" style="padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc;">
+                <button class="update-btn" onclick="addSkill()">Add Skill</button>
+            </div>
+            
+
+            <div class="password-section">
+                <h2>Password</h2>
+                <input type="password" id="passwordField" placeholder="Enter new password" value="originalpassword123">
+                <button class="update-btn" onclick="updatePassword()">Update</button>
+            </div>
+
+            <div class="notification-toggle">
+                <label>Enable Notifications</label>
+                <label class="switch">
+                    <input type="checkbox" id="notificationToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button class="deactivate-btn" onclick="deactivateAccount()">Deactivate Account</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 MIRA</p>
+    </footer>
+
+    <script>
+        // Edit expert information function
+        function editExpertInfo() {
+            const newName = prompt("Enter new name:", document.getElementById('expertName').innerText);
+            const newDesignation = prompt("Enter new designation:", document.getElementById('expertDesignation').innerText);
+
+            if (newName) {
+                document.getElementById('expertName').innerText = newName;
+            }
+            if (newDesignation) {
+                document.getElementById('expertDesignation').innerText = newDesignation;
+            }
+        }
+
+        // Edit profile picture function
+        function editProfilePicture() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.click();
+
+            input.onchange = function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        document.getElementById('profilePic').src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+
+        // Update password function
+        function updatePassword() {
+            const passwordField = document.getElementById('passwordField');
+            const newPassword = passwordField.value;
+            if (newPassword) {
+                passwordField.value = newPassword;
+                alert('Password updated successfully');
+            }
+        }
+        // Add a new skill to the list
+        function addSkill() {
+            const skillInput = document.getElementById('newSkillInput');
+            const skillValue = skillInput.value.trim();
+
+            if (skillValue) {
+                const skillList = document.getElementById('skillsList');
+                const newSkillItem = document.createElement('li');
+                newSkillItem.innerHTML = `
+                    <span>${skillValue}</span>
+                    <button class="edit-btn" onclick="removeSkill(this)">Remove</button>
+        `       ;
+                skillList.appendChild(newSkillItem);
+                skillInput.value = ''; // Clear the input field
+            } else {
+                alert('Please enter a skill to add.');
+            }
+        }
+
+        // Remove a skill from the list
+        function removeSkill(button) {
+            const skillItem = button.parentElement;
+            skillItem.remove();
+        }
+
+        
+
+        // Toggle notifications
+        document.getElementById('notificationToggle').addEventListener('change', function() {
+            if (this.checked) {
+                alert("Notifications Enabled");
+            } else {
+                alert("Notifications Disabled");
+            }
+        });
+
+        // Skills Chart (Placeholder)
+        const ctx = document.getElementById('skillsChart').getContext('2d');
+        const skillsChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Ethical Hacking', 'Penetration Testing', 'Cyber Forensics'],
+                datasets: [{
+                    label: 'Skills',
+                    data: [40, 30, 30],
+                    backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe'],
+                    borderColor: ['#fff', '#fff', '#fff'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</body>
+</html>

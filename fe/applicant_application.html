@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            color: white;
+        }
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar .menu a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 16px;
+    padding: 8px 12px; /* Add padding for a better hover effect */
+    border-radius: 5px; /* Smooth corners */
+    transition: all 0.3s ease-in-out; /* Smooth animation */
+    position: relative; /* For glowing effect positioning */
+}
+
+.navbar .menu a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Light transparent background */
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7); /* Glowing effect */
+    color: #FFD700; /* Optional: Change text color to match the glow */
+    text-decoration: none; /* Ensure no underline */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.navbar .menu a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out; /* Fade in the glow */
+    z-index: -1; /* Place behind the link */
+}
+
+.navbar .menu a:hover::before {
+    opacity: 1;
+}
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007BFF;
+            margin-bottom: 15px;
+        }
+        .form-container {
+            display: flex;
+            gap: 30px;
+        }
+        .form-section {
+            flex: 1;
+        }
+        .form-section input, 
+        .form-section select, 
+        .form-section textarea, 
+        .form-section button {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-section button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-section button:hover {
+            background-color: #0056b3;
+        }
+        .divider {
+            width: 2px;
+            background-color: #ddd;
+        }
+        footer {
+            margin-top: 30px;
+            padding: 10px;
+            text-align: center;
+            background-color: #f1f1f1;
+            border-top: 1px solid #ddd;
+        }
+        footer a {
+            color: #007BFF;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="logo">LOGO</div>
+        <div class="menu">
+            <a href="Applicant_dashboard.html">Home</a>
+            <a href="applicant_application.html">Application</a>
+            <a href="Applicant_Profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+            
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="section-title">Job Details</div>
+        <div class="form-container">
+            <!-- Basic Information Section -->
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <label for="full-name">Full Name:</label>
+                <input type="text" id="full-name" placeholder="Enter your full name">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Enter your email">
+
+                <label for="phone">Phone No.:</label>
+                <input type="text" id="phone" placeholder="Enter your phone number">
+
+                <label for="resume">Referal:</label>
+                <input type="file" id="resume">
+
+                <label for="other-docs">Other Documents:</label>
+                <input type="file" id="other-docs">
+
+                <button>Preview</button>
+            </div>
+
+            <!-- Divider -->
+            <div class="divider"></div>
+
+            <!-- Job Details Section -->
+            <div class="form-section">
+                <h3>Job Details</h3>
+                <!-- <label for="job-title">Job Title:</label>
+                <select id="job-title">
+                    <option>Select a job</option>
+                    <option>Job 1</option>
+                    <option>Job 2</option>
+                </select> -->
+
+                <div class="form-group">
+                <label for="department">Department:</label>
+                <select id="department" name="department" required>
+                    <option value="">-- Select Department --</option>
+                    <option value="aerospace">Aerospace Engineering</option>
+                    <option value="armaments">Armaments and Combat Engineering</option>
+                    <option value="electronics">Electronics and Communication Systems</option>
+                    <option value="naval">Naval Systems and Materials</option>
+                    <option value="missiles">Missile Systems</option>
+                    <option value="robotics">Robotics and Autonomous Systems</option>
+                    <option value="artificial-intelligence">Artificial Intelligence and Machine Learning</option>
+                    <option value="cybersecurity">Cybersecurity and Information Assurance</option>
+                    <option value="materials">Materials and Metallurgical Engineering</option>
+                    <option value="chemical">Chemical and Biological Defence</option>
+                    <option value="radar">Radar and Sensors</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="desired_post">Desired Post:</label>
+                <select id="desired_post" name="desired_post" required disabled>
+                    <option value="">-- Select Post --</option>
+                </select>
+            </div> 
+
+            <div class="form-group">
+                <label for="resume">Add Resume:</label>
+                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+            </div>
+
+            <label for="job-description">Job Description:</label>
+            <textarea id="job-description" placeholder="Enter job description"></textarea>
+            
+            <label for="eligibility">Eligibility Criteria:</label>
+            <textarea id="eligibility" placeholder="List eligibility criteria"></textarea>
+
+            <label for="skills">Required Skills:</label>
+            <textarea id="skills" placeholder="List required skills"></textarea>
+            
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <a href="#">Help</a> |
+        <a href="#">Contact</a>
+        <p>&copy; All copyrights reserved</p>
+    </footer>
+    <script>
+    // Mapping departments to their respective posts
+    const departmentPosts = {
+        aerospace: ["Aerospace Scientist", "Flight Systems Engineer", "Aerodynamics Specialist"],
+        armaments: ["Weapons Engineer", "Explosive Materials Expert", "Defense Systems Specialist"],
+        electronics: ["Electronics Engineer", "Embedded Systems Developer", "Radar Specialist"],
+        naval: ["Naval Architect", "Marine Engineer", "Underwater Systems Specialist"],
+        missiles: ["Missile Systems Engineer", "Propulsion Specialist", "Guidance and Control Engineer"],
+        robotics: ["Robotics Engineer", "Autonomous Systems Developer", "AI Integration Specialist"],
+        "artificial-intelligence": ["AI Research Scientist", "Machine Learning Engineer", "Data Scientist"],
+        cybersecurity: ["Cybersecurity Analyst", "Information Security Specialist", "Network Defense Engineer"],
+        materials: ["Material Scientist", "Metallurgist", "Polymer Engineer"],
+        chemical: ["Chemical Defense Expert", "Biological Research Scientist", "Toxicology Specialist"],
+        radar: ["Radar Systems Engineer", "Signal Processing Specialist", "Surveillance Systems Expert"]
+    };
+
+    // DOM elements
+    const departmentDropdown = document.getElementById("department");
+    const postDropdown = document.getElementById("desired_post");
+
+    // Event listener to update posts dynamically
+    departmentDropdown.addEventListener("change", function () {
+        const selectedDepartment = this.value;
+
+        // Clear previous options
+        postDropdown.innerHTML = '<option value="">-- Select Post --</option>';
+
+        // If a valid department is selected, populate the "Desired Post" dropdown
+        if (selectedDepartment && departmentPosts[selectedDepartment]) {
+            postDropdown.disabled = false; // Enable the dropdown
+            departmentPosts[selectedDepartment].forEach(post => {
+                const option = document.createElement("option");
+                option.value = post.toLowerCase().replace(/\s+/g, "-");
+                option.textContent = post;
+                postDropdown.appendChild(option);
+            });
+        } else {
+            postDropdown.disabled = true; // Disable the dropdown if no department is selected
+        }
+    });
+</script>
+</body>
+</html>

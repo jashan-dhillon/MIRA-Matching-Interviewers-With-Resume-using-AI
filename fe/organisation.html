@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Matrix</title>
+    <link rel="icon" href="Designer.png" type="image/png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            animation: gradient 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 20px;
+            white-space: nowrap; /* Prevents text from wrapping */
+            overflow: hidden;
+            border-right: .15em solid white; /* Typewriter cursor */
+            animation: typewriter 4s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        .dropdown {
+            margin-top: 20px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: white;
+            color: #1e3c72;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+        }
+
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: rise 20s infinite ease-in;
+        }
+
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 10s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 30px;
+            height: 30px;
+            left: 40%;
+            animation-duration: 15s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 50px;
+            height: 50px;
+            left: 60%;
+            animation-duration: 25s;
+        }
+
+        .bubble:nth-child(5) {
+            width: 10px;
+            height: 10px;
+            left: 80%;
+            animation-duration: 12s;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: white; }
+        }
+
+        /* Cursor-following effect */
+        .cursor-follow {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+        }
+
+        .cursor-trail {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Welcome to MIRA</div>
+        <div class="dropdown">
+            <select id="organizationSelect">
+                <option value="">Select your organization</option>
+                <option value="login.html">DRDO</option>
+                <option value="organization2.html">Google</option>
+                <option value="organization3.html">Microsoft</option>
+            </select>
+        </div>
+    </div>
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+    <div class="cursor-follow"></div>
+
+    <script>
+        document.getElementById('organizationSelect').addEventListener('change', function() {
+            var value = this.value;
+            if (value) {
+                window.location.href = value;
+            }
+        });
+
+        // Typewriter effect
+        const logo = document.querySelector('.logo');
+        const text = logo.textContent;
+        logo.textContent = '';
+        let i = 0;
+
+        function type() {
+            if (i < text.length) {
+                logo.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, 100); // Adjust typing speed here
+            }
+        }
+        type();
+
+        // Cursor-follow effect with trail
+        const cursor = document.querySelector('.cursor-follow');
+        const trailCount = 10; // Number of trail dots
+        const trails = [];
+
+        // Create trail dots
+        for (let i = 0; i < trailCount; i++) {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            document.body.appendChild(trail);
+            trails.push(trail);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+
+            // Update trail dots
+            trails.forEach((trail, index) => {
+                setTimeout(() => {
+                    trail.style.left = `${e.clientX}px`;
+                    trail.style.top = `${e.clientY}px`;
+                    trail.style.opacity = '1';
+                }, index * 50); // Stagger the appearance
+                setTimeout(() => {
+                    trail.style.opacity = '0';
+                }, (index + 1) * 50); // Fade out
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Matrix</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            animation: gradient 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 20px;
+            white-space: nowrap; /* Prevents text from wrapping */
+            overflow: hidden;
+            border-right: .15em solid white; /* Typewriter cursor */
+            animation: typewriter 4s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        .dropdown {
+            margin-top: 20px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: white;
+            color: #1e3c72;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+        }
+
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: rise 20s infinite ease-in;
+        }
+
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 10s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 30px;
+            height: 30px;
+            left: 40%;
+            animation-duration: 15s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 50px;
+            height: 50px;
+            left: 60%;
+            animation-duration: 25s;
+        }
+
+        .bubble:nth-child(5) {
+            width: 10px;
+            height: 10px;
+            left: 80%;
+            animation-duration: 12s;
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: white; }
+        }
+
+        /* Cursor-following effect */
+        .cursor-follow {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Welcome to Match Matrix</div>
+        <div class="dropdown">
+            <select id="organizationSelect">
+                <option value="">Select your organization</option>
+                <option value="login.html">DRDO</option>
+                <option value="organization2.html">Organization 2</option>
+                <option value="organization3.html">Organization 3</option>
+            </select>
+        </div>
+    </div>
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+    <div class="cursor-follow"></div>
+
+    <script>
+        document.getElementById('organizationSelect').addEventListener('change', function() {
+            var value = this.value;
+            if (value) {
+                window.location.href = value;
+            }
+        });
+
+        // Typewriter effect
+        const logo = document.querySelector('.logo');
+        const text = logo.textContent;
+        logo.textContent = '';
+        let i = 0;
+
+        function type() {
+            if (i < text.length) {
+                logo.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, 100); // Adjust typing speed here
+            }
+        }
+        type();
+
+        // Cursor-follow effect
+        const cursor = document.querySelector('.cursor-follow');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+ -->
