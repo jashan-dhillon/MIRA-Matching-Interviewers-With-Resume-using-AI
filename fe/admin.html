@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - RAC DRDO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            min-height: calc(100vh - 120px);
+        }
+
+        .sidebar {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar h3 {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: var(--bg-blue);
+            color: var(--primary-blue);
+        }
+
+        .sidebar-menu a i {
+            width: 20px;
+        }
+
+        .content-area {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px var(--card-shadow);
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .content-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .content-header h2 i {
+            color: var(--primary-blue);
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background-color: var(--bg-blue);
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .data-table tr:hover {
+            background-color: var(--bg-blue);
+        }
+
+        .data-table .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .data-table .actions button {
+            padding: 0.5rem 0.75rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .data-table .actions .edit-btn {
+            background-color: var(--light-blue);
+            color: var(--white);
+        }
+
+        .data-table .actions .delete-btn {
+            background-color: var(--red-remove);
+            color: var(--white);
+        }
+
+        .data-table .actions .view-btn {
+            background-color: var(--green-accept);
+            color: var(--white);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Edit Modal */
+        .edit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .edit-modal.active {
+            display: flex;
+        }
+
+        .edit-modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .edit-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .edit-modal-header h3 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .edit-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="rac_logo.png" alt="DRDO Logo" class="header-logo">
+            <div class="header-center">
+                <h1>Recruitment and Assessment Centre, DRDO</h1>
+                <p>Department of Defence Research and Development</p>
+                <p>Ministry of Defence, Government of India</p>
+                <p class="iso-text">an ISO 9001 certified establishment</p>
+            </div>
+            <img src="emblem.png" alt="Indian Emblem" class="header-emblem">
+        </div>
+
+        <nav class="navbar">
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="experts.html" class="nav-link" data-role="admin,expert">Experts</a>
+            <a href="admin.html" class="nav-link active" data-role="admin">Admin</a>
+            <a href="profile.html" class="nav-link">Profile</a>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <div class="admin-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3>Admin Menu</h3>
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" data-section="dashboard"><i class="fa-solid fa-chart-line"></i>
+                            Dashboard</a></li>
+                    <li><a href="#" data-section="advertisements"><i class="fa-solid fa-bullhorn"></i>
+                            Advertisements</a></li>
+                    <li><a href="#" data-section="items"><i class="fa-solid fa-list-check"></i> Items</a></li>
+                    <li><a href="#" data-section="experts"><i class="fa-solid fa-user-tie"></i> Experts</a></li>
+                    <li><a href="#" data-section="users"><i class="fa-solid fa-users"></i> Users</a></li>
+                    <li><a href="#" data-section="panels"><i class="fa-solid fa-users-viewfinder"></i> Panels</a></li>
+                </ul>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="admin-section active">
+                    <div class="content-header">
+                        <h2><i class="fa-solid fa-chart-line"></i> Dashboard Overview</h2>
+                        <button class="btn btn-primary" onclick="refreshAll()">
+                            <i class="fa-solid fa-refresh"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card" onclick="showSection('advertisements')">
+                            <i class="fa-solid fa-bullhorn"></i>
+                            <div class="stat-number" id="stat-advertisements">0</div>
+                            <div class="stat-label">Advertisements</div>
+                        </div>
+                        <div class="stat-card" onclick="showSection('items')">
+                            <i class="fa-solid fa-list-check"></i>
+                            <div class="stat-number" id="stat-items">0</div>
+                            <div class="stat-label">Items</div>
+                        </div>
+                        <div class="stat-card" onclick="showSection('experts')">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <div class="stat-number" id="stat-experts">0</div>
+                            <div class="stat-label">Experts</div>
+                        </div>
+                        <div class="stat-card" onclick="showSection('users')">
+                            <i class="fa-solid fa-users"></i>
+                            <div class="stat-number" id="stat-users">0</div>
+                            <div class="stat-label">Users</div>
+                        </div>
+                    </div>
+
+                    <h3>Quick Actions</h3>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="showSection('advertisements')">
+                            <i class="fa-solid fa-plus"></i> Add Advertisement
+                        </button>
+                        <button class="btn btn-primary" onclick="showSection('items')">
+                            <i class="fa-solid fa-plus"></i> Add Item
+                        </button>
+                        <button class="btn btn-primary" onclick="showSection('experts')">
+                            <i class="fa-solid fa-plus"></i> Add Expert
+                        </button>
+                        <button class="btn btn-success" onclick="seedDatabase()">
+                            <i class="fa-solid fa-database"></i> Seed Sample Data
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Advertisements Section -->
+                <section id="advertisements-section" class="admin-section">
+                    <div class="content-header">
+                        <h2><i class="fa-solid fa-bullhorn"></i> Manage Advertisements</h2>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="upload-pdf"><i class="fa-solid fa-file-pdf"></i> Upload PDF</button>
+                        <button class="tab-btn" data-tab="add-adv">Add Manual</button>
+                        <button class="tab-btn" data-tab="list-adv">View All</button>
+                    </div>
+
+                    <!-- PDF Upload Tab -->
+                    <div id="upload-pdf" class="tab-content active">
+                        <div style="background: linear-gradient(135deg, #e8f4fd 0%, #d1e9f9 100%); padding: 2rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                            <h3 style="margin-bottom: 1rem; color: var(--primary-blue);">
+                                <i class="fa-solid fa-magic"></i> Smart PDF Upload
+                            </h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                                Upload a DRDO advertisement PDF and our AI will automatically extract:
+                            </p>
+                            <ul style="list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 1.5rem;">
+                                <li><i class="fa-solid fa-check-circle" style="color: var(--green-accept);"></i> Advertisement Number</li>
+                                <li><i class="fa-solid fa-check-circle" style="color: var(--green-accept);"></i> Total Vacancies</li>
+                                <li><i class="fa-solid fa-check-circle" style="color: var(--green-accept);"></i> Closing Date</li>
+                                <li><i class="fa-solid fa-check-circle" style="color: var(--green-accept);"></i> All Items (Job Roles)</li>
+                                <li><i class="fa-solid fa-check-circle" style="color: var(--green-accept);"></i> Category-wise Vacancies</li>
+                                <li><i class="fa-solid fa-check-circle" style="color: var(--green-accept);"></i> Essential Qualifications</li>
+                            </ul>
+                            
+                            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                                <label for="pdfFileInput" class="btn btn-primary" style="cursor: pointer;">
+                                    <i class="fa-solid fa-upload"></i> Select PDF File
+                                </label>
+                                <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;">
+                                <span id="selectedFileName" style="color: var(--text-secondary);">No file selected</span>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section (hidden by default) -->
+                        <div id="pdfPreviewSection" style="display: none;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h3><i class="fa-solid fa-eye"></i> Preview Extracted Data</h3>
+                                <div style="display: flex; gap: 1rem;">
+                                    <button id="confirmUploadBtn" class="btn btn-success">
+                                        <i class="fa-solid fa-check"></i> Confirm & Save
+                                    </button>
+                                    <button id="cancelUploadBtn" class="btn btn-outline">
+                                        <i class="fa-solid fa-times"></i> Cancel
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="pdfPreviewContent" style="background: var(--white); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+                                <!-- Preview content will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- Upload Progress -->
+                        <div id="uploadProgress" style="display: none; text-align: center; padding: 2rem;">
+                            <div class="spinner" style="margin: 0 auto 1rem;"></div>
+                            <p id="uploadStatusText">Processing PDF...</p>
+                        </div>
+                    </div>
+
+                    <div id="add-adv" class="tab-content">
+                        <form id="addAdvertisementForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Advertisement Number *</label>
+                                    <input type="number" id="advNo" required placeholder="e.g., 157">
+                                </div>
+                                <div class="form-group">
+                                    <label>Status *</label>
+                                    <select id="advStatus" required>
+                                        <option value="active">Active</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="draft">Draft</option>
+                                    </select>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Title</label>
+                                    <input type="text" id="advTitle" placeholder="e.g., Scientist Recruitment 2024">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa-solid fa-save"></i> Save Advertisement
+                                </button>
+                                <button type="reset" class="btn btn-outline">Clear</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="list-adv" class="tab-content">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Adv. No.</th>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="advTableBody">
+                                <tr>
+                                    <td colspan="4" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Items Section -->
+                <section id="items-section" class="admin-section">
+                    <div class="content-header">
+                        <h2><i class="fa-solid fa-list-check"></i> Manage Items</h2>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="add-item">Add New</button>
+                        <button class="tab-btn" data-tab="list-item">View All</button>
+                    </div>
+
+                    <div id="add-item" class="tab-content active">
+                        <form id="addItemForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Select Advertisement *</label>
+                                    <select id="itemAdvId" required>
+                                        <option value="">Select Advertisement...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Item Number *</label>
+                                    <input type="number" id="itemNo" required placeholder="e.g., 1">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Title *</label>
+                                    <input type="text" id="itemTitle" required
+                                        placeholder="e.g., Scientist-B (Electronics)">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Description</label>
+                                    <textarea id="itemDesc" placeholder="Job description..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Required Board Size</label>
+                                    <input type="number" id="itemBoardSize" value="5" min="3" max="10">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa-solid fa-save"></i> Save Item
+                                </button>
+                                <button type="reset" class="btn btn-outline">Clear</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="list-item" class="tab-content">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Item No.</th>
+                                    <th>Title</th>
+                                    <th>Advertisement</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemTableBody">
+                                <tr>
+                                    <td colspan="4" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Experts Section -->
+                <section id="experts-section" class="admin-section">
+                    <div class="content-header">
+                        <h2><i class="fa-solid fa-user-tie"></i> Manage Experts</h2>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="add-expert">Add New</button>
+                        <button class="tab-btn" data-tab="list-expert">View All</button>
+                    </div>
+
+                    <div id="add-expert" class="tab-content active">
+                        <form id="addExpertForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Full Name *</label>
+                                    <input type="text" id="expertName" required placeholder="e.g., Dr. Ashok Kumar">
+                                </div>
+                                <div class="form-group">
+                                    <label>Role/Designation *</label>
+                                    <input type="text" id="expertRole" required placeholder="e.g., Chief Scientist">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category *</label>
+                                    <select id="expertCategory" required>
+                                        <option value="chairperson">Chairperson</option>
+                                        <option value="departmental">Departmental</option>
+                                        <option value="external">External</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Affiliation (for External)</label>
+                                    <select id="expertAffiliation">
+                                        <option value="">N/A</option>
+                                        <option value="Academia">Academia</option>
+                                        <option value="Industry">Industry</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" id="expertEmail" placeholder="expert@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Relevance Score (0-100)</label>
+                                    <input type="number" id="expertScore" min="0" max="100" value="85">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Expertise Reason</label>
+                                    <textarea id="expertReason" placeholder="Why is this expert suitable..."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa-solid fa-save"></i> Save Expert
+                                </button>
+                                <button type="reset" class="btn btn-outline">Clear</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="list-expert" class="tab-content">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Category</th>
+                                    <th>Score</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expertTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Users Section -->
+                <section id="users-section" class="admin-section">
+                    <div class="content-header">
+                        <h2><i class="fa-solid fa-users"></i> Manage Users</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <tr>
+                                <td colspan="4" class="text-center">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Panels Section -->
+                <section id="panels-section" class="admin-section">
+                    <div class="content-header">
+                        <h2><i class="fa-solid fa-users-viewfinder"></i> Manage Panels</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Panel ID</th>
+                                <th>Board Type</th>
+                                <th>Members</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="panelTableBody">
+                            <tr>
+                                <td colspan="4" class="text-center">No panels created yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Advertisement Modal -->
+    <div id="editAdvModal" class="edit-modal">
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h3><i class="fa-solid fa-pen"></i> Edit Advertisement</h3>
+                <button class="edit-modal-close" onclick="closeModal('editAdvModal')">&times;</button>
+            </div>
+            <form id="editAdvForm">
+                <input type="hidden" id="editAdvId">
+                <div class="form-group">
+                    <label>Advertisement Number</label>
+                    <input type="number" id="editAdvNo" required>
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="editAdvTitle">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="editAdvStatus">
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('editAdvModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Expert Modal -->
+    <div id="editExpertModal" class="edit-modal">
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h3><i class="fa-solid fa-pen"></i> Edit Expert</h3>
+                <button class="edit-modal-close" onclick="closeModal('editExpertModal')">&times;</button>
+            </div>
+            <form id="editExpertForm">
+                <input type="hidden" id="editExpertId">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="editExpertName" required>
+                </div>
+                <div class="form-group">
+                    <label>Role/Designation</label>
+                    <input type="text" id="editExpertRole" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="editExpertCategory">
+                        <option value="chairperson">Chairperson</option>
+                        <option value="departmental">Departmental</option>
+                        <option value="external">External</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Relevance Score</label>
+                    <input type="number" id="editExpertScore" min="0" max="100">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <button type="button" class="btn btn-outline"
+                        onclick="closeModal('editExpertModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        // Check auth and role
+        if (!requireAuth()) { }
+        if (!requireRole(['admin'])) { }
+
+        // Global data cache
+        let allAdvertisements = [];
+        let allItems = [];
+        let allExperts = [];
+        let allUsers = [];
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try { await api.auth.logout(); } catch (e) { }
+            session.clearUser();
+            window.location.href = 'login.html';
+        });
+
+        // Section navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+
+            document.getElementById(sectionId + '-section').classList.add('active');
+            const link = document.querySelector(`[data-section="${sectionId}"]`);
+            if (link) link.classList.add('active');
+        }
+
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection(link.dataset.section);
+            });
+        });
+
+        // Tab navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                const parent = btn.closest('.admin-section');
+
+                parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                parent.querySelector('#' + tabId).classList.add('active');
+            });
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.querySelectorAll('.edit-modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // ==================== LOAD DATA ====================
+        async function loadStats() {
+            try {
+                const [advs, experts, users] = await Promise.all([
+                    api.advertisements.getAll(),
+                    api.experts.getAll(),
+                    api.request('/users')
+                ]);
+
+                allAdvertisements = advs;
+                allExperts = experts;
+                allUsers = users;
+
+                document.getElementById('stat-advertisements').textContent = advs.length;
+                document.getElementById('stat-experts').textContent = experts.length;
+                document.getElementById('stat-users').textContent = users.length;
+
+                // Count items
+                let itemCount = 0;
+                allItems = [];
+                for (const adv of advs) {
+                    try {
+                        const items = await api.advertisements.getItems(adv._id);
+                        itemCount += items.length;
+                        items.forEach(item => {
+                            item.advertisementNo = adv.advertisementNo;
+                            allItems.push(item);
+                        });
+                    } catch (e) { }
+                }
+                document.getElementById('stat-items').textContent = itemCount;
+            } catch (e) {
+                console.error('Error loading stats:', e);
+            }
+        }
+
+        async function loadAdvertisements() {
+            try {
+                const advs = await api.advertisements.getAll();
+                allAdvertisements = advs;
+                const tbody = document.getElementById('advTableBody');
+
+                if (advs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No advertisements found. Add one above!</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = advs.map(adv => `
+                    <tr>
+                        <td><strong>${adv.advertisementNo}</strong></td>
+                        <td>${adv.title || 'Advertisement No. ' + adv.advertisementNo}</td>
+                        <td><span class="badge badge-${adv.status === 'active' ? 'accepted' : 'pending'}">${adv.status}</span></td>
+                        <td class="actions">
+                            <button class="view-btn" onclick="window.location.href='advertisment.html?id=${adv._id}&advNo=${adv.advertisementNo}'" title="View Items">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <button class="edit-btn" onclick="editAdvertisement('${adv._id}')" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="delete-btn" onclick="deleteAdvertisement('${adv._id}')" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Populate item dropdown
+                const select = document.getElementById('itemAdvId');
+                select.innerHTML = '<option value="">Select Advertisement...</option>' +
+                    advs.map(a => `<option value="${a._id}">${a.advertisementNo} - ${a.title || ''}</option>`).join('');
+            } catch (e) {
+                console.error('Error loading advertisements:', e);
+            }
+        }
+
+        async function loadItems() {
+            try {
+                const tbody = document.getElementById('itemTableBody');
+
+                if (allItems.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No items found. Add one above!</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = allItems.map(item => `
+                    <tr>
+                        <td><strong>${item.itemNo}</strong></td>
+                        <td>${item.title}</td>
+                        <td>Adv. No. ${item.advertisementNo || 'N/A'}</td>
+                        <td class="actions">
+                            <button class="view-btn" onclick="window.location.href='item.html?id=${item._id}&itemNo=${item.itemNo}'" title="View">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <button class="delete-btn" onclick="deleteItem('${item._id}')" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.error('Error loading items:', e);
+            }
+        }
+
+        async function loadExperts() {
+            try {
+                const experts = await api.experts.getAll();
+                allExperts = experts;
+                const tbody = document.getElementById('expertTableBody');
+
+                if (experts.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center">No experts found. Add one above!</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = experts.map(exp => `
+                    <tr>
+                        <td><strong>${exp.name}</strong></td>
+                        <td>${exp.role}</td>
+                        <td><span class="badge badge-${exp.category === 'external' ? 'academia' : 'accepted'}">${exp.category}</span></td>
+                        <td>${exp.relevanceScore}%</td>
+                        <td class="actions">
+                            <button class="edit-btn" onclick="editExpert('${exp._id}')" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="delete-btn" onclick="deleteExpert('${exp._id}')" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.error('Error loading experts:', e);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const users = await api.request('/users');
+                allUsers = users;
+                const tbody = document.getElementById('userTableBody');
+
+                if (users.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No users found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = users.map(user => `
+                    <tr>
+                        <td><strong>${user.fullName}</strong></td>
+                        <td>${user.email}</td>
+                        <td><span class="badge badge-accepted">${user.role}</span></td>
+                        <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.error('Error loading users:', e);
+                document.getElementById('userTableBody').innerHTML = '<tr><td colspan="4" class="text-center">Failed to load users</td></tr>';
+            }
+        }
+
+        // ==================== ADD FUNCTIONS ====================
+        document.getElementById('addAdvertisementForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+            const data = {
+                advertisementNo: parseInt(document.getElementById('advNo').value),
+                title: document.getElementById('advTitle').value || `Advertisement No. ${document.getElementById('advNo').value}`,
+                status: document.getElementById('advStatus').value
+            };
+
+            try {
+                await api.request('/advertisements', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                showToast('Advertisement added successfully!', 'success');
+                e.target.reset();
+                await refreshAll();
+            } catch (err) {
+                showToast('Error: ' + err.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Advertisement';
+        });
+
+        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+            const data = {
+                advertisementId: document.getElementById('itemAdvId').value,
+                itemNo: parseInt(document.getElementById('itemNo').value),
+                title: document.getElementById('itemTitle').value,
+                description: document.getElementById('itemDesc').value,
+                requiredBoardSize: parseInt(document.getElementById('itemBoardSize').value) || 5
+            };
+
+            try {
+                await api.request('/items', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                showToast('Item added successfully!', 'success');
+                e.target.reset();
+                await refreshAll();
+            } catch (err) {
+                showToast('Error: ' + err.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Item';
+        });
+
+        document.getElementById('addExpertForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+            const data = {
+                name: document.getElementById('expertName').value,
+                role: document.getElementById('expertRole').value,
+                category: document.getElementById('expertCategory').value,
+                affiliation: document.getElementById('expertAffiliation').value,
+                email: document.getElementById('expertEmail').value,
+                relevanceScore: parseInt(document.getElementById('expertScore').value) || 85,
+                reason: document.getElementById('expertReason').value
+            };
+
+            try {
+                await api.request('/experts', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                showToast('Expert added successfully!', 'success');
+                e.target.reset();
+                await refreshAll();
+            } catch (err) {
+                showToast('Error: ' + err.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Expert';
+        });
+
+        // ==================== EDIT FUNCTIONS ====================
+        function editAdvertisement(id) {
+            const adv = allAdvertisements.find(a => a._id === id);
+            if (!adv) return;
+
+            document.getElementById('editAdvId').value = adv._id;
+            document.getElementById('editAdvNo').value = adv.advertisementNo;
+            document.getElementById('editAdvTitle').value = adv.title || '';
+            document.getElementById('editAdvStatus').value = adv.status;
+
+            openModal('editAdvModal');
+        }
+
+        document.getElementById('editAdvForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editAdvId').value;
+
+            try {
+                // For now, delete and recreate (simple approach)
+                await api.request(`/advertisements/${id}`, { method: 'DELETE' });
+                await api.request('/advertisements', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        advertisementNo: parseInt(document.getElementById('editAdvNo').value),
+                        title: document.getElementById('editAdvTitle').value,
+                        status: document.getElementById('editAdvStatus').value
+                    })
+                });
+                showToast('Advertisement updated!', 'success');
+                closeModal('editAdvModal');
+                await refreshAll();
+            } catch (err) {
+                showToast('Error: ' + err.message, 'error');
+            }
+        });
+
+        function editExpert(id) {
+            const exp = allExperts.find(e => e._id === id);
+            if (!exp) return;
+
+            document.getElementById('editExpertId').value = exp._id;
+            document.getElementById('editExpertName').value = exp.name;
+            document.getElementById('editExpertRole').value = exp.role;
+            document.getElementById('editExpertCategory').value = exp.category;
+            document.getElementById('editExpertScore').value = exp.relevanceScore;
+
+            openModal('editExpertModal');
+        }
+
+        document.getElementById('editExpertForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editExpertId').value;
+            const exp = allExperts.find(e => e._id === id);
+
+            try {
+                await api.request(`/experts/${id}`, { method: 'DELETE' });
+                await api.request('/experts', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: document.getElementById('editExpertName').value,
+                        role: document.getElementById('editExpertRole').value,
+                        category: document.getElementById('editExpertCategory').value,
+                        relevanceScore: parseInt(document.getElementById('editExpertScore').value),
+                        affiliation: exp?.affiliation || '',
+                        email: exp?.email || '',
+                        reason: exp?.reason || ''
+                    })
+                });
+                showToast('Expert updated!', 'success');
+                closeModal('editExpertModal');
+                await refreshAll();
+            } catch (err) {
+                showToast('Error: ' + err.message, 'error');
+            }
+        });
+
+        // ==================== DELETE FUNCTIONS ====================
+        async function deleteAdvertisement(id) {
+            if (!confirm('Delete this advertisement and all its items?')) return;
+            try {
+                await api.request(`/advertisements/${id}`, { method: 'DELETE' });
+                showToast('Advertisement deleted', 'success');
+                await refreshAll();
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+
+        async function deleteItem(id) {
+            if (!confirm('Delete this item?')) return;
+            try {
+                await api.request(`/items/${id}`, { method: 'DELETE' });
+                showToast('Item deleted', 'success');
+                await refreshAll();
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+
+        async function deleteExpert(id) {
+            if (!confirm('Delete this expert?')) return;
+            try {
+                await api.request(`/experts/${id}`, { method: 'DELETE' });
+                showToast('Expert deleted', 'success');
+                await refreshAll();
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        async function seedDatabase() {
+            if (!confirm('This will reset all data. Continue?')) return;
+            try {
+                await api.seedDatabase();
+                showToast('Database seeded with sample data!', 'success');
+                await refreshAll();
+            } catch (e) {
+                showToast('Error seeding database', 'error');
+            }
+        }
+
+        async function refreshAll() {
+            await loadStats();
+            await loadAdvertisements();
+            await loadItems();
+            await loadExperts();
+            await loadUsers();
+        }
+
+        // ==================== PDF UPLOAD FUNCTIONS ====================
+        let pendingPdfFile = null;
+        let extractedPdfData = null;
+
+        document.getElementById('pdfFileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            document.getElementById('selectedFileName').textContent = file.name;
+            pendingPdfFile = file;
+
+            // Show progress
+            document.getElementById('uploadProgress').style.display = 'block';
+            document.getElementById('pdfPreviewSection').style.display = 'none';
+            document.getElementById('uploadStatusText').textContent = 'Extracting data from PDF...';
+
+            try {
+                // Preview the extraction first
+                const result = await api.pdf.preview(file);
+                extractedPdfData = result.extractedData;
+
+                if (result.alreadyExists) {
+                    showToast(`Advertisement No. ${extractedPdfData.advertisementNo} already exists!`, 'error');
+                    document.getElementById('uploadProgress').style.display = 'none';
+                    return;
+                }
+
+                // Show preview
+                renderPdfPreview(extractedPdfData);
+                document.getElementById('uploadProgress').style.display = 'none';
+                document.getElementById('pdfPreviewSection').style.display = 'block';
+
+            } catch (err) {
+                showToast('Error: ' + err.message, 'error');
+                document.getElementById('uploadProgress').style.display = 'none';
+            }
+        });
+
+        function renderPdfPreview(data) {
+            const html = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="background: var(--bg-blue); padding: 1rem; border-radius: 8px;">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">Advertisement No.</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-blue);">${data.advertisementNo}</div>
+                    </div>
+                    <div style="background: var(--bg-blue); padding: 1rem; border-radius: 8px;">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">Total Vacancies</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--green-accept);">${data.totalVacancies}</div>
+                    </div>
+                    <div style="background: var(--bg-blue); padding: 1rem; border-radius: 8px;">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">Closing Date</div>
+                        <div style="font-size: 1.2rem; font-weight: 600;">${data.closingDate || 'Not specified'}</div>
+                    </div>
+                    <div style="background: var(--bg-blue); padding: 1rem; border-radius: 8px;">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">Items Extracted</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--light-blue);">${data.items?.length || 0}</div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 1rem;"><i class="fa-solid fa-list"></i> Extracted Items (Job Roles)</h4>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table class="data-table" style="font-size: 0.9rem;">
+                        <thead>
+                            <tr>
+                                <th>Item No.</th>
+                                <th>Discipline</th>
+                                <th>Organization</th>
+                                <th>UR</th>
+                                <th>EWS</th>
+                                <th>OBC</th>
+                                <th>SC</th>
+                                <th>ST</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.items?.map(item => `
+                                <tr>
+                                    <td><strong>${item.itemNo}</strong></td>
+                                    <td>${item.discipline}</td>
+                                    <td>${item.organization}</td>
+                                    <td>${item.vacancies?.UR || 0}</td>
+                                    <td>${item.vacancies?.EWS || 0}</td>
+                                    <td>${item.vacancies?.OBC || 0}</td>
+                                    <td>${item.vacancies?.SC || 0}</td>
+                                    <td>${item.vacancies?.ST || 0}</td>
+                                    <td><strong>${item.vacancies?.Total || 0}</strong></td>
+                                </tr>
+                            `).join('') || '<tr><td colspan="9">No items found</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+
+                ${data.generalInfo ? `
+                <div style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <h4 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-info-circle"></i> Additional Information</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">
+                        Pay Level: ${data.generalInfo.payLevel || 'N/A'} |
+                        Basic Pay: ₹${data.generalInfo.basicPay || 'N/A'} |
+                        Application Fee: ₹${data.generalInfo.applicationFee || 'N/A'}
+                    </p>
+                </div>
+                ` : ''}
+            `;
+            document.getElementById('pdfPreviewContent').innerHTML = html;
+        }
+
+        document.getElementById('confirmUploadBtn').addEventListener('click', async () => {
+            if (!pendingPdfFile) {
+                showToast('No file selected', 'error');
+                return;
+            }
+
+            document.getElementById('uploadProgress').style.display = 'block';
+            document.getElementById('pdfPreviewSection').style.display = 'none';
+            document.getElementById('uploadStatusText').textContent = 'Saving to database...';
+
+            try {
+                const result = await api.pdf.upload(pendingPdfFile);
+                showToast(`Advertisement ${result.advertisement.advertisementNo} created with ${result.itemsCreated} items!`, 'success');
+                
+                pendingPdfFile = null;
+                extractedPdfData = null;
+                document.getElementById('pdfFileInput').value = '';
+                document.getElementById('selectedFileName').textContent = 'No file selected';
+                document.getElementById('uploadProgress').style.display = 'none';
+                
+                await refreshAll();
+                
+                // Switch to View All tab
+                document.querySelector('[data-tab="list-adv"]').click();
+                
+            } catch (err) {
+                showToast('Error: ' + err.message, 'error');
+                document.getElementById('uploadProgress').style.display = 'none';
+                document.getElementById('pdfPreviewSection').style.display = 'block';
+            }
+        });
+
+        document.getElementById('cancelUploadBtn').addEventListener('click', () => {
+            pendingPdfFile = null;
+            extractedPdfData = null;
+            document.getElementById('pdfFileInput').value = '';
+            document.getElementById('selectedFileName').textContent = 'No file selected';
+            document.getElementById('pdfPreviewSection').style.display = 'none';
+        });
+
+        // Initialize
+        refreshAll();
+    </script>
+</body>
+
+</html>

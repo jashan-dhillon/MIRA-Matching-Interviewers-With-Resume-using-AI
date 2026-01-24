@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment and Assessment Center - DRDO | Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-banner h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .welcome-banner p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .board-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 12px var(--card-shadow);
+        }
+
+        .board-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .board-card h3 i {
+            margin-right: 0.75rem;
+        }
+
+        #generate-board h3 i {
+            color: var(--green-accept);
+        }
+
+        #completed-board h3 i {
+            color: var(--text-secondary);
+        }
+
+        .advertisement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .advertisement-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .advertisement-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+
+        .adv-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .adv-item:hover {
+            border-color: var(--primary-blue);
+            background-color: var(--bg-blue);
+            box-shadow: 0 2px 8px var(--card-shadow);
+            transform: translateY(-2px);
+        }
+
+        .adv-item span {
+            flex-grow: 1;
+        }
+
+        .adv-item i {
+            color: var(--text-secondary);
+            transition: transform 0.3s ease;
+        }
+
+        .adv-item:hover i {
+            transform: translateX(5px);
+            color: var(--primary-blue);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border-color);
+        }
+
+        .home-board-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .home-board-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="rac_logo.png" alt="DRDO Logo" class="header-logo">
+            <div class="header-center">
+                <h1>Recruitment and Assessment Centre, DRDO</h1>
+                <p>Department of Defence Research and Development</p>
+                <p>Ministry of Defence, Government of India</p>
+                <p class="iso-text">an ISO 9001 certified establishment</p>
+            </div>
+            <img src="emblem.png" alt="Indian Emblem" class="header-emblem">
+        </div>
+
+        <nav class="navbar">
+            <a href="home.html" class="nav-link active">Home</a>
+            <a href="experts.html" class="nav-link" data-role="admin,expert">Experts</a>
+            <a href="admin.html" class="nav-link" data-role="admin">Admin</a>
+            <a href="profile.html" class="nav-link">Profile</a>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div>
+                <h2>Welcome back, <span id="userName">User</span>!</h2>
+                <p>Manage recruitment boards and expert panels</p>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="home-board-container">
+            <!-- Generate Board Section -->
+            <div class="board-card" id="generate-board">
+                <h3>
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                    Generate Board
+                </h3>
+                <div id="activeAdvertisements" class="advertisement-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Boards Section -->
+            <div class="board-card" id="completed-board">
+                <h3>
+                    <i class="fa-solid fa-check-double"></i>
+                    Already Done Boards
+                </h3>
+                <div id="completedAdvertisements" class="advertisement-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script>
+        // Check authentication
+        if (!requireAuth()) {
+            // Redirect handled by requireAuth()
+        }
+
+        // Display user name
+        const user = session.getUser();
+        if (user) {
+            document.getElementById('userName').textContent = user.fullName || user.email;
+        }
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await api.auth.logout();
+            } catch (e) {
+                // Continue even if API fails
+            }
+            session.clearUser();
+            window.location.href = 'login.html';
+        });
+
+        // Render advertisement list
+        function renderAdvertisements(container, advertisements, status) {
+            if (advertisements.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <p>No ${status} advertisements found</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = advertisements.map(adv => `
+                <a href="advertisment.html?id=${adv._id}&advNo=${adv.advertisementNo}" class="adv-item">
+                    <span>Advertisement No. ${adv.advertisementNo}</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            `).join('');
+        }
+
+        // Load advertisements
+        async function loadAdvertisements() {
+            try {
+                // Load active advertisements
+                const activeAds = await api.advertisements.getAll('active');
+                renderAdvertisements(
+                    document.getElementById('activeAdvertisements'),
+                    activeAds,
+                    'active'
+                );
+
+                // Load completed advertisements
+                const completedAds = await api.advertisements.getAll('completed');
+                renderAdvertisements(
+                    document.getElementById('completedAdvertisements'),
+                    completedAds,
+                    'completed'
+                );
+            } catch (error) {
+                console.error('Error loading advertisements:', error);
+                document.getElementById('activeAdvertisements').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        <p>Failed to load advertisements</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Is the server running? Try seeding the database first.</p>
+                    </div>
+                `;
+                document.getElementById('completedAdvertisements').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        <p>Failed to load advertisements</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize
+        loadAdvertisements();
+    </script>
+
+</body>
+
+</html>
