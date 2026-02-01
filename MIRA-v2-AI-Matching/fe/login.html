@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment and Assessment Centre | Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        body {
+            background-color: #f5f8ff;
+        }
+
+        .login-header {
+            background-color: #dce9ff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 40px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-header img {
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .login-header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .login-header-text h1 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 700;
+            color: #003366;
+        }
+
+        .login-header-text p {
+            font-size: 13px;
+            margin: 0;
+            color: #333;
+        }
+
+        .login-header nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: #003366;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .login-header nav a:hover {
+            color: #0066cc;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 60px;
+            min-height: calc(100vh - 140px);
+        }
+
+        .form-box {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 420px;
+            padding: 30px 40px;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .toggle-btns {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .toggle-btns button {
+            flex: 1;
+            padding: 10px;
+            background-color: #e7efff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btns button.active {
+            background-color: #003366;
+            color: white;
+            border-radius: 6px;
+        }
+
+        .form-box input,
+        .form-box select {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: var(--font-family);
+        }
+
+        button.submit {
+            width: 100%;
+            padding: 10px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: var(--font-family);
+        }
+
+        button.submit:hover {
+            background-color: #0059b3;
+        }
+
+        button.submit:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+            margin-top: 15px;
+        }
+
+        .footer a {
+            color: #003366;
+            text-decoration: none;
+        }
+
+        .forgot-password {
+            text-align: right;
+            font-size: 13px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+
+        .forgot-password a {
+            color: #003366;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .captcha-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .captcha-image {
+            width: 100px;
+            height: 40px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            font-size: 20px;
+            font-weight: 600;
+            color: #003366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 2px;
+            user-select: none;
+        }
+
+        .reload-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: #003366;
+        }
+
+        .captcha-input {
+            width: 55% !important;
+        }
+
+        .error-message {
+            color: #ff5630;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .seed-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .seed-btn:hover {
+            background-color: #0059b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="login-header">
+        <div class="login-header-left">
+            <img src="rac_logo.png" alt="DRDO Logo">
+            <div class="login-header-text">
+                <h1>Recruitment and Assessment Centre, DRDO</h1>
+                <p>Department of Defence Research and Development<br>
+                    Ministry of Defence, Government of India<br>
+                    <em>an ISO 9001 certified establishment</em>
+                </p>
+            </div>
+        </div>
+
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="login.html" class="active">Login</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-box">
+            <div class="toggle-btns">
+                <button id="loginBtn" class="active">Login</button>
+                <button id="signupBtn">Signup</button>
+            </div>
+
+            <!-- Role Selection -->
+            <select id="roleSelect" required>
+                <option value="" disabled selected>Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="expert">Expert</option>
+                <option value="candidate">Candidate</option>
+            </select>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+
+                <div class="forgot-password">
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <!-- CAPTCHA Section -->
+                <div class="captcha-container">
+                    <div class="captcha-box">
+                        <div id="captcha" class="captcha-image"></div>
+                        <button type="button" class="reload-btn" id="reloadCaptcha">⟳</button>
+                    </div>
+                    <input type="text" id="loginCaptchaInput" class="captcha-input" placeholder="Enter Captcha"
+                        required>
+                </div>
+
+                <p id="loginError" class="error-message"></p>
+
+                <button type="submit" class="submit">Login</button>
+
+                <div class="footer">
+                    Don't have an account? <a href="#" id="switchToSignup">Sign up</a>
+                </div>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="hidden">
+                <input type="text" id="signupName" placeholder="Full Name" required>
+                <input type="email" id="signupEmail" placeholder="Email" required>
+                <input type="password" id="signupPassword" placeholder="Password" required>
+                <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+
+                <!-- CAPTCHA Section -->
+                <div class="captcha-container">
+                    <div class="captcha-box">
+                        <div id="signupCaptcha" class="captcha-image"></div>
+                        <button type="button" class="reload-btn" id="reloadSignupCaptcha">⟳</button>
+                    </div>
+                    <input type="text" id="signupCaptchaInput" class="captcha-input" placeholder="Enter Captcha"
+                        required>
+                </div>
+
+                <p id="signupError" class="error-message"></p>
+
+                <button type="submit" class="submit">Sign Up</button>
+
+                <div class="footer">
+                    Already have an account? <a href="#" id="switchToLogin">Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Seed Database Button (for first-time setup) -->
+    <button class="seed-btn" id="seedBtn" title="Click to populate database with sample data">
+        <i class="fa-solid fa-database"></i> Seed Database
+    </button>
+
+    <script src="../js/api.js"></script>
+    <script>
+        // Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const switchToSignup = document.getElementById('switchToSignup');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const roleSelect = document.getElementById('roleSelect');
+
+        // CAPTCHA elements
+        const captcha = document.getElementById('captcha');
+        const signupCaptcha = document.getElementById('signupCaptcha');
+        let loginCaptchaCode = '';
+        let signupCaptchaCode = '';
+
+        // Toggle forms
+        loginBtn.onclick = () => {
+            loginForm.classList.remove('hidden');
+            signupForm.classList.add('hidden');
+            loginBtn.classList.add('active');
+            signupBtn.classList.remove('active');
+        };
+
+        signupBtn.onclick = () => {
+            signupForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            signupBtn.classList.add('active');
+            loginBtn.classList.remove('active');
+        };
+
+        switchToSignup.onclick = (e) => {
+            e.preventDefault();
+            signupBtn.click();
+        };
+
+        switchToLogin.onclick = (e) => {
+            e.preventDefault();
+            loginBtn.click();
+        };
+
+        // CAPTCHA - fetch from server
+        async function fetchCaptcha(element, type) {
+            try {
+                const response = await api.auth.getCaptcha();
+                element.textContent = response.captcha;
+                return response.captcha;
+            } catch (error) {
+                element.textContent = 'ERROR';
+                console.error('Failed to fetch CAPTCHA:', error);
+                return '';
+            }
+        }
+
+        document.getElementById('reloadCaptcha').addEventListener('click', async () => {
+            loginCaptchaCode = await fetchCaptcha(captcha, 'login');
+        });
+
+        document.getElementById('reloadSignupCaptcha').addEventListener('click', async () => {
+            signupCaptchaCode = await fetchCaptcha(signupCaptcha, 'signup');
+        });
+
+        // Initialize CAPTCHA from server
+        (async () => {
+            loginCaptchaCode = await fetchCaptcha(captcha, 'login');
+            signupCaptchaCode = await fetchCaptcha(signupCaptcha, 'signup');
+        })();
+
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const role = roleSelect.value;
+            const captchaInput = document.getElementById('loginCaptchaInput').value;
+            const errorEl = document.getElementById('loginError');
+            const submitBtn = loginForm.querySelector('.submit');
+
+            // Client-side validation (basic)
+            if (!role) {
+                errorEl.textContent = 'Please select a role.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (!captchaInput) {
+                errorEl.textContent = 'Please enter the CAPTCHA.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Logging in...';
+            errorEl.classList.remove('show');
+
+            try {
+                // Pass CAPTCHA to server for validation
+                const response = await api.auth.login(email, password, role, captchaInput);
+                session.setUser(response.user);
+                showToast('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1000);
+            } catch (error) {
+                errorEl.textContent = error.message || 'Login failed. Please try again.';
+                errorEl.classList.add('show');
+                // Refresh CAPTCHA from server on error
+                loginCaptchaCode = await fetchCaptcha(captcha, 'login');
+                document.getElementById('loginCaptchaInput').value = '';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
+            }
+        });
+
+        // Signup form submission
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fullName = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const role = roleSelect.value;
+            const captchaInput = document.getElementById('signupCaptchaInput').value;
+            const errorEl = document.getElementById('signupError');
+            const submitBtn = signupForm.querySelector('.submit');
+
+            // Client-side validation (basic)
+            if (!role) {
+                errorEl.textContent = 'Please select a role.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorEl.textContent = 'Passwords do not match.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (!captchaInput) {
+                errorEl.textContent = 'Please enter the CAPTCHA.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing up...';
+            errorEl.classList.remove('show');
+
+            try {
+                // Pass CAPTCHA to server for validation
+                await api.auth.signup(fullName, email, password, role, captchaInput);
+                showToast('Account created! Please login.', 'success');
+                loginBtn.click();
+                document.getElementById('loginEmail').value = email;
+                // Refresh CAPTCHA for login form
+                loginCaptchaCode = await fetchCaptcha(captcha, 'login');
+            } catch (error) {
+                errorEl.textContent = error.message || 'Signup failed. Please try again.';
+                errorEl.classList.add('show');
+                // Refresh CAPTCHA from server on error
+                signupCaptchaCode = await fetchCaptcha(signupCaptcha, 'signup');
+                document.getElementById('signupCaptchaInput').value = '';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign Up';
+            }
+        });
+
+        // Seed database button
+        document.getElementById('seedBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('seedBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Seeding...';
+
+            try {
+                await api.seedDatabase();
+                showToast('Database seeded successfully! You can now login with admin@drdo.gov.in / admin123', 'success');
+            } catch (error) {
+                showToast('Failed to seed database. Is the server running?', 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-database"></i> Seed Database';
+        });
+
+        // Check if already logged in
+        if (session.isLoggedIn()) {
+            window.location.href = 'home.html';
+        }
+    </script>
+
+</body>
+
+</html>

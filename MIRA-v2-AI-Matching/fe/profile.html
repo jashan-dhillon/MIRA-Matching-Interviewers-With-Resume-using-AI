@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - RAC DRDO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .profile-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .profile-banner {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            height: 150px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background-color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--primary-blue);
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid var(--white);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-content {
+            padding: 80px 2rem 2rem;
+            text-align: center;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem;
+        }
+
+        .profile-email {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin: 0 0 1rem;
+        }
+
+        .profile-role {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background-color: var(--bg-blue);
+            color: var(--primary-blue);
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .profile-details {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-label i {
+            color: var(--primary-blue);
+            width: 20px;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="rac_logo.png" alt="DRDO Logo" class="header-logo">
+            <div class="header-center">
+                <h1>Recruitment and Assessment Centre, DRDO</h1>
+                <p>Department of Defence Research and Development</p>
+                <p>Ministry of Defence, Government of India</p>
+                <p class="iso-text">an ISO 9001 certified establishment</p>
+            </div>
+            <img src="emblem.png" alt="Indian Emblem" class="header-emblem">
+        </div>
+
+        <nav class="navbar">
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="experts.html" class="nav-link" data-role="admin,expert">Experts</a>
+            <a href="admin.html" class="nav-link" data-role="admin">Admin</a>
+            <a href="profile.html" class="nav-link active">Profile</a>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <div class="profile-container">
+            <div class="profile-card">
+                <div class="profile-banner">
+                    <div class="profile-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+                <div class="profile-content">
+                    <h1 class="profile-name" id="profileName">Loading...</h1>
+                    <p class="profile-email" id="profileEmail">Loading...</p>
+                    <span class="profile-role" id="profileRole">-</span>
+
+                    <div class="profile-details">
+                        <div class="detail-row">
+                            <span class="detail-label"><i class="fa-solid fa-envelope"></i> Email</span>
+                            <span class="detail-value" id="detailEmail">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label"><i class="fa-solid fa-user-tag"></i> Role</span>
+                            <span class="detail-value" id="detailRole">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label"><i class="fa-solid fa-shield-halved"></i> Status</span>
+                            <span class="detail-value" style="color: var(--green-accept);">Active</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button class="btn btn-outline" onclick="window.location.href='home.html'">
+                            <i class="fa-solid fa-home"></i> Go to Dashboard
+                        </button>
+                        <button class="btn btn-danger" id="logoutBtn2">
+                            <i class="fa-solid fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script>
+        if (!requireAuth()) { }
+
+        const user = session.getUser();
+        if (user) {
+            document.getElementById('profileName').textContent = user.fullName || 'User';
+            document.getElementById('profileEmail').textContent = user.email;
+            document.getElementById('profileRole').textContent = user.role;
+            document.getElementById('detailEmail').textContent = user.email;
+            document.getElementById('detailRole').textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+        }
+
+        function logout() {
+            api.auth.logout().catch(() => { });
+            session.clearUser();
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('logoutBtn2').addEventListener('click', logout);
+    </script>
+</body>
+
+</html>

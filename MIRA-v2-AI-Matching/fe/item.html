@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Details - RAC DRDO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        /* Item Section */
+        .item-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .item-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            cursor: pointer;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .item-title:hover {
+            color: var(--primary-blue);
+        }
+
+        .item-title i {
+            margin-right: 0.5rem;
+        }
+
+        .item-description-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* Board Selection */
+        .board-selection {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            gap: 1.5rem;
+            align-items: flex-end;
+        }
+
+        .dropdown-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dropdown-container label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .board-dropdown {
+            width: 400px;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            background-color: var(--white);
+            cursor: pointer;
+        }
+
+        /* Recommended Experts */
+        .recommended-experts-container {
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .recommended-experts-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .recommended-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommended-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .expert-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .expert-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px var(--card-shadow);
+        }
+
+        .expert-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .expert-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .expert-info p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0.25rem 0 0;
+        }
+
+        .relevance-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .expert-card-footer {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+
+        .card-btn {
+            flex-grow: 1;
+            padding: 0.7rem 1rem;
+            border-radius: 6px;
+            border: none;
+            font-family: var(--font-family);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .details-btn {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .details-btn:hover {
+            background-color: var(--bg-blue);
+            border-color: var(--light-blue);
+        }
+
+        .accept-btn {
+            background-color: var(--green-accept);
+            color: var(--white);
+        }
+
+        .accept-btn:hover {
+            opacity: 0.9;
+        }
+
+        .accept-btn.accepted {
+            background-color: #e3fcef;
+            color: var(--green-accept);
+            cursor: not-allowed;
+        }
+
+        .remove-btn {
+            background-color: var(--red-remove);
+            color: var(--white);
+        }
+
+        .remove-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Manual Selection */
+        .manual-selection-container {
+            background-color: #d6eefc;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+        }
+
+        .manual-selection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .manual-selection-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-right: auto;
+        }
+
+        .manual-selection-header h3 i {
+            margin-right: 0.75rem;
+            color: var(--primary-blue);
+        }
+
+        .create-panel-button {
+            background-color: var(--light-blue);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .create-panel-button i {
+            margin-right: 0.5rem;
+        }
+
+        .create-panel-button:hover {
+            background-color: var(--primary-blue);
+        }
+
+        .create-panel-button:disabled {
+            background-color: #c1c7d0;
+            cursor: not-allowed;
+        }
+
+        #view-panel-btn {
+            background-color: var(--primary-blue);
+        }
+
+        #view-panel-btn:hover {
+            background-color: var(--light-blue);
+        }
+
+        #view-panel-btn:disabled {
+            background-color: #c1c7d0;
+            color: #8993a4;
+        }
+
+        .manual-selection-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .manual-selection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .selection-column h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .expert-list {
+            height: 400px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .expert-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .expert-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+
+        .manual-expert-item {
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .manual-expert-item:hover {
+            border-color: var(--light-blue);
+            box-shadow: 0 2px 8px var(--card-shadow);
+        }
+
+        .manual-expert-item .expert-info {
+            flex-grow: 1;
+            margin-left: 1rem;
+        }
+
+        .manual-expert-item .relevance-score {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .manual-expert-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .expert-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .tag-academia {
+            background-color: #e6fcff;
+            color: #00a3bf;
+        }
+
+        .tag-industry {
+            background-color: #fff0e6;
+            color: #ff8b3d;
+        }
+
+        /* Panel Modal Styles */
+        .panelist-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .panelist-table th,
+        .panelist-table td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .panelist-table th {
+            background-color: var(--bg-blue);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .panelist-table td:first-child {
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .status-pending {
+            background-color: #fffaeb;
+            color: #b45309;
+        }
+
+        .status-accepted {
+            background-color: #f0fdf4;
+            color: #15803d;
+        }
+
+        .status-declined {
+            background-color: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .panel-empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .panel-empty-state i {
+            font-size: 3rem;
+            color: var(--border-color);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .panel-empty-state .empty-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .panel-empty-state .empty-subtitle {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* AI Explanation Text Formatting */
+        .ai-explanation-text {
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        /* Custom scrollbar for explanation boxes */
+        .ai-explanation-text::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .ai-explanation-text::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .ai-explanation-text::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .ai-explanation-text::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="rac_logo.png" alt="DRDO Logo" class="header-logo">
+            <div class="header-center">
+                <h1>Recruitment and Assessment Centre, DRDO</h1>
+                <p>Department of Defence Research and Development</p>
+                <p>Ministry of Defence, Government of India</p>
+                <p class="iso-text">an ISO 9001 certified establishment</p>
+            </div>
+            <img src="emblem.png" alt="Indian Emblem" class="header-emblem">
+        </div>
+
+        <nav class="navbar">
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="experts.html" class="nav-link" data-role="admin,expert">Experts</a>
+            <a href="admin.html" class="nav-link" data-role="admin">Admin</a>
+            <a href="profile.html" class="nav-link">Profile</a>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="home.html"><i class="fa-solid fa-home"></i> Home</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <a href="#" id="advLink">Advertisement</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span id="breadcrumbItem">Item</span>
+        </div>
+
+        <!-- Item Details Section - PDF Hidden by Default -->
+        <section style="margin-bottom: 2rem;">
+            <!-- Header -->
+            <div
+                style="background: var(--primary-blue); color: white; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="itemTitle" style="margin: 0; font-size: 1.2rem;">
+                    <i class="fa-regular fa-file-lines"></i> Item --
+                </h2>
+                <button id="togglePdfBtn"
+                    style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                    <i class="fa-solid fa-file-pdf"></i> View PDF
+                </button>
+            </div>
+
+            <!-- Extracted Info Card -->
+            <div id="itemDetailsCard"
+                style="background: white; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px; padding: 1.5rem;">
+
+                <!-- Basic Info Grid -->
+                <div
+                    style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+                    <div>
+                        <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase;">Item No.</div>
+                        <div id="infoItemNo" style="font-size: 1.3rem; font-weight: 700; color: var(--primary-blue);">--
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase;">Discipline</div>
+                        <div id="infoDiscipline" style="font-size: 0.95rem; font-weight: 600;">--</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase;">Organization</div>
+                        <div id="infoOrg" style="font-size: 0.95rem; font-weight: 600;">--</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase;">GATE Code</div>
+                        <div id="infoGate" style="font-size: 0.95rem; font-weight: 600; color: #7c3aed;">--</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase;">Total Posts</div>
+                        <div id="infoTotal" style="font-size: 1.3rem; font-weight: 700; color: #059669;">--</div>
+                    </div>
+                </div>
+
+                <!-- Vacancies -->
+                <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">
+                        Category-wise Vacancies</div>
+                    <div id="vacancyRow" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+                </div>
+
+                <!-- Essential Qualification -->
+                <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">
+                        Essential Qualification</div>
+                    <div id="infoEssentialQual"
+                        style="font-size: 0.9rem; line-height: 1.6; color: #374151; background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
+                        Loading...
+                    </div>
+                </div>
+
+                <!-- Equivalent Degrees -->
+                <div id="degreesRow"
+                    style="display: none; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">
+                        Equivalent Degrees Accepted</div>
+                    <div id="infoDegreesGrid" style="display: flex; gap: 0.4rem; flex-wrap: wrap;"></div>
+                </div>
+
+                <!-- Sub Organizations -->
+                <div id="subOrgsRow" style="display: none;">
+                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">
+                        Other Organizations</div>
+                    <div id="infoSubOrgs" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+                </div>
+            </div>
+
+            <!-- PDF Viewer - HIDDEN by default -->
+            <div id="pdfViewerSection"
+                style="display: none; margin-top: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden;">
+                <div
+                    style="background: #dc2626; color: white; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 600;"><i class="fa-solid fa-file-pdf"></i> Original Advertisement
+                        PDF</span>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <a id="downloadPdfBtn" href="#" target="_blank"
+                            style="color: white; font-size: 0.85rem; text-decoration: none;">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a id="openPdfNewTab" href="#" target="_blank"
+                            style="color: white; font-size: 0.85rem; text-decoration: none;">
+                            <i class="fa-solid fa-external-link"></i> New Tab
+                        </a>
+                        <button id="closePdfBtn"
+                            style="background: white; color: #dc2626; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <iframe id="pdfFrame" style="width: 100%; height: 500px; border: none;"></iframe>
+            </div>
+        </section>
+
+        <!-- Ollama Status Warning Banner -->
+        <div id="ollama-status-banner"
+            style="display: none; margin-bottom: 1.5rem; padding: 1rem 1.5rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fa-solid fa-exclamation-triangle" style="font-size: 1.5rem; color: #d97706;"></i>
+                <div style="flex-grow: 1;">
+                    <div style="font-weight: 600; color: #92400e; margin-bottom: 0.25rem;">⚠️ Using Fallback Scoring
+                        Method</div>
+                    <div style="font-size: 0.9rem; color: #78350f;">
+                        <strong>Ollama LLM is not connected.</strong> The system is using keyword-based matching instead
+                        of AI semantic analysis.
+                        Scores may be less accurate.
+                        <a href="https://ollama.com/download" target="_blank"
+                            style="color: #92400e; text-decoration: underline;">Install Ollama</a>
+                        and run <code
+                            style="background: #fff; padding: 2px 6px; border-radius: 4px;">ollama pull llama3</code>
+                        for better results.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="board-selection">
+            <div class="dropdown-container">
+                <label for="board-type">Select Interview Board</label>
+                <select id="board-type" class="board-dropdown">
+                    <option value="" disabled selected>Choose board type...</option>
+                    <option value="3">Technical Screening Committee (3 Members)</option>
+                    <option value="5">Final Interview Panel (5 Members)</option>
+                    <option value="7">Assessment Board (7 Members)</option>
+                </select>
+            </div>
+
+            <button id="ai-generate-btn" class="create-panel-button"
+                style="background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); position: relative; overflow: hidden;">
+                <i class="fa-solid fa-robot"></i>
+                <span>🤖 Generate AI Panel</span>
+                <div id="ai-loading-indicator"
+                    style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: none; align-items: center; justify-content: center;">
+                    <div class="spinner" style="width: 20px; height: 20px; border-width: 2px;"></div>
+                </div>
+            </button>
+
+            <button id="view-panel-btn" class="create-panel-button" disabled>
+                <i class="fa-solid fa-users-viewfinder"></i>
+                <span>View Panel (0)</span>
+            </button>
+        </section>
+
+        <section id="recommended-experts-section" class="recommended-experts-container hidden">
+            <div class="recommended-header">
+                <h3>Recommended Experts</h3>
+                <button id="add-more-expert-btn" class="card-btn details-btn"
+                    style="flex-grow: 0; padding: 0.5rem 1rem;">
+                    <i class="fa-solid fa-plus"></i> Add Expert
+                </button>
+            </div>
+            <div id="recommended-experts-grid" class="experts-grid">
+            </div>
+        </section>
+
+        <section class="manual-selection-container">
+            <div class="manual-selection-header">
+                <h3><i class="fa-solid fa-users"></i> Manual Expert Selection</h3>
+
+                <button id="create-panel-btn" class="create-panel-button" disabled>
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Create Panel & Send Invites (0)</span>
+                </button>
+            </div>
+            <div class="manual-selection-grid">
+                <div class="selection-column">
+                    <h4>Select Chairperson</h4>
+                    <div id="chairperson-list" class="expert-list">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="selection-column">
+                    <h4>Departmental Experts</h4>
+                    <div id="departmental-list" class="expert-list">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="selection-column">
+                    <h4>External Experts</h4>
+                    <div id="external-list" class="expert-list">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AI Modal -->
+    <div id="ai-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="close-modal-btn" class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <i class="fa-solid fa-microchip"></i>
+                <h3>AI Relevance Analysis</h3>
+            </div>
+            <div class="modal-body">
+                <div id="modal-expert-info"
+                    style="background-color: var(--bg-blue); padding: 1rem 1.5rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                </div>
+                <div class="modal-explanation">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 0.75rem;">
+                        <i class="fa-solid fa-wand-magic-sparkles"
+                            style="margin-right: 0.5rem; color: var(--primary-blue);"></i>
+                        Why This Expert?
+                    </h4>
+                    <p id="modal-expert-reason"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel Modal -->
+    <div id="panel-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 800px;">
+            <button id="close-panel-modal-btn" class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <i class="fa-solid fa-users-viewfinder"></i>
+                <h3>Panel Monitoring: Selected Experts</h3>
+            </div>
+            <div class="modal-body">
+                <div id="panelist-list-container">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        // Check authentication
+        if (!requireAuth()) { }
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try { await api.auth.logout(); } catch (e) { }
+            session.clearUser();
+            window.location.href = 'login.html';
+        });
+
+        // Get URL parameters
+        const itemId = getUrlParam('id');
+        const itemNo = getUrlParam('itemNo');
+        const advId = getUrlParam('advId');
+        const advNo = getUrlParam('advNo');
+
+        // Update breadcrumb
+        if (advNo && advId) {
+            document.getElementById('advLink').href = `advertisment.html?id=${advId}&advNo=${advNo}`;
+            document.getElementById('advLink').textContent = `Advertisement No. ${advNo}`;
+        }
+        if (itemNo) {
+            document.getElementById('breadcrumbItem').textContent = `Item No. ${itemNo}`;
+            document.getElementById('itemTitle').innerHTML = `<i class="fa-regular fa-file-lines"></i> Item ${itemNo}`;
+        }
+
+        // State
+        let allExperts = [];
+        let invitedPanelists = [];
+        let currentRecommendedCount = 0;
+        let currentItemData = null;
+        let currentAdvertisement = null;
+        let aiGeneratedPanel = null;
+        let allScoredExperts = null;
+
+        // DOM Elements
+        const boardDropdown = document.getElementById('board-type');
+        const recommendedSection = document.getElementById('recommended-experts-section');
+        const recommendedGrid = document.getElementById('recommended-experts-grid');
+        const createPanelBtn = document.getElementById('create-panel-btn');
+        const viewPanelBtn = document.getElementById('view-panel-btn');
+        const addMoreExpertBtn = document.getElementById('add-more-expert-btn');
+        const aiModal = document.getElementById('ai-modal');
+        const panelModal = document.getElementById('panel-modal');
+
+        const listContainers = {
+            chairperson: document.getElementById('chairperson-list'),
+            departmental: document.getElementById('departmental-list'),
+            external: document.getElementById('external-list')
+        };
+
+        // ==================== OLLAMA STATUS CHECK ====================
+        async function checkOllamaStatus() {
+            try {
+                const response = await fetch('/api/matching/ollama-status');
+                const status = await response.json();
+
+                const banner = document.getElementById('ollama-status-banner');
+                if (!status.available) {
+                    banner.style.display = 'block';
+                    console.warn('⚠️ Ollama not available - using fallback scoring method');
+                } else {
+                    banner.style.display = 'none';
+                    console.log('✅ Ollama connected:', status.model);
+                }
+            } catch (error) {
+                console.error('Error checking Ollama status:', error);
+                // Show warning on error too
+                document.getElementById('ollama-status-banner').style.display = 'block';
+            }
+        }
+
+        // Check Ollama status on page load
+        checkOllamaStatus();
+
+
+        // ==================== ITEM SUMMARY & PDF FUNCTIONS ====================
+        async function loadItemDetails() {
+            try {
+                // Load item details
+                if (itemId) {
+                    currentItemData = await api.items.getById(itemId);
+                    renderItemSummary(currentItemData);
+                }
+
+                // Load advertisement details
+                if (advId) {
+                    currentAdvertisement = await api.advertisements.getById(advId);
+                    setupPdfViewer(currentAdvertisement);
+                }
+            } catch (error) {
+                console.error('Error loading item details:', error);
+            }
+        }
+
+        function renderItemSummary(item) {
+            // Debug: log the full item data
+            console.log('Item data received:', item);
+
+            // Update title
+            document.getElementById('itemTitle').innerHTML = `<i class="fa-regular fa-file-lines"></i> Item ${item.itemNo} - ${item.discipline || item.title || 'Details'}`;
+
+            // Basic info
+            document.getElementById('infoItemNo').textContent = item.itemNo;
+            document.getElementById('infoDiscipline').textContent = item.discipline || item.title || '-';
+            document.getElementById('infoOrg').textContent = item.organization || 'DRDO';
+            document.getElementById('infoGate').textContent = item.gateCode || '-';
+            document.getElementById('infoTotal').textContent = item.vacancies?.Total || '-';
+
+            // Vacancy breakdown with colored badges
+            if (item.vacancies) {
+                const cats = ['UR', 'EWS', 'OBC', 'SC', 'ST', 'Total'];
+                const colors = { 'UR': '#3b82f6', 'EWS': '#8b5cf6', 'OBC': '#f59e0b', 'SC': '#10b981', 'ST': '#ef4444', 'Total': '#1f2937' };
+                document.getElementById('vacancyRow').innerHTML = cats.map(c =>
+                    `<span style="background: ${colors[c]}; color: white; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.85rem;">
+                        <strong>${item.vacancies[c] || 0}</strong> ${c}
+                    </span>`
+                ).join('');
+            }
+
+            // Essential Qualification - show FULL text from item
+            // Priority: description (from PDF extraction) > essentialQualification > fallback
+            let eqText = item.description || item.essentialQualification || '';
+
+            // If no extracted text, show a meaningful default
+            if (!eqText || eqText.trim() === '') {
+                eqText = `At least First Class Bachelor's Degree in Engineering or Technology in ${item.discipline || 'relevant discipline'} from a recognized university or equivalent. Valid GATE score in ${item.gateCode || 'relevant paper'} is mandatory.`;
+            }
+
+            document.getElementById('infoEssentialQual').innerHTML = eqText;
+
+            // Equivalent degrees - show ALL
+            if (item.equivalentDegrees && item.equivalentDegrees.length > 0) {
+                const degreesGrid = document.getElementById('infoDegreesGrid');
+                degreesGrid.innerHTML = item.equivalentDegrees.map(degree =>
+                    `<span style="background: #dbeafe; color: #1e40af; padding: 0.4rem 0.7rem; border-radius: 4px; font-size: 0.85rem; margin-bottom: 0.3rem;">✓ ${degree}</span>`
+                ).join('');
+                document.getElementById('degreesRow').style.display = 'block';
+            }
+
+            // Sub organizations
+            if (item.subOrganizations && item.subOrganizations.length > 0) {
+                const subOrgsDiv = document.getElementById('infoSubOrgs');
+                subOrgsDiv.innerHTML = item.subOrganizations.map(sub =>
+                    `<span style="background: #f3f4f6; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem;">
+                        <strong>${sub.organization}</strong>: ${sub.vacancies?.Total || 0} posts
+                    </span>`
+                ).join('');
+                document.getElementById('subOrgsRow').style.display = 'block';
+            }
+        }
+
+        function setupPdfViewer(advertisement) {
+            const pdfFile = advertisement.pdfFile;
+            if (pdfFile) {
+                const pdfUrl = `/uploads/${pdfFile}`;
+                // Don't load PDF immediately - wait for button click
+                document.getElementById('downloadPdfBtn').href = pdfUrl;
+                document.getElementById('openPdfNewTab').href = pdfUrl;
+
+                // Store URL for lazy loading
+                document.getElementById('pdfFrame').dataset.src = pdfUrl;
+            } else {
+                // No PDF available
+                document.getElementById('togglePdfBtn').style.display = 'none';
+            }
+        }
+
+        // Toggle PDF Viewer
+        document.getElementById('togglePdfBtn').addEventListener('click', function () {
+            const pdfSection = document.getElementById('pdfViewerSection');
+            const isVisible = pdfSection.style.display !== 'none';
+
+            if (isVisible) {
+                pdfSection.style.display = 'none';
+                this.innerHTML = '<i class="fa-solid fa-file-pdf"></i> View PDF';
+            } else {
+                pdfSection.style.display = 'block';
+                // Lazy load PDF only when opened
+                const frame = document.getElementById('pdfFrame');
+                if (frame.dataset.src && !frame.src.includes(frame.dataset.src)) {
+                    frame.src = frame.dataset.src;
+                }
+                this.innerHTML = '<i class="fa-solid fa-times"></i> Hide PDF';
+            }
+        });
+
+        // Close PDF button (red X)
+        document.getElementById('closePdfBtn').addEventListener('click', function () {
+            document.getElementById('pdfViewerSection').style.display = 'none';
+            document.getElementById('togglePdfBtn').innerHTML = '<i class="fa-solid fa-file-pdf"></i> View PDF';
+        });
+
+        // Toast notification
+        function showLocalToast(message, type = 'success') {
+            showToast(message, type);
+        }
+
+        // Modal functions
+        function openAiModal(expertId) {
+            const expert = allExperts.find(e => e._id === expertId);
+            if (!expert) return;
+
+            document.getElementById('modal-expert-info').innerHTML = `
+                <div>
+                    <h4 style="font-size: 1.2rem; margin: 0;">${expert.name}</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">Relevance Score with Item</p>
+                </div>
+                <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary-blue);">${expert.relevanceScore}%</div>
+            `;
+            document.getElementById('modal-expert-reason').textContent = expert.reason || 'No additional details available.';
+            aiModal.classList.add('visible');
+        }
+
+        function closeAiModal() {
+            aiModal.classList.remove('visible');
+        }
+
+        function openPanelModal() {
+            renderInvitedPanelists();
+            panelModal.classList.add('visible');
+        }
+
+        function closePanelModal() {
+            panelModal.classList.remove('visible');
+        }
+
+        function renderInvitedPanelists() {
+            const container = document.getElementById('panelist-list-container');
+
+            if (invitedPanelists.length === 0) {
+                container.innerHTML = `
+                    <div class="panel-empty-state">
+                        <i class="fa-solid fa-users-slash"></i>
+                        <p class="empty-title">Experts Not Selected Yet</p>
+                        <p class="empty-subtitle">Please use the "Accept" or "Create Panel" buttons to send invites first.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let tableHtml = `
+                <table class="panelist-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            invitedPanelists.forEach(expert => {
+                let statusClass = 'status-pending';
+                if (expert.status.toLowerCase() === 'accepted') statusClass = 'status-accepted';
+                if (expert.status.toLowerCase() === 'declined') statusClass = 'status-declined';
+
+                tableHtml += `
+                    <tr>
+                        <td>${expert.name}</td>
+                        <td>${expert.role}</td>
+                        <td><span class="status-badge ${statusClass}">${expert.status}</span></td>
+                    </tr>
+                `;
+            });
+
+            tableHtml += '</tbody></table>';
+            container.innerHTML = tableHtml;
+        }
+
+        function updateViewPanelButton() {
+            const count = invitedPanelists.length;
+            viewPanelBtn.querySelector('span').textContent = `View Panel (${count})`;
+            viewPanelBtn.disabled = (count === 0);
+        }
+
+        // Format AI explanation text for better readability
+        function formatExplanation(text) {
+            if (!text) return '';
+
+            // Convert sections like **STRENGTHS:** to styled headers
+            text = text.replace(/\*\*(STRENGTHS|WEAKNESSES|SCORE BREAKDOWN):?\*\*/g,
+                '<div style="margin-top: 1.5rem; margin-bottom: 0.8rem; font-weight: 700; color: #111827; font-size: 1.1em; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em;">$1</div>');
+
+            // Convert bullet points (- text) to proper list items
+            text = text.replace(/^- (.+)$/gm, '<div style="margin-left: 1rem; margin-bottom: 0.5rem; position: relative; color: #4b5563; line-height: 1.5;"><span style="color: var(--primary-blue); margin-right: 0.6rem; font-weight: bold;">•</span>$1</div>');
+
+            // Clean up any double newlines
+            text = text.replace(/\n\n/g, '<br>');
+
+            return text;
+        }
+
+        // Create expert card with detailed AI explanation
+        function createExpertCard(expert) {
+            const card = document.createElement('div');
+            card.className = 'expert-card';
+            card.dataset.expertId = expert._id;
+
+            const reasonText = expert.reason || 'Calculating detailed analysis...';
+            const scoreColor = expert.relevanceScore >= 80 ? '#10b981' :
+                expert.relevanceScore >= 60 ? '#f59e0b' : '#ef4444';
+            const formattedReason = formatExplanation(reasonText);
+
+            card.innerHTML = `
+                <div class="expert-card-header">
+                    <div class="expert-info">
+                        <h4>${expert.name}</h4>
+                        <p>${expert.role}</p>
+                    </div>
+                    <div class="relevance-score" style="color: ${scoreColor};">${expert.relevanceScore}%</div>
+                </div>
+                
+                <!-- Detailed AI Explanation Box -->
+                <div style="
+                    margin: 1rem 0;
+                    padding: 1rem;
+                    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+                    border-left: 4px solid var(--primary-blue);
+                    border-radius: 8px;
+                    font-size: 0.85rem;
+                    line-height: 1.6;
+                    max-height: 300px;
+                    overflow-y: auto;
+                ">
+                    <div style="display: flex; align-items: center; margin-bottom: 0.6rem; font-weight: 600; color: var(--primary-blue);">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 0.5rem;"></i>
+                        AI Evaluation
+                    </div>
+                    <div class="ai-explanation-text">${formattedReason}</div>
+                </div>
+                
+                <div class="expert-card-footer">
+                    <button class="card-btn details-btn"><i class="fa-regular fa-file-alt"></i>More Details</button>
+                    <button class="card-btn accept-btn"><i class="fa-solid fa-check"></i>Accept</button>
+                    <button class="card-btn remove-btn"><i class="fa-solid fa-xmark"></i>Remove</button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Render experts
+        function renderRecommendedExperts() {
+            recommendedGrid.innerHTML = '';
+            const sortedExperts = [...allExperts].sort((a, b) => b.relevanceScore - a.relevanceScore);
+            const expertsToShow = sortedExperts.slice(0, currentRecommendedCount);
+
+            expertsToShow.forEach(expert => {
+                const card = createExpertCard(expert);
+                recommendedGrid.appendChild(card);
+            });
+
+            if (currentRecommendedCount > 0) {
+                recommendedSection.classList.remove('hidden');
+                setTimeout(() => recommendedSection.classList.add('visible'), 10);
+            } else {
+                recommendedSection.classList.add('hidden');
+                recommendedSection.classList.remove('visible');
+            }
+        }
+
+        function renderManualLists() {
+            Object.keys(listContainers).forEach(category => {
+                const container = listContainers[category];
+                // Sort experts by relevance score (highest first)
+                const experts = allExperts
+                    .filter(e => e.category === category)
+                    .sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
+
+                if (experts.length === 0) {
+                    container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No experts found</p>';
+                    return;
+                }
+
+                container.innerHTML = experts.map(expert => {
+                    const reasonText = expert.reason || 'No analysis available yet';
+                    const scoreColor = expert.relevanceScore >= 80 ? '#10b981' :
+                        expert.relevanceScore >= 60 ? '#f59e0b' : '#ef4444';
+
+                    let tagHtml = '';
+                    if (expert.affiliation) {
+                        tagHtml = `<span class="expert-tag tag-${expert.affiliation.toLowerCase()}">${expert.affiliation}</span>`;
+                    }
+
+                    return `
+                        <div class="manual-expert-item" 
+                             data-expert-id="${expert._id}"
+                             title="${reasonText.replace(/"/g, '&quot;')}"
+                             style="cursor: pointer;">
+                            <input type="checkbox" class="manual-checkbox" data-expert-id="${expert._id}">
+                            <div class="expert-info" style="cursor: pointer;" onclick="openAiModal('${expert._id}')">
+                                <h4 style="font-size: 1rem; margin: 0;">${expert.name}</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">${expert.role}</p>
+                                ${tagHtml}
+                            </div>
+                            <div class="relevance-score" style="color: ${scoreColor}; font-weight: 700;">${expert.relevanceScore}%</div>
+                        </div>
+                    `;
+                }).join('');
+            });
+        }
+
+        function updatePanelButtonCount() {
+            const checkedCount = document.querySelectorAll('.manual-checkbox:checked').length;
+            createPanelBtn.querySelector('span').textContent = `Create Panel & Send Invites (${checkedCount})`;
+            createPanelBtn.disabled = (checkedCount === 0);
+        }
+
+        function simulateStatusUpdate(expert) {
+            setTimeout(() => {
+                const statuses = ['Accepted', 'Declined'];
+                expert.status = statuses[Math.floor(Math.random() * statuses.length)];
+                if (panelModal.classList.contains('visible')) {
+                    renderInvitedPanelists();
+                }
+            }, 3000 + Math.random() * 3000);
+        }
+
+        // Event listeners
+        boardDropdown.addEventListener('change', (e) => {
+            const count = parseInt(e.target.value);
+            if (count) {
+                currentRecommendedCount = count;
+
+                // OPTIMIZATION: If we already have scores, just update the view immediately
+                // This prevents needing to hit "Generate" again
+                if (allScoredExperts && allScoredExperts.length > 0) {
+                    const newPanel = allScoredExperts.slice(0, count);
+                    renderAIRecommendedExperts(newPanel);
+                    showLocalToast(`Updated panel view to ${count} members`, 'success');
+                }
+            }
+        });
+
+        addMoreExpertBtn.addEventListener('click', () => {
+            if (currentRecommendedCount < allExperts.length) {
+                currentRecommendedCount++;
+                renderRecommendedExperts();
+                showLocalToast('Added another expert recommendation', 'success');
+            } else {
+                showLocalToast('No more experts available', 'error');
+            }
+        });
+
+        recommendedGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.expert-card');
+            if (!card) return;
+            const expertId = card.dataset.expertId;
+
+            if (e.target.closest('.details-btn')) {
+                openAiModal(expertId);
+            }
+
+            if (e.target.closest('.accept-btn')) {
+                const btn = e.target.closest('.accept-btn');
+                if (!btn.classList.contains('accepted')) {
+                    const expert = allExperts.find(e => e._id === expertId);
+
+                    if (!invitedPanelists.find(p => p._id === expertId)) {
+                        const newInvite = { ...expert, status: 'Pending' };
+                        invitedPanelists.push(newInvite);
+                        simulateStatusUpdate(newInvite);
+                        updateViewPanelButton();
+                        showLocalToast(`${expert.name}'s invite has been sent.`, 'success');
+                    }
+
+                    btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Invite Sent`;
+                    btn.classList.add('accepted');
+                }
+            }
+
+            if (e.target.closest('.remove-btn')) {
+                card.remove();
+                showLocalToast('Expert removed from recommendations', 'error');
+            }
+        });
+
+        document.querySelector('.manual-selection-grid').addEventListener('click', (e) => {
+            if (e.target.classList.contains('manual-checkbox')) {
+                updatePanelButtonCount();
+            }
+        });
+
+        createPanelBtn.addEventListener('click', () => {
+            const checkedBoxes = document.querySelectorAll('.manual-checkbox:checked');
+            let invitedCount = 0;
+
+            checkedBoxes.forEach(box => {
+                const expertId = box.dataset.expertId;
+
+                if (!invitedPanelists.find(p => p._id === expertId)) {
+                    const expert = allExperts.find(e => e._id === expertId);
+                    const newInvite = { ...expert, status: 'Pending' };
+                    invitedPanelists.push(newInvite);
+                    simulateStatusUpdate(newInvite);
+                    invitedCount++;
+                }
+                box.checked = false;
+            });
+
+            if (invitedCount > 0) {
+                showLocalToast(`Sent ${invitedCount} new invite(s).`, 'success');
+            } else {
+                showLocalToast(`All selected panelists have already been invited.`, 'error');
+            }
+
+            updatePanelButtonCount();
+            updateViewPanelButton();
+        });
+
+        // Modal events
+        document.getElementById('close-modal-btn').addEventListener('click', closeAiModal);
+        aiModal.addEventListener('click', (e) => {
+            if (e.target === aiModal) closeAiModal();
+        });
+
+        viewPanelBtn.addEventListener('click', openPanelModal);
+        document.getElementById('close-panel-modal-btn').addEventListener('click', closePanelModal);
+        panelModal.addEventListener('click', (e) => {
+            if (e.target === panelModal) closePanelModal();
+        });
+
+        // ==================== AI PANEL GENERATION ====================
+        const aiGenerateBtn = document.getElementById('ai-generate-btn');
+
+        aiGenerateBtn.addEventListener('click', async () => {
+            if (!itemId) {
+                showLocalToast('No item selected', 'error');
+                return;
+            }
+
+            const panelSize = parseInt(boardDropdown.value) || 5;
+
+            // Show loading state
+            aiGenerateBtn.disabled = true;
+            aiGenerateBtn.querySelector('span').textContent = '⏳ Calculating Scores...';
+            const loadingIndicator = document.getElementById('ai-loading-indicator');
+            loadingIndicator.style.display = 'flex';
+
+            try {
+                // Call AI panel generation API with LLM enabled for detailed explanations
+                const result = await api.matching.generatePanel(itemId, {
+                    panel_size: panelSize,
+                    use_llm: true  // Enable LLM for detailed, accurate scoring and explanations
+                });
+
+                aiGeneratedPanel = result.recommended_panel;
+                allScoredExperts = result.all_scored_experts;
+
+                // Update allExperts with new scores
+                if (allScoredExperts) {
+                    allExperts = allExperts.map(expert => {
+                        const scored = allScoredExperts.find(s => s.expert_id === expert._id);
+                        if (scored) {
+                            return {
+                                ...expert,
+                                relevanceScore: Math.round(scored.final_score),
+                                scoreDetails: scored.component_scores,
+                                reason: scored.reason || expert.reason
+                            };
+                        }
+                        return expert;
+                    });
+                }
+
+                // Show recommended panel section
+                currentRecommendedCount = panelSize;
+                renderAIRecommendedExperts(aiGeneratedPanel);
+
+                // Update the manual selection lists with new scores
+                renderManualLists();
+
+                showLocalToast(`✨ AI Panel generated! Average score: ${result.average_score}%`, 'success');
+
+            } catch (error) {
+                console.error('AI Generation error:', error);
+                showLocalToast(`AI Generation failed: ${error.message}`, 'error');
+            } finally {
+                // Reset button state
+                aiGenerateBtn.disabled = false;
+                aiGenerateBtn.querySelector('span').textContent = '🤖 Generate AI Panel';
+                loadingIndicator.style.display = 'none';
+            }
+        });
+
+        function renderAIRecommendedExperts(panel) {
+            if (!panel || panel.length === 0) {
+                recommendedSection.classList.add('hidden');
+                return;
+            }
+
+            recommendedGrid.innerHTML = '';
+
+            panel.forEach((expert, index) => {
+                const card = createAIExpertCard(expert, index);
+                recommendedGrid.appendChild(card);
+            });
+
+            // Update header to show AI recommendation
+            const headerH3 = recommendedSection.querySelector('h3');
+            headerH3.innerHTML = `<i class="fa-solid fa-robot" style="color: #7c3aed; margin-right: 0.5rem;"></i> AI-Recommended Panel`;
+
+            recommendedSection.classList.remove('hidden');
+            setTimeout(() => recommendedSection.classList.add('visible'), 10);
+        }
+
+        function createAIExpertCard(expert, index) {
+            const card = document.createElement('div');
+            card.className = 'expert-card';
+            card.dataset.expertId = expert.expert_id;
+
+            // Category badge colors
+            const categoryColors = {
+                'chairperson': { bg: '#fef3c7', color: '#d97706', label: '👑 Chairperson' },
+                'departmental': { bg: '#dbeafe', color: '#2563eb', label: '🏛️ Departmental' },
+                'external': { bg: '#dcfce7', color: '#16a34a', label: '🌐 External' }
+            };
+            const catStyle = categoryColors[expert.category] || categoryColors['departmental'];
+
+            // Score color based on value
+            const scoreColor = expert.final_score >= 80 ? '#059669' :
+                expert.final_score >= 60 ? '#2563eb' :
+                    expert.final_score >= 40 ? '#d97706' : '#dc2626';
+
+            card.innerHTML = `
+                <div class="expert-card-header">
+                    <div class="expert-info">
+                        <span style="display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; background: ${catStyle.bg}; color: ${catStyle.color}; margin-bottom: 0.5rem;">
+                            ${catStyle.label}
+                        </span>
+                        <h4>${expert.expert_name}</h4>
+                        <p>${expert.category === 'external' ? 'External Expert' : 'DRDO Scientist'}</p>
+                    </div>
+                    <div class="relevance-score" style="color: ${scoreColor}; display: flex; flex-direction: column; align-items: flex-end;">
+                        <span style="font-size: 1.8rem;">${Math.round(expert.final_score)}%</span>
+                        <span style="font-size: 0.7rem; color: #6b7280;">AI Score</span>
+                    </div>
+                </div>
+                <div style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                    ${expert.component_scores ? `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div title="Job Description - Expert Cosine Similarity (Embedding Match)">
+                                <span style="color: #6b7280;">📄 JD-Expert Cosine:</span> 
+                                <strong>${expert.component_scores.w1_item_expert_cosine?.toFixed(0) || 0}%</strong>
+                            </div>
+                            <div title="Job Description - Expert Semantic Similarity (LLM Match)">
+                                <span style="color: #6b7280;">🤖 JD-Expert Semantic:</span> 
+                                <strong>${expert.component_scores.w2_item_expert_llm?.toFixed(0) || 0}%</strong>
+                            </div>
+                            <div title="Expert-Candidates Average Cosine Similarity">
+                                <span style="color: #6b7280;">👥 Expert-Cand Cosine:</span> 
+                                <strong>${expert.component_scores.w3_expert_candidates_cosine?.toFixed(0) || 0}%</strong>
+                            </div>
+                            <div title="Expert-Candidates Average Semantic Similarity (LLM)">
+                                <span style="color: #6b7280;">🎯 Expert-Cand Semantic:</span> 
+                                <strong>${expert.component_scores.w4_expert_candidates_llm?.toFixed(0) || 0}%</strong>
+                            </div>
+                        </div>
+                    ` : '<p style="color: #6b7280;">Score breakdown loading...</p>'}
+                </div>
+                <div class="expert-card-footer">
+                    <button class="card-btn details-btn" onclick="showScoreBreakdown('${expert.expert_id}')">
+                        <i class="fa-regular fa-file-alt"></i>Details
+                    </button>
+                    <button class="card-btn accept-btn">
+                        <i class="fa-solid fa-check"></i>Accept
+                    </button>
+                    <button class="card-btn remove-btn">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        async function showScoreBreakdown(expertId) {
+            // Find the expert in scored list
+            const expert = allScoredExperts?.find(e => e.expert_id === expertId) ||
+                allExperts.find(e => e._id === expertId);
+
+            if (!expert) return;
+
+            // Update modal content
+            document.getElementById('modal-expert-info').innerHTML = `
+                <div>
+                    <h4 style="font-size: 1.2rem; margin: 0;">${expert.expert_name || expert.name}</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">AI Relevance Score</p>
+                </div>
+                <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary-blue);">
+                    ${Math.round(expert.final_score || expert.relevanceScore)}%
+                </div>
+            `;
+
+            // Show component breakdown
+            let reasonHtml = expert.reason || 'Expert has relevant skills and domain expertise.';
+
+            if (expert.component_scores) {
+                reasonHtml = `
+                    <div style="margin-bottom: 1rem;">
+                        <h5 style="margin-bottom: 0.5rem; color: #374151;">Score Components:</h5>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                            <div style="background: #eff6ff; padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">📄 JD-Expert Cosine</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #2563eb;">${expert.component_scores.w1_item_expert_cosine?.toFixed(1)}%</div>
+                            </div>
+                            <div style="background: #f5f3ff; padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">🤖 JD-Expert Semantic</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #7c3aed;">${expert.component_scores.w2_item_expert_llm?.toFixed(1)}%</div>
+                            </div>
+                            <div style="background: #ecfdf5; padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">👥 Expert-Cand Cosine</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #059669;">${expert.component_scores.w3_expert_candidates_cosine?.toFixed(1)}%</div>
+                            </div>
+                            <div style="background: #fef3c7; padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">🎯 Expert-Cand Semantic</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #d97706;">${expert.component_scores.w4_expert_candidates_llm?.toFixed(1)}%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <h5 style="margin-bottom: 0.5rem; color: #374151;">AI Evaluation</h5>
+                        <div class="ai-explanation-text" style="
+                            max-height: 60vh; 
+                            overflow-y: auto; 
+                            padding: 1.5rem; 
+                            background: #ffffff; 
+                            border: 1px solid #e5e7eb;
+                            border-radius: 8px;
+                            white-space: normal;
+                            line-height: 1.8;
+                            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+                        ">${formatExplanation(expert.reason || 'Expert has relevant skills and domain expertise for evaluating candidates in this field.')}</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modal-expert-reason').innerHTML = reasonHtml;
+            aiModal.classList.add('visible');
+        }
+
+        // Make showScoreBreakdown available globally
+        window.showScoreBreakdown = showScoreBreakdown;
+
+        // Load data
+        async function loadData() {
+            try {
+                const experts = await api.experts.getAll();
+                // CRITICAL FIX: Reset all relevanceScores to 0 
+                // Only AI-calculated scores should be shown
+                allExperts = experts.map(expert => ({
+                    ...expert,
+                    relevanceScore: 0,  // Reset database score to 0
+                    reason: 'Score will be calculated by AI panel generation'
+                }));
+                renderManualLists();
+            } catch (error) {
+                console.error('Error loading experts:', error);
+                Object.values(listContainers).forEach(container => {
+                    container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">Failed to load experts</p>';
+                });
+            }
+        }
+
+        // Initialize
+        loadData();
+        loadItemDetails();
+    </script>
+
+</body>
+
+</html>

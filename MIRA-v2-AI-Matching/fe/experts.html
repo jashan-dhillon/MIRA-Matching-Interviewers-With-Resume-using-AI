@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experts Directory - RAC DRDO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border-color);
+            background: var(--white);
+            border-radius: 20px;
+            font-family: var(--font-family);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .expert-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .expert-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .expert-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .expert-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .expert-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .expert-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 0.25rem;
+        }
+
+        .expert-role {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0 0 0.5rem;
+        }
+
+        .expert-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .cat-chairperson {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .cat-departmental {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .cat-external {
+            background-color: #d1fae5;
+            color: #059669;
+        }
+
+        .expert-reason {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            line-height: 1.5;
+        }
+
+        .expert-email {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .expert-email i {
+            color: var(--primary-blue);
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="rac_logo.png" alt="DRDO Logo" class="header-logo">
+            <div class="header-center">
+                <h1>Recruitment and Assessment Centre, DRDO</h1>
+                <p>Department of Defence Research and Development</p>
+                <p>Ministry of Defence, Government of India</p>
+                <p class="iso-text">an ISO 9001 certified establishment</p>
+            </div>
+            <img src="emblem.png" alt="Indian Emblem" class="header-emblem">
+        </div>
+
+        <nav class="navbar">
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="experts.html" class="nav-link active" data-role="admin,expert">Experts</a>
+            <a href="admin.html" class="nav-link" data-role="admin">Admin</a>
+            <a href="profile.html" class="nav-link">Profile</a>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <div class="page-header">
+            <h2><i class="fa-solid fa-user-tie" style="color: var(--primary-blue); margin-right: 0.5rem;"></i> Experts
+                Directory</h2>
+            <p style="color: var(--text-secondary);">Browse and filter all registered experts</p>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All Experts</button>
+            <button class="filter-btn" data-filter="chairperson">Chairperson</button>
+            <button class="filter-btn" data-filter="departmental">Departmental</button>
+            <button class="filter-btn" data-filter="external">External</button>
+        </div>
+
+        <div id="expertsGrid" class="experts-grid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script>
+        if (!requireAuth()) { }
+        if (!requireRole(['admin', 'expert'])) { }
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try { await api.auth.logout(); } catch (e) { }
+            session.clearUser();
+            window.location.href = 'login.html';
+        });
+
+        let allExperts = [];
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        }
+
+        function renderExperts(experts) {
+            const grid = document.getElementById('expertsGrid');
+
+            if (experts.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-secondary); grid-column: 1/-1;">No experts found</p>';
+                return;
+            }
+
+            grid.innerHTML = experts.map(exp => `
+                <div class="expert-card">
+                    <div class="expert-card-header">
+                        <div class="expert-avatar">${getInitials(exp.name)}</div>
+                        <div class="expert-score">${exp.relevanceScore}%</div>
+                    </div>
+                    <h3 class="expert-name">${exp.name}</h3>
+                    <p class="expert-role">${exp.role}</p>
+                    <span class="expert-category cat-${exp.category}">${exp.category}</span>
+                    ${exp.affiliation ? `<span class="expert-category" style="margin-left: 0.5rem; background: #f3e8ff; color: #7c3aed;">${exp.affiliation}</span>` : ''}
+                    <p class="expert-reason">${exp.reason || 'Expert in their field.'}</p>
+                    <div class="expert-email">
+                        <i class="fa-solid fa-envelope"></i>
+                        ${exp.email || 'No email provided'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+                if (filter === 'all') {
+                    renderExperts(allExperts);
+                } else {
+                    renderExperts(allExperts.filter(e => e.category === filter));
+                }
+            });
+        });
+
+        // Load experts
+        async function loadExperts() {
+            try {
+                allExperts = await api.experts.getAll();
+                renderExperts(allExperts);
+            } catch (e) {
+                document.getElementById('expertsGrid').innerHTML = '<p style="color: var(--red-remove);">Failed to load experts</p>';
+            }
+        }
+
+        loadExperts();
+    </script>
+</body>
+
+</html>
