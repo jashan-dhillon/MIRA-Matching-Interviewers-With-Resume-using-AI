@@ -209,6 +209,49 @@
             return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
         }
 
+        // Format AI explanation text for better readability
+        function formatExplanation(text) {
+            if (!text) return '<p style="color: #6b7280; font-style: italic;">Expert in their field.</p>';
+
+            // Step 1: Escape HTML to prevent XSS
+            let formatted = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Step 2: Convert section headers like **STRENGTHS:** or **STRENGTHS** or *STRENGTHS:*
+            formatted = formatted.replace(/\*\*([A-Z][A-Z\s]+):?\*\*/g,
+                '<div style="margin-top: 0.8rem; margin-bottom: 0.4rem; font-weight: 700; color: #1e40af; font-size: 0.85rem; border-bottom: 1px solid #3b82f6; padding-bottom: 0.2rem;">▸ $1</div>');
+
+            // Also handle single asterisk headers like *STRENGTHS:*
+            formatted = formatted.replace(/\*([A-Z][A-Z\s]+):?\*/g,
+                '<div style="margin-top: 0.8rem; margin-bottom: 0.4rem; font-weight: 700; color: #1e40af; font-size: 0.85rem; border-bottom: 1px solid #3b82f6; padding-bottom: 0.2rem;">▸ $1</div>');
+
+            // Step 3: Convert bold text **text** to styled bold
+            formatted = formatted.replace(/\*\*([^*]+)\*\*/g,
+                '<strong style="color: #1f2937;">$1</strong>');
+
+            // Step 4: Convert italic text *text* to styled italic
+            formatted = formatted.replace(/\*([^*]+)\*/g,
+                '<em style="color: #4b5563;">$1</em>');
+
+            // Step 5: Convert bullet points starting with - or • to styled list items
+            formatted = formatted.replace(/^[\-•]\s*(.+)$/gm,
+                '<div style="margin-left: 0.5rem; margin-bottom: 0.3rem; color: #374151; line-height: 1.4; display: flex; font-size: 0.85rem;"><span style="color: #3b82f6; margin-right: 0.5rem;">●</span><span>$1</span></div>');
+
+            // Step 6: Convert numbered lists (1. 2. etc)
+            formatted = formatted.replace(/^(\d+)\.\s*(.+)$/gm,
+                '<div style="margin-left: 0.5rem; margin-bottom: 0.3rem; color: #374151; line-height: 1.4; display: flex; font-size: 0.85rem;"><span style="background: #3b82f6; color: white; width: 1.2rem; height: 1.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; margin-right: 0.5rem;">$1</span><span>$2</span></div>');
+
+            // Step 7: Handle paragraph breaks (double newlines)
+            formatted = formatted.replace(/\n\n+/g, '</p><p style="margin: 0.5rem 0; color: #374151; line-height: 1.4; font-size: 0.85rem;">');
+
+            // Step 8: Handle single newlines as line breaks
+            formatted = formatted.replace(/\n/g, '<br>');
+
+            // Clean up empty content
+            formatted = formatted.replace(/<p[^>]*>\s*<\/p>/g, '');
+
+            return formatted;
+        }
+
         function renderExperts(experts) {
             const grid = document.getElementById('expertsGrid');
 
@@ -221,13 +264,13 @@
                 <div class="expert-card">
                     <div class="expert-card-header">
                         <div class="expert-avatar">${getInitials(exp.name)}</div>
-                        <div class="expert-score">${exp.relevanceScore}%</div>
+                        <div class="expert-score">${exp.relevanceScore || 0}%</div>
                     </div>
                     <h3 class="expert-name">${exp.name}</h3>
                     <p class="expert-role">${exp.role}</p>
                     <span class="expert-category cat-${exp.category}">${exp.category}</span>
                     ${exp.affiliation ? `<span class="expert-category" style="margin-left: 0.5rem; background: #f3e8ff; color: #7c3aed;">${exp.affiliation}</span>` : ''}
-                    <p class="expert-reason">${exp.reason || 'Expert in their field.'}</p>
+                    <div class="expert-reason" style="max-height: 200px; overflow-y: auto;">${formatExplanation(exp.reason)}</div>
                     <div class="expert-email">
                         <i class="fa-solid fa-envelope"></i>
                         ${exp.email || 'No email provided'}

@@ -444,6 +444,31 @@
         .breadcrumb a:hover {
             text-decoration: underline;
         }
+
+        /* AI Explanation Text Formatting */
+        .ai-explanation-text {
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        /* Custom scrollbar for explanation boxes */
+        .ai-explanation-text::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .ai-explanation-text::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .ai-explanation-text::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .ai-explanation-text::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
     </style>
 </head>
 
@@ -485,23 +510,28 @@
         <!-- Item Details Section - PDF Hidden by Default -->
         <section style="margin-bottom: 2rem;">
             <!-- Header -->
-            <div style="background: var(--primary-blue); color: white; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <div
+                style="background: var(--primary-blue); color: white; padding: 1rem 1.5rem; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
                 <h2 id="itemTitle" style="margin: 0; font-size: 1.2rem;">
                     <i class="fa-regular fa-file-lines"></i> Item --
                 </h2>
-                <button id="togglePdfBtn" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                <button id="togglePdfBtn"
+                    style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
                     <i class="fa-solid fa-file-pdf"></i> View PDF
                 </button>
             </div>
 
             <!-- Extracted Info Card -->
-            <div id="itemDetailsCard" style="background: white; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px; padding: 1.5rem;">
-                
+            <div id="itemDetailsCard"
+                style="background: white; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 10px 10px; padding: 1.5rem;">
+
                 <!-- Basic Info Grid -->
-                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+                <div
+                    style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
                     <div>
                         <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase;">Item No.</div>
-                        <div id="infoItemNo" style="font-size: 1.3rem; font-weight: 700; color: var(--primary-blue);">--</div>
+                        <div id="infoItemNo" style="font-size: 1.3rem; font-weight: 700; color: var(--primary-blue);">--
+                        </div>
                     </div>
                     <div>
                         <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase;">Discipline</div>
@@ -523,43 +553,55 @@
 
                 <!-- Vacancies -->
                 <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
-                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">Category-wise Vacancies</div>
+                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">
+                        Category-wise Vacancies</div>
                     <div id="vacancyRow" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
                 </div>
 
                 <!-- Essential Qualification -->
                 <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
-                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">Essential Qualification</div>
-                    <div id="infoEssentialQual" style="font-size: 0.9rem; line-height: 1.6; color: #374151; background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
+                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">
+                        Essential Qualification</div>
+                    <div id="infoEssentialQual"
+                        style="font-size: 0.9rem; line-height: 1.6; color: #374151; background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
                         Loading...
                     </div>
                 </div>
 
                 <!-- Equivalent Degrees -->
-                <div id="degreesRow" style="display: none; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
-                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">Equivalent Degrees Accepted</div>
+                <div id="degreesRow"
+                    style="display: none; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb;">
+                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">
+                        Equivalent Degrees Accepted</div>
                     <div id="infoDegreesGrid" style="display: flex; gap: 0.4rem; flex-wrap: wrap;"></div>
                 </div>
 
                 <!-- Sub Organizations -->
                 <div id="subOrgsRow" style="display: none;">
-                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">Other Organizations</div>
+                    <div style="font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem;">
+                        Other Organizations</div>
                     <div id="infoSubOrgs" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
                 </div>
             </div>
 
             <!-- PDF Viewer - HIDDEN by default -->
-            <div id="pdfViewerSection" style="display: none; margin-top: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden;">
-                <div style="background: #dc2626; color: white; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 600;"><i class="fa-solid fa-file-pdf"></i> Original Advertisement PDF</span>
+            <div id="pdfViewerSection"
+                style="display: none; margin-top: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden;">
+                <div
+                    style="background: #dc2626; color: white; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 600;"><i class="fa-solid fa-file-pdf"></i> Original Advertisement
+                        PDF</span>
                     <div style="display: flex; gap: 1rem; align-items: center;">
-                        <a id="downloadPdfBtn" href="#" target="_blank" style="color: white; font-size: 0.85rem; text-decoration: none;">
+                        <a id="downloadPdfBtn" href="#" target="_blank"
+                            style="color: white; font-size: 0.85rem; text-decoration: none;">
                             <i class="fa-solid fa-download"></i> Download
                         </a>
-                        <a id="openPdfNewTab" href="#" target="_blank" style="color: white; font-size: 0.85rem; text-decoration: none;">
+                        <a id="openPdfNewTab" href="#" target="_blank"
+                            style="color: white; font-size: 0.85rem; text-decoration: none;">
                             <i class="fa-solid fa-external-link"></i> New Tab
                         </a>
-                        <button id="closePdfBtn" style="background: white; color: #dc2626; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <button id="closePdfBtn"
+                            style="background: white; color: #dc2626; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;">
                             <i class="fa-solid fa-times"></i>
                         </button>
                     </div>
@@ -568,6 +610,28 @@
             </div>
         </section>
 
+        <!-- Ollama Status Warning Banner -->
+        <div id="ollama-status-banner"
+            style="display: none; margin-bottom: 1.5rem; padding: 1rem 1.5rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; border-radius: 8px; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fa-solid fa-exclamation-triangle" style="font-size: 1.5rem; color: #d97706;"></i>
+                <div style="flex-grow: 1;">
+                    <div style="font-weight: 600; color: #92400e; margin-bottom: 0.25rem;">⚠️ Using Fallback Scoring
+                        Method</div>
+                    <div style="font-size: 0.9rem; color: #78350f;">
+                        <strong>Ollama LLM is not connected.</strong> The system is using keyword-based matching instead
+                        of AI semantic analysis.
+                        Scores may be less accurate.
+                        <a href="https://ollama.com/download" target="_blank"
+                            style="color: #92400e; text-decoration: underline;">Install Ollama</a>
+                        and run <code
+                            style="background: #fff; padding: 2px 6px; border-radius: 4px;">ollama pull llama3</code>
+                        for better results.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <section class="board-selection">
             <div class="dropdown-container">
                 <label for="board-type">Select Interview Board</label>
@@ -575,9 +639,19 @@
                     <option value="" disabled selected>Choose board type...</option>
                     <option value="3">Technical Screening Committee (3 Members)</option>
                     <option value="5">Final Interview Panel (5 Members)</option>
-                    <option value="5">Assessment Board (5 Members)</option>
+                    <option value="7">Assessment Board (7 Members)</option>
                 </select>
             </div>
+
+            <button id="ai-generate-btn" class="create-panel-button"
+                style="background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); position: relative; overflow: hidden;">
+                <i class="fa-solid fa-robot"></i>
+                <span>🤖 Generate AI Panel</span>
+                <div id="ai-loading-indicator"
+                    style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: none; align-items: center; justify-content: center;">
+                    <div class="spinner" style="width: 20px; height: 20px; border-width: 2px;"></div>
+                </div>
+            </button>
 
             <button id="view-panel-btn" class="create-panel-button" disabled>
                 <i class="fa-solid fa-users-viewfinder"></i>
@@ -588,10 +662,17 @@
         <section id="recommended-experts-section" class="recommended-experts-container hidden">
             <div class="recommended-header">
                 <h3>Recommended Experts</h3>
-                <button id="add-more-expert-btn" class="card-btn details-btn"
-                    style="flex-grow: 0; padding: 0.5rem 1rem;">
-                    <i class="fa-solid fa-plus"></i> Add Expert
-                </button>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button id="add-more-expert-btn" class="card-btn details-btn"
+                        style="flex-grow: 0; padding: 0.5rem 1rem;">
+                        <i class="fa-solid fa-plus"></i> Add Expert
+                    </button>
+                    <button id="accept-all-btn" class="create-panel-button"
+                        style="background: linear-gradient(135deg, #10b981, #059669); padding: 0.6rem 1.2rem; font-size: 0.85rem;">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Accept All & Complete Board</span>
+                    </button>
+                </div>
             </div>
             <div id="recommended-experts-grid" class="experts-grid">
             </div>
@@ -691,6 +772,7 @@
         const itemNo = getUrlParam('itemNo');
         const advId = getUrlParam('advId');
         const advNo = getUrlParam('advNo');
+        const viewPanel = getUrlParam('view') === 'panel';  // Check if viewing completed panel
 
         // Update breadcrumb
         if (advNo && advId) {
@@ -708,6 +790,9 @@
         let currentRecommendedCount = 0;
         let currentItemData = null;
         let currentAdvertisement = null;
+        let aiGeneratedPanel = null;
+        let allScoredExperts = null;
+        let isViewingCompletedPanel = viewPanel;  // Track if we're viewing a completed panel
 
         // DOM Elements
         const boardDropdown = document.getElementById('board-type');
@@ -724,6 +809,31 @@
             departmental: document.getElementById('departmental-list'),
             external: document.getElementById('external-list')
         };
+
+        // ==================== OLLAMA STATUS CHECK ====================
+        async function checkOllamaStatus() {
+            try {
+                const response = await fetch('/api/matching/ollama-status');
+                const status = await response.json();
+
+                const banner = document.getElementById('ollama-status-banner');
+                if (!status.available) {
+                    banner.style.display = 'block';
+                    console.warn('⚠️ Ollama not available - using fallback scoring method');
+                } else {
+                    banner.style.display = 'none';
+                    console.log('✅ Ollama connected:', status.model);
+                }
+            } catch (error) {
+                console.error('Error checking Ollama status:', error);
+                // Show warning on error too
+                document.getElementById('ollama-status-banner').style.display = 'block';
+            }
+        }
+
+        // Check Ollama status on page load
+        checkOllamaStatus();
+
 
         // ==================== ITEM SUMMARY & PDF FUNCTIONS ====================
         async function loadItemDetails() {
@@ -747,10 +857,10 @@
         function renderItemSummary(item) {
             // Debug: log the full item data
             console.log('Item data received:', item);
-            
+
             // Update title
             document.getElementById('itemTitle').innerHTML = `<i class="fa-regular fa-file-lines"></i> Item ${item.itemNo} - ${item.discipline || item.title || 'Details'}`;
-            
+
             // Basic info
             document.getElementById('infoItemNo').textContent = item.itemNo;
             document.getElementById('infoDiscipline').textContent = item.discipline || item.title || '-';
@@ -762,7 +872,7 @@
             if (item.vacancies) {
                 const cats = ['UR', 'EWS', 'OBC', 'SC', 'ST', 'Total'];
                 const colors = { 'UR': '#3b82f6', 'EWS': '#8b5cf6', 'OBC': '#f59e0b', 'SC': '#10b981', 'ST': '#ef4444', 'Total': '#1f2937' };
-                document.getElementById('vacancyRow').innerHTML = cats.map(c => 
+                document.getElementById('vacancyRow').innerHTML = cats.map(c =>
                     `<span style="background: ${colors[c]}; color: white; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.85rem;">
                         <strong>${item.vacancies[c] || 0}</strong> ${c}
                     </span>`
@@ -772,18 +882,18 @@
             // Essential Qualification - show FULL text from item
             // Priority: description (from PDF extraction) > essentialQualification > fallback
             let eqText = item.description || item.essentialQualification || '';
-            
+
             // If no extracted text, show a meaningful default
             if (!eqText || eqText.trim() === '') {
                 eqText = `At least First Class Bachelor's Degree in Engineering or Technology in ${item.discipline || 'relevant discipline'} from a recognized university or equivalent. Valid GATE score in ${item.gateCode || 'relevant paper'} is mandatory.`;
             }
-            
+
             document.getElementById('infoEssentialQual').innerHTML = eqText;
 
             // Equivalent degrees - show ALL
             if (item.equivalentDegrees && item.equivalentDegrees.length > 0) {
                 const degreesGrid = document.getElementById('infoDegreesGrid');
-                degreesGrid.innerHTML = item.equivalentDegrees.map(degree => 
+                degreesGrid.innerHTML = item.equivalentDegrees.map(degree =>
                     `<span style="background: #dbeafe; color: #1e40af; padding: 0.4rem 0.7rem; border-radius: 4px; font-size: 0.85rem; margin-bottom: 0.3rem;">✓ ${degree}</span>`
                 ).join('');
                 document.getElementById('degreesRow').style.display = 'block';
@@ -792,7 +902,7 @@
             // Sub organizations
             if (item.subOrganizations && item.subOrganizations.length > 0) {
                 const subOrgsDiv = document.getElementById('infoSubOrgs');
-                subOrgsDiv.innerHTML = item.subOrganizations.map(sub => 
+                subOrgsDiv.innerHTML = item.subOrganizations.map(sub =>
                     `<span style="background: #f3f4f6; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem;">
                         <strong>${sub.organization}</strong>: ${sub.vacancies?.Total || 0} posts
                     </span>`
@@ -808,7 +918,7 @@
                 // Don't load PDF immediately - wait for button click
                 document.getElementById('downloadPdfBtn').href = pdfUrl;
                 document.getElementById('openPdfNewTab').href = pdfUrl;
-                
+
                 // Store URL for lazy loading
                 document.getElementById('pdfFrame').dataset.src = pdfUrl;
             } else {
@@ -818,10 +928,10 @@
         }
 
         // Toggle PDF Viewer
-        document.getElementById('togglePdfBtn').addEventListener('click', function() {
+        document.getElementById('togglePdfBtn').addEventListener('click', function () {
             const pdfSection = document.getElementById('pdfViewerSection');
             const isVisible = pdfSection.style.display !== 'none';
-            
+
             if (isVisible) {
                 pdfSection.style.display = 'none';
                 this.innerHTML = '<i class="fa-solid fa-file-pdf"></i> View PDF';
@@ -837,7 +947,7 @@
         });
 
         // Close PDF button (red X)
-        document.getElementById('closePdfBtn').addEventListener('click', function() {
+        document.getElementById('closePdfBtn').addEventListener('click', function () {
             document.getElementById('pdfViewerSection').style.display = 'none';
             document.getElementById('togglePdfBtn').innerHTML = '<i class="fa-solid fa-file-pdf"></i> View PDF';
         });
@@ -859,7 +969,7 @@
                 </div>
                 <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary-blue);">${expert.relevanceScore}%</div>
             `;
-            document.getElementById('modal-expert-reason').textContent = expert.reason || 'No additional details available.';
+            document.getElementById('modal-expert-reason').innerHTML = formatExplanation(expert.reason) || '<p style="color: #6b7280;">No additional details available.</p>';
             aiModal.classList.add('visible');
         }
 
@@ -926,19 +1036,92 @@
             viewPanelBtn.disabled = (count === 0);
         }
 
-        // Create expert card
+        // Format AI explanation text for better readability
+        function formatExplanation(text) {
+            if (!text) return '<p style="color: #6b7280; font-style: italic;">No analysis available yet.</p>';
+
+            // Step 1: Escape HTML to prevent XSS
+            let formatted = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+            // Step 2: Convert section headers like **STRENGTHS:** or **STRENGTHS** or *STRENGTHS:*
+            formatted = formatted.replace(/\*\*([A-Z][A-Z\s]+):?\*\*/g,
+                '<div class="ai-section-header" style="margin-top: 1.2rem; margin-bottom: 0.6rem; font-weight: 700; color: #1e40af; font-size: 1rem; border-bottom: 2px solid #3b82f6; padding-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem;"><span style="color: #3b82f6;">▸</span> $1</div>');
+
+            // Also handle single asterisk headers like *STRENGTHS:*
+            formatted = formatted.replace(/\*([A-Z][A-Z\s]+):?\*/g,
+                '<div class="ai-section-header" style="margin-top: 1.2rem; margin-bottom: 0.6rem; font-weight: 700; color: #1e40af; font-size: 1rem; border-bottom: 2px solid #3b82f6; padding-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem;"><span style="color: #3b82f6;">▸</span> $1</div>');
+
+            // Step 3: Convert bold text **text** to styled bold
+            formatted = formatted.replace(/\*\*([^*]+)\*\*/g,
+                '<strong style="color: #1f2937; font-weight: 600;">$1</strong>');
+
+            // Step 4: Convert italic text *text* to styled italic (but not section headers)
+            formatted = formatted.replace(/\*([^*]+)\*/g,
+                '<em style="color: #4b5563;">$1</em>');
+
+            // Step 5: Convert bullet points starting with - or • to styled list items
+            formatted = formatted.replace(/^[\-•]\s*(.+)$/gm,
+                '<div style="margin-left: 1rem; margin-bottom: 0.5rem; padding: 0.3rem 0; color: #374151; line-height: 1.6; display: flex;"><span style="color: #3b82f6; margin-right: 0.75rem; font-weight: bold; flex-shrink: 0;">●</span><span>$1</span></div>');
+
+            // Step 6: Convert numbered lists (1. 2. etc)
+            formatted = formatted.replace(/^(\d+)\.\s*(.+)$/gm,
+                '<div style="margin-left: 1rem; margin-bottom: 0.5rem; padding: 0.3rem 0; color: #374151; line-height: 1.6; display: flex;"><span style="background: #3b82f6; color: white; width: 1.5rem; height: 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-right: 0.75rem; flex-shrink: 0;">$1</span><span>$2</span></div>');
+
+            // Step 7: Handle paragraph breaks (double newlines)
+            formatted = formatted.replace(/\n\n+/g, '</p><p style="margin: 0.75rem 0; color: #374151; line-height: 1.6;">');
+
+            // Step 8: Handle single newlines as line breaks
+            formatted = formatted.replace(/\n/g, '<br>');
+
+            // Wrap in paragraph
+            formatted = '<p style="margin: 0.75rem 0; color: #374151; line-height: 1.6;">' + formatted + '</p>';
+
+            // Clean up empty paragraphs
+            formatted = formatted.replace(/<p[^>]*>\s*<\/p>/g, '');
+            formatted = formatted.replace(/<p[^>]*><br><\/p>/g, '');
+
+            return formatted;
+        }
+
+        // Create expert card with detailed AI explanation
         function createExpertCard(expert) {
             const card = document.createElement('div');
             card.className = 'expert-card';
             card.dataset.expertId = expert._id;
+
+            const reasonText = expert.reason || 'Calculating detailed analysis...';
+            const scoreColor = expert.relevanceScore >= 80 ? '#10b981' :
+                expert.relevanceScore >= 60 ? '#f59e0b' : '#ef4444';
+            const formattedReason = formatExplanation(reasonText);
+
             card.innerHTML = `
                 <div class="expert-card-header">
                     <div class="expert-info">
                         <h4>${expert.name}</h4>
                         <p>${expert.role}</p>
                     </div>
-                    <div class="relevance-score">${expert.relevanceScore}%</div>
+                    <div class="relevance-score" style="color: ${scoreColor};">${expert.relevanceScore}%</div>
                 </div>
+                
+                <!-- Detailed AI Explanation Box -->
+                <div style="
+                    margin: 1rem 0;
+                    padding: 1rem;
+                    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+                    border-left: 4px solid var(--primary-blue);
+                    border-radius: 8px;
+                    font-size: 0.85rem;
+                    line-height: 1.6;
+                    max-height: 300px;
+                    overflow-y: auto;
+                ">
+                    <div style="display: flex; align-items: center; margin-bottom: 0.6rem; font-weight: 600; color: var(--primary-blue);">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 0.5rem;"></i>
+                        AI Evaluation
+                    </div>
+                    <div class="ai-explanation-text">${formattedReason}</div>
+                </div>
+                
                 <div class="expert-card-footer">
                     <button class="card-btn details-btn"><i class="fa-regular fa-file-alt"></i>More Details</button>
                     <button class="card-btn accept-btn"><i class="fa-solid fa-check"></i>Accept</button>
@@ -971,7 +1154,10 @@
         function renderManualLists() {
             Object.keys(listContainers).forEach(category => {
                 const container = listContainers[category];
-                const experts = allExperts.filter(e => e.category === category);
+                // Sort experts by relevance score (highest first)
+                const experts = allExperts
+                    .filter(e => e.category === category)
+                    .sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
 
                 if (experts.length === 0) {
                     container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No experts found</p>';
@@ -979,20 +1165,27 @@
                 }
 
                 container.innerHTML = experts.map(expert => {
+                    const reasonText = expert.reason || 'No analysis available yet';
+                    const scoreColor = expert.relevanceScore >= 80 ? '#10b981' :
+                        expert.relevanceScore >= 60 ? '#f59e0b' : '#ef4444';
+
                     let tagHtml = '';
                     if (expert.affiliation) {
                         tagHtml = `<span class="expert-tag tag-${expert.affiliation.toLowerCase()}">${expert.affiliation}</span>`;
                     }
 
                     return `
-                        <div class="manual-expert-item" data-expert-id="${expert._id}">
+                        <div class="manual-expert-item" 
+                             data-expert-id="${expert._id}"
+                             title="${reasonText.replace(/"/g, '&quot;')}"
+                             style="cursor: pointer;">
                             <input type="checkbox" class="manual-checkbox" data-expert-id="${expert._id}">
                             <div class="expert-info" style="cursor: pointer;" onclick="openAiModal('${expert._id}')">
                                 <h4 style="font-size: 1rem; margin: 0;">${expert.name}</h4>
                                 <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">${expert.role}</p>
                                 ${tagHtml}
                             </div>
-                            <div class="relevance-score">${expert.relevanceScore}%</div>
+                            <div class="relevance-score" style="color: ${scoreColor}; font-weight: 700;">${expert.relevanceScore}%</div>
                         </div>
                     `;
                 }).join('');
@@ -1020,7 +1213,14 @@
             const count = parseInt(e.target.value);
             if (count) {
                 currentRecommendedCount = count;
-                renderRecommendedExperts();
+
+                // OPTIMIZATION: If we already have scores, just update the view immediately
+                // This prevents needing to hit "Generate" again
+                if (allScoredExperts && allScoredExperts.length > 0) {
+                    const newPanel = allScoredExperts.slice(0, count);
+                    renderAIRecommendedExperts(newPanel);
+                    showLocalToast(`Updated panel view to ${count} members`, 'success');
+                }
             }
         });
 
@@ -1031,6 +1231,51 @@
                 showLocalToast('Added another expert recommendation', 'success');
             } else {
                 showLocalToast('No more experts available', 'error');
+            }
+        });
+
+        // Accept All & Complete Board button handler
+        document.getElementById('accept-all-btn').addEventListener('click', async () => {
+            if (!aiGeneratedPanel || aiGeneratedPanel.length === 0) {
+                showLocalToast('No AI panel generated yet. Please generate a panel first.', 'error');
+                return;
+            }
+
+            // Get all expert IDs from the AI generated panel
+            const expertIds = aiGeneratedPanel.map(expert => expert.expert_id);
+
+            if (expertIds.length === 0) {
+                showLocalToast('No experts in the panel to accept.', 'error');
+                return;
+            }
+
+            showLocalToast(`Saving panel with ${expertIds.length} expert(s)...`, 'success');
+
+            try {
+                await api.items.completeBoard(itemId, expertIds);
+                console.log('✅ AI Panel saved and item marked as completed');
+                showLocalToast('🎉 Board completed successfully! This item is now in the completed boards section.', 'success');
+
+                // Update UI to show completion
+                const acceptAllBtn = document.getElementById('accept-all-btn');
+                acceptAllBtn.disabled = true;
+                acceptAllBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Board Completed!</span>';
+                acceptAllBtn.style.background = '#6b7280';
+
+                // Disable the manual create panel button too
+                createPanelBtn.disabled = true;
+                createPanelBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Board Completed</span>';
+
+                // Mark all Accept buttons as accepted
+                document.querySelectorAll('.accept-btn').forEach(btn => {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Accepted';
+                    btn.classList.add('accepted');
+                    btn.style.background = '#10b981';
+                });
+
+            } catch (error) {
+                console.error('Error saving panel:', error);
+                showLocalToast('Error saving panel: ' + error.message, 'error');
             }
         });
 
@@ -1046,18 +1291,24 @@
             if (e.target.closest('.accept-btn')) {
                 const btn = e.target.closest('.accept-btn');
                 if (!btn.classList.contains('accepted')) {
-                    const expert = allExperts.find(e => e._id === expertId);
+                    const expert = allExperts.find(e => e._id === expertId) ||
+                        aiGeneratedPanel?.find(p => p.expert_id === expertId);
 
-                    if (!invitedPanelists.find(p => p._id === expertId)) {
-                        const newInvite = { ...expert, status: 'Pending' };
+                    if (expert && !invitedPanelists.find(p => p._id === expertId || p.expert_id === expertId)) {
+                        const newInvite = {
+                            ...expert,
+                            _id: expert._id || expert.expert_id,
+                            name: expert.name || expert.expert_name,
+                            status: 'Selected'
+                        };
                         invitedPanelists.push(newInvite);
-                        simulateStatusUpdate(newInvite);
                         updateViewPanelButton();
-                        showLocalToast(`${expert.name}'s invite has been sent.`, 'success');
+                        showLocalToast(`${newInvite.name} added to panel selection.`, 'success');
                     }
 
-                    btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Invite Sent`;
+                    btn.innerHTML = `<i class="fa-solid fa-check"></i> Selected`;
                     btn.classList.add('accepted');
+                    btn.style.background = '#10b981';
                 }
             }
 
@@ -1073,27 +1324,43 @@
             }
         });
 
-        createPanelBtn.addEventListener('click', () => {
+        createPanelBtn.addEventListener('click', async () => {
             const checkedBoxes = document.querySelectorAll('.manual-checkbox:checked');
-            let invitedCount = 0;
+            const selectedExpertIds = [];
 
             checkedBoxes.forEach(box => {
                 const expertId = box.dataset.expertId;
+                selectedExpertIds.push(expertId);
 
                 if (!invitedPanelists.find(p => p._id === expertId)) {
                     const expert = allExperts.find(e => e._id === expertId);
                     const newInvite = { ...expert, status: 'Pending' };
                     invitedPanelists.push(newInvite);
                     simulateStatusUpdate(newInvite);
-                    invitedCount++;
                 }
                 box.checked = false;
             });
 
-            if (invitedCount > 0) {
-                showLocalToast(`Sent ${invitedCount} new invite(s).`, 'success');
+            if (selectedExpertIds.length > 0) {
+                showLocalToast(`Saving panel with ${selectedExpertIds.length} expert(s)...`, 'success');
+
+                // Save the panel to database and mark item as completed
+                if (itemId) {
+                    try {
+                        await api.items.completeBoard(itemId, selectedExpertIds);
+                        console.log('✅ Panel saved and item marked as completed');
+                        showLocalToast('🎉 Board saved successfully! Item moved to completed boards.', 'success');
+
+                        // Disable further editing
+                        createPanelBtn.disabled = true;
+                        createPanelBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Board Completed</span>';
+                    } catch (error) {
+                        console.error('Error saving panel:', error);
+                        showLocalToast('Error saving panel: ' + error.message, 'error');
+                    }
+                }
             } else {
-                showLocalToast(`All selected panelists have already been invited.`, 'error');
+                showLocalToast(`Please select at least one expert.`, 'error');
             }
 
             updatePanelButtonCount();
@@ -1112,18 +1379,353 @@
             if (e.target === panelModal) closePanelModal();
         });
 
+        // ==================== AI PANEL GENERATION ====================
+        const aiGenerateBtn = document.getElementById('ai-generate-btn');
+
+        aiGenerateBtn.addEventListener('click', async () => {
+            if (!itemId) {
+                showLocalToast('No item selected', 'error');
+                return;
+            }
+
+            const panelSize = parseInt(boardDropdown.value) || 5;
+
+            // Show loading state
+            aiGenerateBtn.disabled = true;
+            aiGenerateBtn.querySelector('span').textContent = '⏳ Calculating Scores...';
+            const loadingIndicator = document.getElementById('ai-loading-indicator');
+            loadingIndicator.style.display = 'flex';
+
+            try {
+                // Call AI panel generation API with LLM enabled for detailed explanations
+                const result = await api.matching.generatePanel(itemId, {
+                    panel_size: panelSize,
+                    use_llm: true  // Enable LLM for detailed, accurate scoring and explanations
+                });
+
+                aiGeneratedPanel = result.recommended_panel;
+                allScoredExperts = result.all_scored_experts;
+
+                // Update allExperts with new scores
+                if (allScoredExperts) {
+                    allExperts = allExperts.map(expert => {
+                        const scored = allScoredExperts.find(s => s.expert_id === expert._id);
+                        if (scored) {
+                            return {
+                                ...expert,
+                                relevanceScore: Math.round(scored.final_score),
+                                scoreDetails: scored.component_scores,
+                                reason: scored.reason || expert.reason
+                            };
+                        }
+                        return expert;
+                    });
+                }
+
+                // Show recommended panel section
+                currentRecommendedCount = panelSize;
+                renderAIRecommendedExperts(aiGeneratedPanel);
+
+                // Update the manual selection lists with new scores
+                renderManualLists();
+
+                showLocalToast(`✨ AI Panel generated! Average score: ${result.average_score}%`, 'success');
+
+            } catch (error) {
+                console.error('AI Generation error:', error);
+                showLocalToast(`AI Generation failed: ${error.message}`, 'error');
+            } finally {
+                // Reset button state
+                aiGenerateBtn.disabled = false;
+                aiGenerateBtn.querySelector('span').textContent = '🤖 Generate AI Panel';
+                loadingIndicator.style.display = 'none';
+            }
+        });
+
+        function renderAIRecommendedExperts(panel) {
+            if (!panel || panel.length === 0) {
+                recommendedSection.classList.add('hidden');
+                return;
+            }
+
+            recommendedGrid.innerHTML = '';
+
+            panel.forEach((expert, index) => {
+                const card = createAIExpertCard(expert, index);
+                recommendedGrid.appendChild(card);
+            });
+
+            // Update header to show AI recommendation
+            const headerH3 = recommendedSection.querySelector('h3');
+            headerH3.innerHTML = `<i class="fa-solid fa-robot" style="color: #7c3aed; margin-right: 0.5rem;"></i> AI-Recommended Panel`;
+
+            recommendedSection.classList.remove('hidden');
+            setTimeout(() => recommendedSection.classList.add('visible'), 10);
+        }
+
+        function createAIExpertCard(expert, index) {
+            const card = document.createElement('div');
+            card.className = 'expert-card';
+            card.dataset.expertId = expert.expert_id;
+
+            // Category badge colors
+            const categoryColors = {
+                'chairperson': { bg: '#fef3c7', color: '#d97706', label: '👑 Chairperson' },
+                'departmental': { bg: '#dbeafe', color: '#2563eb', label: '🏛️ Departmental' },
+                'external': { bg: '#dcfce7', color: '#16a34a', label: '🌐 External' }
+            };
+            const catStyle = categoryColors[expert.category] || categoryColors['departmental'];
+
+            // Score color based on value
+            const scoreColor = expert.final_score >= 80 ? '#059669' :
+                expert.final_score >= 60 ? '#2563eb' :
+                    expert.final_score >= 40 ? '#d97706' : '#dc2626';
+
+            card.innerHTML = `
+                <div class="expert-card-header">
+                    <div class="expert-info">
+                        <span style="display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; background: ${catStyle.bg}; color: ${catStyle.color}; margin-bottom: 0.5rem;">
+                            ${catStyle.label}
+                        </span>
+                        <h4>${expert.expert_name}</h4>
+                        <p>${expert.category === 'external' ? 'External Expert' : 'DRDO Scientist'}</p>
+                    </div>
+                    <div class="relevance-score" style="color: ${scoreColor}; display: flex; flex-direction: column; align-items: flex-end;">
+                        <span style="font-size: 1.8rem;">${Math.round(expert.final_score)}%</span>
+                        <span style="font-size: 0.7rem; color: #6b7280;">AI Score</span>
+                    </div>
+                </div>
+                <div style="background: #f8fafc; border-radius: 8px; padding: 0.75rem; margin-bottom: 1rem; font-size: 0.85rem;">
+                    ${expert.component_scores ? `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div title="Job Description - Expert Cosine Similarity (Embedding Match)">
+                                <span style="color: #6b7280;">📄 JD-Expert Cosine:</span> 
+                                <strong>${expert.component_scores.w1_item_expert_cosine?.toFixed(0) || 0}%</strong>
+                            </div>
+                            <div title="Job Description - Expert Semantic Similarity (LLM Match)">
+                                <span style="color: #6b7280;">🤖 JD-Expert Semantic:</span> 
+                                <strong>${expert.component_scores.w2_item_expert_llm?.toFixed(0) || 0}%</strong>
+                            </div>
+                            <div title="Expert-Candidates Average Cosine Similarity">
+                                <span style="color: #6b7280;">👥 Expert-Cand Cosine:</span> 
+                                <strong>${expert.component_scores.w3_expert_candidates_cosine?.toFixed(0) || 0}%</strong>
+                            </div>
+                            <div title="Expert-Candidates Average Semantic Similarity (LLM)">
+                                <span style="color: #6b7280;">🎯 Expert-Cand Semantic:</span> 
+                                <strong>${expert.component_scores.w4_expert_candidates_llm?.toFixed(0) || 0}%</strong>
+                            </div>
+                        </div>
+                    ` : '<p style="color: #6b7280;">Score breakdown loading...</p>'}
+                </div>
+                <div class="expert-card-footer">
+                    <button class="card-btn details-btn" onclick="showScoreBreakdown('${expert.expert_id}')">
+                        <i class="fa-regular fa-file-alt"></i>Details
+                    </button>
+                    <button class="card-btn accept-btn">
+                        <i class="fa-solid fa-check"></i>Accept
+                    </button>
+                    <button class="card-btn remove-btn">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        async function showScoreBreakdown(expertId) {
+            // Find the expert in scored list
+            const expert = allScoredExperts?.find(e => e.expert_id === expertId) ||
+                allExperts.find(e => e._id === expertId);
+
+            if (!expert) return;
+
+            // Update modal content
+            document.getElementById('modal-expert-info').innerHTML = `
+                <div>
+                    <h4 style="font-size: 1.2rem; margin: 0;">${expert.expert_name || expert.name}</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">AI Relevance Score</p>
+                </div>
+                <div style="font-size: 1.8rem; font-weight: 700; color: var(--primary-blue);">
+                    ${Math.round(expert.final_score || expert.relevanceScore)}%
+                </div>
+            `;
+
+            // Show component breakdown
+            let reasonHtml = expert.reason || 'Expert has relevant skills and domain expertise.';
+
+            if (expert.component_scores) {
+                reasonHtml = `
+                    <div style="margin-bottom: 1rem;">
+                        <h5 style="margin-bottom: 0.5rem; color: #374151;">Score Components:</h5>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                            <div style="background: #eff6ff; padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">📄 JD-Expert Cosine</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #2563eb;">${expert.component_scores.w1_item_expert_cosine?.toFixed(1)}%</div>
+                            </div>
+                            <div style="background: #f5f3ff; padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">🤖 JD-Expert Semantic</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #7c3aed;">${expert.component_scores.w2_item_expert_llm?.toFixed(1)}%</div>
+                            </div>
+                            <div style="background: #ecfdf5; padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">👥 Expert-Cand Cosine</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #059669;">${expert.component_scores.w3_expert_candidates_cosine?.toFixed(1)}%</div>
+                            </div>
+                            <div style="background: #fef3c7; padding: 0.75rem; border-radius: 8px;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">🎯 Expert-Cand Semantic</div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #d97706;">${expert.component_scores.w4_expert_candidates_llm?.toFixed(1)}%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <h5 style="margin-bottom: 0.5rem; color: #374151;">AI Evaluation</h5>
+                        <div class="ai-explanation-text" style="
+                            max-height: 60vh; 
+                            overflow-y: auto; 
+                            padding: 1.5rem; 
+                            background: #ffffff; 
+                            border: 1px solid #e5e7eb;
+                            border-radius: 8px;
+                            white-space: normal;
+                            line-height: 1.8;
+                            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+                        ">${formatExplanation(expert.reason || 'Expert has relevant skills and domain expertise for evaluating candidates in this field.')}</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('modal-expert-reason').innerHTML = reasonHtml;
+            aiModal.classList.add('visible');
+        }
+
+        // Make showScoreBreakdown available globally
+        window.showScoreBreakdown = showScoreBreakdown;
+
         // Load data
         async function loadData() {
             try {
                 const experts = await api.experts.getAll();
-                allExperts = experts;
+                // CRITICAL FIX: Reset all relevanceScores to 0 
+                // Only AI-calculated scores should be shown
+                allExperts = experts.map(expert => ({
+                    ...expert,
+                    relevanceScore: 0,  // Reset database score to 0
+                    reason: 'Score will be calculated by AI panel generation'
+                }));
                 renderManualLists();
+
+                // If viewing a completed panel, load the saved panel
+                if (isViewingCompletedPanel && itemId) {
+                    await loadAcceptedPanel();
+                }
             } catch (error) {
                 console.error('Error loading experts:', error);
                 Object.values(listContainers).forEach(container => {
                     container.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">Failed to load experts</p>';
                 });
             }
+        }
+
+        // Load and display an accepted panel for completed boards
+        async function loadAcceptedPanel() {
+            try {
+                const panel = await api.items.getPanel(itemId);
+
+                if (panel && panel.expertIds) {
+                    // Find the expert details for each expert in the panel
+                    const panelExperts = panel.expertIds.map(expertId => {
+                        return allExperts.find(e => e._id === expertId) || { _id: expertId, name: 'Unknown Expert' };
+                    });
+
+                    // Display the panel
+                    displayAcceptedPanel(panelExperts, panel);
+                }
+            } catch (error) {
+                console.log('No accepted panel found for this item:', error.message);
+            }
+        }
+
+        // Display the accepted panel in view-only mode
+        function displayAcceptedPanel(panelExperts, panelData) {
+            // Update title to show this is a completed board
+            document.getElementById('itemTitle').innerHTML = `
+                <i class="fa-solid fa-check-circle" style="color: #10b981;"></i> 
+                ${currentItemData?.itemNo ? `Item ${currentItemData.itemNo}` : 'Item'} - <span style="color: #10b981;">Completed Board</span>
+            `;
+
+            // Hide the board selection and AI generation sections
+            const boardSelection = document.querySelector('.board-selection-wrapper');
+            if (boardSelection) boardSelection.style.display = 'none';
+
+            // Show the accepted panel in the recommended section
+            recommendedSection.classList.remove('hidden');
+            recommendedSection.classList.add('visible');
+
+            const headerH3 = recommendedSection.querySelector('h3');
+            headerH3.innerHTML = `
+                <i class="fa-solid fa-check-double" style="color: #10b981; margin-right: 0.5rem;"></i> 
+                Accepted Interview Board
+                <span style="background: #d1fae5; color: #059669; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; margin-left: 0.5rem;">
+                    ${panelExperts.length} Members
+                </span>
+            `;
+
+            // Render the panel members
+            recommendedGrid.innerHTML = '';
+            panelExperts.forEach((expert, index) => {
+                const card = document.createElement('div');
+                card.className = 'expert-card';
+                card.style.border = '2px solid #10b981';
+                card.style.background = 'linear-gradient(to bottom, #ecfdf5, white)';
+
+                const categoryColors = {
+                    'chairperson': { bg: '#fef3c7', color: '#d97706', label: '👑 Chairperson' },
+                    'departmental': { bg: '#dbeafe', color: '#2563eb', label: '🏛️ Departmental' },
+                    'external': { bg: '#dcfce7', color: '#16a34a', label: '🌐 External' }
+                };
+                const catStyle = categoryColors[expert.category] || categoryColors['departmental'];
+
+                card.innerHTML = `
+                    <div class="expert-card-header">
+                        <div class="expert-info">
+                            <span style="display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; background: ${catStyle.bg}; color: ${catStyle.color}; margin-bottom: 0.5rem;">
+                                ${catStyle.label}
+                            </span>
+                            <h4>${expert.name || 'Expert'}</h4>
+                            <p>${expert.role || 'Panel Member'}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                            <i class="fa-solid fa-check-circle" style="color: #10b981; font-size: 1.5rem;"></i>
+                            <span style="font-size: 0.75rem; color: #10b981; margin-top: 0.25rem;">Accepted</span>
+                        </div>
+                    </div>
+                    <div class="expert-card-footer" style="justify-content: center;">
+                        <span style="color: #6b7280; font-size: 0.85rem;">
+                            <i class="fa-solid fa-envelope" style="margin-right: 0.3rem;"></i>
+                            ${expert.email || 'No email'}
+                        </span>
+                    </div>
+                `;
+                recommendedGrid.appendChild(card);
+            });
+
+            // Hide the manual selection section for completed boards
+            const manualSection = document.querySelector('.manual-section');
+            if (manualSection) {
+                manualSection.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0;">
+                        <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #166534; margin-bottom: 0.5rem;">Board Completed</h3>
+                        <p style="color: #15803d;">This interview board has been finalized with ${panelExperts.length} expert(s).</p>
+                        <p style="color: #6b7280; font-size: 0.85rem; margin-top: 1rem;">
+                            Completed on: ${panelData.acceptedAt ? new Date(panelData.acceptedAt).toLocaleString() : 'N/A'}
+                        </p>
+                    </div>
+                `;
+            }
+
+            // Disable create panel button
+            createPanelBtn.disabled = true;
+            createPanelBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Board Completed</span>';
         }
 
         // Initialize

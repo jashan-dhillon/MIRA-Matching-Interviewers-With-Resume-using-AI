@@ -20,6 +20,7 @@ from routes.expert_routes import expert_bp, init_expert_routes
 from routes.panel_routes import panel_bp, init_panel_routes
 from routes.admin_routes import admin_bp, init_admin_routes
 from routes.pdf_routes import pdf_bp, init_pdf_routes
+from routes.matching_routes import matching_bp, init_matching_routes
 
 load_dotenv()
 
@@ -48,6 +49,7 @@ advertisements_collection = db['advertisements']
 items_collection = db['items']
 experts_collection = db['experts']
 panels_collection = db['panels']
+candidates_collection = db['candidates']
 
 
 # ==================== HELPER FUNCTIONS ====================
@@ -135,7 +137,7 @@ def get_captcha():
 # Initialize each blueprint with required dependencies
 init_auth_routes(users_collection, validate_captcha)
 init_adv_routes(advertisements_collection, items_collection, serialize_doc)
-init_item_routes(items_collection, serialize_doc)
+init_item_routes(items_collection, serialize_doc, advertisements_collection, panels_collection)
 init_expert_routes(experts_collection, serialize_doc)
 init_panel_routes(panels_collection, serialize_doc)
 init_admin_routes(
@@ -147,6 +149,7 @@ init_admin_routes(
     serialize_doc
 )
 init_pdf_routes(advertisements_collection, items_collection, serialize_doc)
+init_matching_routes(items_collection, experts_collection, candidates_collection, serialize_doc)
 
 # Register Blueprints
 app.register_blueprint(auth_bp)
@@ -156,13 +159,15 @@ app.register_blueprint(expert_bp)
 app.register_blueprint(panel_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(pdf_bp)
+app.register_blueprint(matching_bp)
 
 
 # ==================== MAIN ====================
 if __name__ == '__main__':
     print("\n🚀 MIRA DRDO Server Starting...")
     print(f"   MongoDB: {MONGODB_URI}")
-    print(f"   Local: http://localhost:5000")
-    print(f"   Login: http://localhost:5000/fe/login.html")
+    print(f"   Local: http://localhost:5001")
+    print(f"   Login: http://localhost:5001/fe/login.html")
     print("\n📌 First time? Call POST /api/seed to populate database\n")
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
+

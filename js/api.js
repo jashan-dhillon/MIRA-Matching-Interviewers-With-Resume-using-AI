@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5001/api';
 
 // API Helper Functions
 const api = {
@@ -71,13 +71,43 @@ const api = {
 
         async getItems(advertisementId) {
             return api.request(`/advertisements/${advertisementId}/items`);
+        },
+
+        async updateStatus(id, status) {
+            return api.request(`/advertisements/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({ status })
+            });
         }
     },
 
     // Item endpoints
     items: {
+        async getAll(status = null) {
+            const query = status ? `?status=${status}` : '';
+            return api.request(`/items${query}`);
+        },
+
         async getById(id) {
             return api.request(`/items/${id}`);
+        },
+
+        async update(id, data) {
+            return api.request(`/items/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            });
+        },
+
+        async completeBoard(itemId, expertIds, panelType = 'Final Interview Panel') {
+            return api.request(`/items/${itemId}/complete-board`, {
+                method: 'POST',
+                body: JSON.stringify({ expertIds, panelType })
+            });
+        },
+
+        async getPanel(itemId) {
+            return api.request(`/items/${itemId}/panel`);
         }
     },
 
@@ -119,13 +149,13 @@ const api = {
         async upload(file) {
             const formData = new FormData();
             formData.append('file', file);
-            
+
             const response = await fetch(`${API_BASE_URL}/pdf/upload`, {
                 method: 'POST',
                 body: formData,
                 credentials: 'include'
             });
-            
+
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.error || 'Upload failed');
@@ -136,13 +166,13 @@ const api = {
         async preview(file) {
             const formData = new FormData();
             formData.append('file', file);
-            
+
             const response = await fetch(`${API_BASE_URL}/pdf/preview`, {
                 method: 'POST',
                 body: formData,
                 credentials: 'include'
             });
-            
+
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.error || 'Preview failed');
@@ -152,6 +182,35 @@ const api = {
 
         async reprocess(advertisementId) {
             return api.request(`/pdf/reprocess/${advertisementId}`, { method: 'POST' });
+        }
+    },
+
+    // AI Matching endpoints
+    matching: {
+        async calculateScores(itemId, options = {}) {
+            return api.request(`/matching/calculate/${itemId}`, {
+                method: 'POST',
+                body: JSON.stringify(options)
+            });
+        },
+
+        async generatePanel(itemId, options = {}) {
+            return api.request(`/matching/generate-panel/${itemId}`, {
+                method: 'POST',
+                body: JSON.stringify(options)
+            });
+        },
+
+        async getScoreBreakdown(itemId, expertId, useLlm = true) {
+            return api.request(`/matching/score/${itemId}/${expertId}?use_llm=${useLlm}`);
+        },
+
+        async updateEmbeddings() {
+            return api.request('/matching/update-embeddings', { method: 'POST' });
+        },
+
+        async getExpertsWithScores(itemId) {
+            return api.request(`/matching/experts-with-scores/${itemId}`);
         }
     },
 

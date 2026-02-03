@@ -71,13 +71,43 @@ const api = {
 
         async getItems(advertisementId) {
             return api.request(`/advertisements/${advertisementId}/items`);
+        },
+
+        async updateStatus(id, status) {
+            return api.request(`/advertisements/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({ status })
+            });
         }
     },
 
     // Item endpoints
     items: {
+        async getAll(status = null) {
+            const query = status ? `?status=${status}` : '';
+            return api.request(`/items${query}`);
+        },
+
         async getById(id) {
             return api.request(`/items/${id}`);
+        },
+
+        async update(id, data) {
+            return api.request(`/items/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            });
+        },
+
+        async completeBoard(itemId, expertIds, panelType = 'Final Interview Panel') {
+            return api.request(`/items/${itemId}/complete-board`, {
+                method: 'POST',
+                body: JSON.stringify({ expertIds, panelType })
+            });
+        },
+
+        async getPanel(itemId) {
+            return api.request(`/items/${itemId}/panel`);
         }
     },
 
