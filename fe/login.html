@@ -262,12 +262,11 @@
                 <option value="" disabled selected>Select Role</option>
                 <option value="admin">Admin</option>
                 <option value="expert">Expert</option>
-                <option value="candidate">Candidate</option>
             </select>
 
             <!-- Login Form -->
             <form id="loginForm">
-                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="text" id="loginEmail" placeholder="Email or Username" required>
                 <input type="password" id="loginPassword" placeholder="Password" required>
 
                 <div class="forgot-password">
@@ -351,11 +350,14 @@
             signupBtn.classList.remove('active');
         };
 
-        signupBtn.onclick = () => {
+        signupBtn.onclick = async () => {
             signupForm.classList.remove('hidden');
             loginForm.classList.add('hidden');
             signupBtn.classList.add('active');
             loginBtn.classList.remove('active');
+            if (!signupCaptchaCode) {
+                signupCaptchaCode = await fetchCaptcha(signupCaptcha, 'signup');
+            }
         };
 
         switchToSignup.onclick = (e) => {
@@ -392,7 +394,8 @@
         // Initialize CAPTCHA from server
         (async () => {
             loginCaptchaCode = await fetchCaptcha(captcha, 'login');
-            signupCaptchaCode = await fetchCaptcha(signupCaptcha, 'signup');
+            // Don't fetch signup captcha immediately to avoid session overwrite
+            // signupCaptchaCode = await fetchCaptcha(signupCaptcha, 'signup'); 
         })();
 
         // Login form submission
@@ -429,7 +432,11 @@
                 session.setUser(response.user);
                 showToast('Login successful! Redirecting...', 'success');
                 setTimeout(() => {
-                    window.location.href = 'home.html';
+                    if (response.user.role === 'expert') {
+                        window.location.href = 'expert_home.html';
+                    } else {
+                        window.location.href = 'home.html';
+                    }
                 }, 1000);
             } catch (error) {
                 errorEl.textContent = error.message || 'Login failed. Please try again.';

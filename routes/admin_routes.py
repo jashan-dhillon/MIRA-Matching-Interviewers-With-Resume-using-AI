@@ -195,7 +195,8 @@ def seed_data():
             'qualifications': ['PhD Electronics', 'M.Tech Communication', 'B.Tech ECE'],
             'specializations': ['Radar Systems', 'Defense Electronics', 'Signal Intelligence'],
             'experience': '30 years',
-            'reason': 'Extensive experience in chairing high-level assessment boards. Deep knowledge of electronics and communication policies.'
+            'reason': 'Extensive experience in chairing high-level assessment boards. Deep knowledge of electronics and communication policies.',
+            'email': 'nehalsingh01704@gmail.com'
         },
         {
             'name': 'Dr. Veena Rao', 
@@ -381,12 +382,43 @@ def seed_data():
         }
     ]
     
+    expert_count = 1
     for expert_data in experts_data:
-        experts_collection.insert_one({
-            **expert_data,
-            'email': f"{expert_data['name'].lower().replace(' ', '.').replace('dr.', '').replace('prof.', '').strip('.')}@drdo.gov.in",
-            'createdAt': datetime.now()
-        })
+        # Determine credentials
+        if expert_data['name'] == 'Dr. Ashok Kumar':
+            username = 'expert1'
+        else:
+            expert_count += 1
+            if expert_count == 1: expert_count += 1 # Skip 1 as it's Ashok
+            username = f'expert{expert_count}'
+            
+        password = 'expert123'
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        
+        # Calculate email
+        email = expert_data.get('email', f"{expert_data['name'].lower().replace(' ', '.').replace('dr.', '').replace('prof.', '').strip('.')}@drdo.gov.in")
+        
+        # Insert Expert Profile
+        try:
+            expert_id = experts_collection.insert_one({
+                **expert_data,
+                'email': email,
+                'username': username, # Link to user
+                'createdAt': datetime.now()
+            }).inserted_id
+
+            # Insert User Account (for Login)
+            users_collection.insert_one({
+                'username': username,
+                'email': email,
+                'password': hashed_password,
+                'role': 'expert',
+                'expertId': str(expert_id), # Link user to expert profile
+                'createdAt': datetime.now()
+            })
+            print(f"DEBUG: Created User {username} / {email}")
+        except Exception as e:
+            print(f"❌ ERROR Creating Expert/User {username}: {e}")
     
     # Create sample candidates for testing AI matching
     candidates_data = [

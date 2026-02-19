@@ -55,7 +55,7 @@ def _get_ollama_response(prompt: str, model: str = None) -> Optional[str]:
             prompt=prompt,
             options={
                 'temperature': 0.1,  # Low temperature for consistent scoring
-                'num_predict': 300,  # Increased to allow complete explanations (was 50)
+                'num_predict': 50,  # Increased to allow complete explanations (was 50)
             }
         )
         return response.get('response', '').strip()
@@ -126,6 +126,12 @@ def llm_similarity(text1: str, text2: str, context: str = "job matching") -> flo
     Returns:
         Similarity score between 0 and 100
     """
+    # MOCK MODE check
+    if os.getenv('USE_MOCK_LLM', 'false').lower() == 'true':
+        # Return a deterministic high score based on length of inputs
+        seed = (len(text1) + len(text2)) % 20
+        return 80.0 + seed
+
     if not _check_ollama_available():
         # Fallback: Use enhanced heuristic
         return _fallback_text_similarity(text1, text2)
@@ -226,6 +232,10 @@ def llm_generate_reason(
     Returns:
         Explanation string
     """
+    # MOCK MODE check
+    if os.getenv('USE_MOCK_LLM', 'false').lower() == 'true':
+        return f"DEMO EXPLAIN: {expert_name} matches the requirements based on keyword analysis. (Mock Mode)"
+
     if not _check_ollama_available():
         return _generate_fallback_reason(item_text, expert_text)
     

@@ -172,7 +172,7 @@
                     </div>
 
                     <div class="profile-actions">
-                        <button class="btn btn-outline" onclick="window.location.href='home.html'">
+                        <button class="btn btn-outline" id="dashboardBtn">
                             <i class="fa-solid fa-home"></i> Go to Dashboard
                         </button>
                         <button class="btn btn-danger" id="logoutBtn2">
@@ -205,6 +205,15 @@
 
         document.getElementById('logoutBtn').addEventListener('click', logout);
         document.getElementById('logoutBtn2').addEventListener('click', logout);
+
+        document.getElementById('dashboardBtn').addEventListener('click', () => {
+            const user = session.getUser();
+            if (user && user.role === 'expert') {
+                window.location.href = 'expert_home.html';
+            } else {
+                window.location.href = 'home.html';
+            }
+        });
     </script>
 </body>
 

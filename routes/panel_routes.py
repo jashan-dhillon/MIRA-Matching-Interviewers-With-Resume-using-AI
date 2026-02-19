@@ -75,6 +75,7 @@ def update_panelist_status(panel_id):
     data = request.json
     expert_id = data.get('expertId')
     status = data.get('status')  # 'accepted' or 'declined'
+    reason = data.get('reason', '') # Reason for decline/accept
     
     try:
         result = panels_collection.update_one(
@@ -85,6 +86,7 @@ def update_panelist_status(panel_id):
             {
                 '$set': {
                     'panelists.$.status': status,
+                    'panelists.$.reason': reason,
                     'panelists.$.respondedAt': datetime.now()
                 }
             }
