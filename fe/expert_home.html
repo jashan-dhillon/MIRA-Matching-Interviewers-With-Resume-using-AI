@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Dashboard | DRDO RAC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style>
+        .expert-container {
+            max-width: 1200px;
+            margin: 6rem auto 0;
+            padding: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .section-header .badge {
+            background-color: #ef4444;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .invite-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #3b82f6;
+            transition: transform 0.2s;
+        }
+
+        .invite-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .invite-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item label {
+            display: block;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-item span {
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .action-area {
+            background-color: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .reason-box {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-accept {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-accept:hover {
+            background-color: #059669;
+        }
+
+        .btn-decline {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-decline:hover {
+            background-color: #dc2626;
+        }
+
+        .upcoming-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .date-box {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .date-box .day {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .date-box .month {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .job-info {
+            flex-grow: 1;
+            padding: 0 1.5rem;
+        }
+
+        .job-info h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.125rem;
+            color: #111827;
+        }
+
+        .job-info p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #9ca3af;
+            background: white;
+            border-radius: 12px;
+            border: 2px dashed #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <img src="rac_logo.png" alt="DRDO Logo" class="header-logo">
+            <div class="header-center">
+                <h1>Recruitment and Assessment Centre</h1>
+                <p>Expert Portal</p>
+            </div>
+        </div>
+        <nav class="navbar">
+            <a href="expert_home.html" class="nav-link active">Home</a>
+            <a href="expert_history.html" class="nav-link">History</a>
+            <a href="profile.html" class="nav-link">Profile</a>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fa-solid fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+    </header>
+
+    <main class="expert-container">
+        <!-- Welcome Section -->
+        <div style="margin-bottom: 2rem;">
+            <h1 style="color: #111827; font-size: 2rem;">Welcome, <span id="expertName">Expert</span></h1>
+            <p style="color: #6b7280;">Manage your interview panel invitations and schedule.</p>
+        </div>
+
+        <!-- Pending Invites Section -->
+        <section>
+            <div class="section-header">
+                <h2><i class="fa-regular fa-bell"></i> Pending Invitations</h2>
+                <span class="badge" id="pendingCount">0</span>
+            </div>
+            <div id="pendingList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Interviews Section -->
+        <section style="margin-top: 3rem;">
+            <div class="section-header">
+                <h2 style="color: #059669;"><i class="fa-regular fa-calendar-check"></i> Upcoming Interviews</h2>
+            </div>
+            <div id="upcomingList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script>
+        // Auth Check
+        if (!requireAuth()) { }
+
+        const user = session.getUser();
+        document.getElementById('expertName').textContent = user.fullName;
+
+        // Fetch Data
+        async function loadDashboard() {
+            try {
+                if (!user.expertId) {
+                    console.error("No Expert ID found");
+                    return;
+                }
+
+                // Call new API (we need to add this wrapper to api.js or call fetch directly)
+                const response = await fetch(`${API_BASE_URL}/experts/${user.expertId}/invitations`);
+                const data = await response.json();
+
+                renderPending(data.pending);
+                renderUpcoming(data.upcoming);
+                document.getElementById('pendingCount').textContent = data.pending.length;
+
+            } catch (error) {
+                console.error("Error loading dashboard:", error);
+                document.getElementById('pendingList').innerHTML = `<p class="error">Failed to load invites.</p>`;
+            }
+        }
+
+        function renderPending(invites) {
+            const container = document.getElementById('pendingList');
+            if (invites.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>No pending invitations at the moment.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = invites.map(invite => `
+                <div class="invite-card">
+                    <h3 style="margin-top:0; color:#1e40af; margin-bottom:1rem;">
+                        ${invite.itemTitle}
+                    </h3>
+                    <div class="invite-details">
+                        <div class="detail-item">
+                            <label><i class="fa-regular fa-calendar"></i> Date</label>
+                            <span>${invite.date}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label><i class="fa-solid fa-location-dot"></i> Venue</label>
+                            <span>${invite.venue}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label><i class="fa-solid fa-user-tag"></i> Role</label>
+                            <span>${invite.role}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label><i class="fa-solid fa-clock"></i> Deadline</label>
+                            <span style="color:#dc2626;">Respond by Feb 10, 2026</span>
+                        </div>
+                    </div>
+
+                    <div class="action-area">
+                        <label style="display:block; margin-bottom:0.5rem; font-weight:500; color:#374151;">
+                            Your Response (Optional Reason):
+                        </label>
+                        <textarea class="reason-box" id="reason-${invite.panelId}" rows="2" placeholder="e.g., I am available / I have a conflict..."></textarea>
+                        
+                        <div class="btn-group">
+                            <button onclick="handleResponse('${invite.panelId}', '${user.expertId}', 'declined')" class="btn-decline">
+                                <i class="fa-solid fa-xmark"></i> Decline
+                            </button>
+                            <button onclick="handleResponse('${invite.panelId}', '${user.expertId}', 'accepted')" class="btn-accept">
+                                <i class="fa-solid fa-check"></i> Accept Invite
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderUpcoming(invites) {
+            const container = document.getElementById('upcomingList');
+            if (invites.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p>No upcoming interviews scheduled.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = invites.map(invite => `
+                <div class="upcoming-card">
+                    <div style="display:flex; align-items:center;">
+                        <div class="date-box">
+                            <span class="day">15</span>
+                            <span class="month">Feb</span>
+                        </div>
+                        <div class="job-info">
+                            <h4>${invite.itemTitle}</h4>
+                            <p><i class="fa-solid fa-location-dot"></i> ${invite.venue}</p>
+                            <p style="margin-top:0.25rem; font-size:0.8rem; color:#059669;">
+                                <i class="fa-solid fa-check-circle"></i> Confirmed
+                            </p>
+                        </div>
+                    </div>
+                    <a href="#" style="color:#3b82f6; text-decoration:none; font-weight:500;">
+                        View Details <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        async function handleResponse(panelId, expertId, status) {
+            const reason = document.getElementById(`reason-${panelId}`).value;
+            const btnContainer = document.querySelector(`#reason-${panelId}`).parentElement.querySelector('.btn-group');
+
+            // Show loading state
+            btnContainer.innerHTML = '<span style="color:#6b7280;">Processing...</span>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/panels/${panelId}/invite`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ expertId, status, reason })
+                });
+
+                if (response.ok) {
+                    showToast(`Invitation ${status} successfully`, 'success');
+                    loadDashboard(); // Refresh UI
+                } else {
+                    throw new Error('Failed to update status');
+                }
+            } catch (error) {
+                showToast(error.message, 'error');
+                loadDashboard(); // Reset UI
+            }
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            session.clearUser();
+            window.location.href = 'login.html';
+        });
+
+        loadDashboard();
+    </script>
+</body>
+
+</html>

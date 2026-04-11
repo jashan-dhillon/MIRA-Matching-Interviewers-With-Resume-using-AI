@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advertisement Details - RAC DRDO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../styles/main.css">
+  <style>
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb a {
+      color: var(--primary-blue);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .advertisement-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .advertisement-header h2 {
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .advertisement-header .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .status-active {
+      background-color: #f0fdf4;
+      color: #15803d;
+    }
+
+    .status-completed {
+      background-color: #f1f5f9;
+      color: #64748b;
+    }
+
+    .items-container {
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--card-shadow);
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .items-container h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .items-container h3 i {
+      color: var(--primary-blue);
+    }
+
+    .items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .item-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      background-color: var(--bg-blue);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .item-card:hover {
+      background-color: var(--white);
+      border-color: var(--primary-blue);
+      box-shadow: 0 4px 12px var(--card-shadow);
+      transform: translateX(5px);
+    }
+
+    .item-info h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem;
+    }
+
+    .item-info p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .item-arrow {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+
+    .item-card:hover .item-arrow {
+      color: var(--primary-blue);
+      transform: translateX(5px);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: var(--border-color);
+    }
+
+    .empty-state h4 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="header-left">
+      <img src="rac_logo.png" alt="DRDO Logo" class="header-logo">
+      <div class="header-center">
+        <h1>Recruitment and Assessment Centre, DRDO</h1>
+        <p>Department of Defence Research and Development</p>
+        <p>Ministry of Defence, Government of India</p>
+        <p class="iso-text">an ISO 9001 certified establishment</p>
+      </div>
+      <img src="emblem.png" alt="Indian Emblem" class="header-emblem">
+    </div>
+
+    <nav class="navbar">
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="experts.html" class="nav-link" data-role="admin,expert">Experts</a>
+      <a href="admin.html" class="nav-link" data-role="admin">Admin</a>
+      <a href="profile.html" class="nav-link">Profile</a>
+      <button class="logout-btn" id="logoutBtn">
+        <i class="fa-solid fa-sign-out-alt"></i> Logout
+      </button>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="home.html"><i class="fa-solid fa-home"></i> Home</a>
+      <i class="fa-solid fa-chevron-right"></i>
+      <span id="breadcrumbTitle">Advertisement</span>
+    </div>
+
+    <!-- Advertisement Header -->
+    <div class="advertisement-header">
+      <h2 id="advertisementTitle">Advertisement No. --</h2>
+      <span id="advertisementStatus" class="status-badge status-active">Active</span>
+    </div>
+
+    <!-- Items Container -->
+    <div class="items-container">
+      <h3>
+        <i class="fa-solid fa-list-check"></i>
+        Available Items / Positions
+      </h3>
+
+      <div id="itemsList" class="items-list">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/api.js"></script>
+  <script>
+    // Check authentication
+    if (!requireAuth()) {
+      // Redirect handled by requireAuth()
+    }
+
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await api.auth.logout();
+      } catch (e) { }
+      session.clearUser();
+      window.location.href = 'login.html';
+    });
+
+    // Get advertisement ID from URL
+    const advertisementId = getUrlParam('id');
+    const advertisementNo = getUrlParam('advNo');
+
+    // Update page title and breadcrumb
+    if (advertisementNo) {
+      document.getElementById('advertisementTitle').textContent = `Advertisement No. ${advertisementNo}`;
+      document.getElementById('breadcrumbTitle').textContent = `Advertisement No. ${advertisementNo}`;
+      document.title = `Advertisement No. ${advertisementNo} - RAC DRDO`;
+    }
+
+    // Render items list
+    function renderItems(items) {
+      const container = document.getElementById('itemsList');
+
+      if (!items || items.length === 0) {
+        container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-inbox"></i>
+                        <h4>No Items Found</h4>
+                        <p>There are no items/positions available for this advertisement.</p>
+                    </div>
+                `;
+        return;
+      }
+
+      container.innerHTML = items.map(item => `
+                <a href="item.html?id=${item._id}&itemNo=${item.itemNo}&advId=${advertisementId}&advNo=${advertisementNo}" class="item-card">
+                    <div class="item-info">
+                        <h4>Item No. ${item.itemNo}</h4>
+                        <p>${item.title || item.description || 'Click to view details and select experts'}</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-right item-arrow"></i>
+                </a>
+            `).join('');
+    }
+
+    // Load advertisement details and items
+    async function loadData() {
+      try {
+        // Load advertisement details
+        if (advertisementId) {
+          try {
+            const adv = await api.advertisements.getById(advertisementId);
+            document.getElementById('advertisementTitle').textContent = `Advertisement No. ${adv.advertisementNo}`;
+            document.getElementById('breadcrumbTitle').textContent = `Advertisement No. ${adv.advertisementNo}`;
+
+            const statusBadge = document.getElementById('advertisementStatus');
+            statusBadge.textContent = adv.status.charAt(0).toUpperCase() + adv.status.slice(1);
+            statusBadge.className = `status-badge status-${adv.status}`;
+          } catch (e) {
+            console.log('Could not load advertisement details');
+          }
+        }
+
+        // Load items
+        const idToUse = advertisementId || advertisementNo;
+        const items = await api.advertisements.getItems(idToUse);
+        renderItems(items);
+      } catch (error) {
+        console.error('Error loading data:', error);
+        document.getElementById('itemsList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        <h4>Error Loading Items</h4>
+                        <p>Failed to load items. Please try again later.</p>
+                    </div>
+                `;
+      }
+    }
+
+    // Initialize
+    loadData();
+  </script>
+
+</body>
+
+</html>
