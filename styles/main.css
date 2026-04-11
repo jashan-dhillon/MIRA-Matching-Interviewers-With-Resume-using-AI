@@ -472,9 +472,29 @@ select.form-control {
     border-radius: 16px;
     width: 90%;
     max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
     position: relative;
     transform: scale(0.95);
     transition: transform 0.3s ease;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 0 16px 16px 0;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 .modal-overlay.visible .modal-content {

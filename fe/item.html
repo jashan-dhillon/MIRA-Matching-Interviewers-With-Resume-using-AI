@@ -469,6 +469,24 @@
         .ai-explanation-text::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
+        /* Safety Styles for Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.visible {
+            display: flex !important;
+        }
     </style>
 </head>
 
@@ -653,7 +671,7 @@
                 </div>
             </button>
 
-            <button id="view-panel-btn" class="create-panel-button" disabled>
+            <button id="view-panel-btn" class="create-panel-button" onclick="openPanelModal()" disabled>
                 <i class="fa-solid fa-users-viewfinder"></i>
                 <span>View Panel (0)</span>
             </button>
@@ -749,7 +767,7 @@
                 <h3>Panel Monitoring: Selected Experts</h3>
             </div>
             <div class="modal-body">
-                <div id="panelist-list-container">
+                <div id="panel-experts-list">
                 </div>
             </div>
         </div>
@@ -977,17 +995,14 @@
             aiModal.classList.remove('visible');
         }
 
-        function openPanelModal() {
-            renderInvitedPanelists();
-            panelModal.classList.add('visible');
-        }
+        /* Duplicate openPanelModal removed */
 
         function closePanelModal() {
             panelModal.classList.remove('visible');
         }
 
         function renderInvitedPanelists() {
-            const container = document.getElementById('panelist-list-container');
+            const container = document.getElementById('panel-experts-list');
 
             if (invitedPanelists.length === 0) {
                 container.innerHTML = `
@@ -1007,6 +1022,7 @@
                             <th>Name</th>
                             <th>Role</th>
                             <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1016,12 +1032,34 @@
                 let statusClass = 'status-pending';
                 if (expert.status.toLowerCase() === 'accepted') statusClass = 'status-accepted';
                 if (expert.status.toLowerCase() === 'declined') statusClass = 'status-declined';
+                if (expert.status.toLowerCase() === 'invited') statusClass = 'status-pending';
+
+                const expertId = expert._id || expert.expert_id;
+                const isInvited = expert.status.toLowerCase() === 'invited' || expert.status.toLowerCase() === 'accepted';
 
                 tableHtml += `
                     <tr>
-                        <td>${expert.name}</td>
+                        <td>
+                            <div style="font-weight: 600;">${expert.name}</div>
+                            <div style="font-size: 0.75rem; color: #6b7280;">${expert.email || 'No email'}</div>
+                        </td>
                         <td>${expert.role}</td>
                         <td><span class="status-badge ${statusClass}">${expert.status}</span></td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="sendIndividualInvite('${expertId}', '${expert.panel_role || 'Member'}')" 
+                                        class="card-btn details-btn" 
+                                        style="padding: 0.3rem 0.6rem; font-size: 0.8rem;"
+                                        ${isInvited ? 'disabled' : ''}>
+                                    <i class="fa-solid fa-paper-plane"></i> ${isInvited ? 'Invited' : 'Invite'}
+                                </button>
+                                <button onclick="removePanelist('${expertId}')" 
+                                        class="card-btn remove-btn" 
+                                        style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                 `;
             });
@@ -1244,6 +1282,14 @@
             // Get all expert IDs from the AI generated panel
             const expertIds = aiGeneratedPanel.map(expert => expert.expert_id);
 
+            // Construct detailed experts list to preserve scores and reasons
+            const detailedExperts = aiGeneratedPanel.map(expert => ({
+                expertId: expert.expert_id,
+                panelRole: expert.role,
+                relevanceScore: expert.relevanceScore,
+                reason: expert.reason
+            }));
+
             if (expertIds.length === 0) {
                 showLocalToast('No experts in the panel to accept.', 'error');
                 return;
@@ -1252,7 +1298,8 @@
             showLocalToast(`Saving panel with ${expertIds.length} expert(s)...`, 'success');
 
             try {
-                await api.items.completeBoard(itemId, expertIds);
+                // Pass detailedExperts to save scores/reasons
+                await api.items.completeBoard(itemId, expertIds, 'Final Interview Panel', detailedExperts);
                 console.log('✅ AI Panel saved and item marked as completed');
                 showLocalToast('🎉 Board completed successfully! This item is now in the completed boards section.', 'success');
 
@@ -1290,31 +1337,43 @@
 
             if (e.target.closest('.accept-btn')) {
                 const btn = e.target.closest('.accept-btn');
+
+                // If already accepted/selected, ignore or maybe allow re-send?
+                // Assuming we want to send invite now.
+
                 if (!btn.classList.contains('accepted')) {
                     const expert = allExperts.find(e => e._id === expertId) ||
                         aiGeneratedPanel?.find(p => p.expert_id === expertId);
 
-                    if (expert && !invitedPanelists.find(p => p._id === expertId || p.expert_id === expertId)) {
-                        const newInvite = {
-                            ...expert,
-                            _id: expert._id || expert.expert_id,
-                            name: expert.name || expert.expert_name,
-                            status: 'Selected'
-                        };
-                        invitedPanelists.push(newInvite);
-                        updateViewPanelButton();
-                        showLocalToast(`${newInvite.name} added to panel selection.`, 'success');
-                    }
+                    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
 
-                    btn.innerHTML = `<i class="fa-solid fa-check"></i> Selected`;
-                    btn.classList.add('accepted');
-                    btn.style.background = '#10b981';
+                    // Call API to send invite & save to DB
+                    sendIndividualInvite(expertId, 'Member').then(() => {
+                        btn.innerHTML = `<i class="fa-solid fa-check"></i> Invited`;
+                        btn.classList.add('accepted');
+                        btn.style.background = '#10b981';
+
+                        // Add to local list for UI consistency (View Panel modal)
+                        if (expert && !invitedPanelists.find(p => p._id === expertId || p.expert_id === expertId)) {
+                            const newInvite = {
+                                ...expert,
+                                _id: expert._id || expert.expert_id,
+                                name: expert.name || expert.expert_name,
+                                status: 'Invited'
+                            };
+                            invitedPanelists.push(newInvite);
+                            updateViewPanelButton();
+                        }
+                    }).catch(() => {
+                        btn.innerHTML = `<i class="fa-solid fa-check"></i> Accept`; // Revert on failure
+                    });
                 }
             }
 
             if (e.target.closest('.remove-btn')) {
+                const card = e.target.closest('.expert-card');
                 card.remove();
-                showLocalToast('Expert removed from recommendations', 'error');
+                showLocalToast('Expert removed from recommendations', 'info');
             }
         });
 
@@ -1324,6 +1383,108 @@
             }
         });
 
+
+        async function sendIndividualInvite(expertId, role) {
+            try {
+                showLocalToast('Sending invitation...', 'info');
+                const response = await fetch(`/api/items/${itemId}/invite`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ expertId, panelRole: role })
+                });
+
+                if (response.ok) {
+                    showLocalToast('✅ Invitation sent successfully!', 'success');
+                    // Update status in local array
+                    const expert = invitedPanelists.find(p => (p._id || p.expert_id) === expertId);
+                    if (expert) {
+                        expert.status = 'Invited';
+                        renderInvitedPanelists();
+                    }
+                } else {
+                    const err = await response.json();
+                    showLocalToast('❌ ' + (err.error || 'Failed to send'), 'error');
+                }
+            } catch (error) {
+                console.error('Invite error:', error);
+                showLocalToast('❌ Failed to send invite', 'error');
+            }
+        }
+
+        async function removePanelist(expertId) {
+            console.log('=== REMOVE PANELIST CALLED ===');
+            console.log('Expert ID received:', expertId);
+            console.log('Item ID:', itemId);
+            console.log('Current Panel Status:', currentLoadedPanel?.status);
+
+            if (!confirm('Are you sure you want to remove this expert from the panel?')) return;
+
+            // Check if board is completed (has an accepted status)
+            const isCompletedBoard = currentLoadedPanel && currentLoadedPanel.status === 'accepted';
+            console.log('Is Completed Board:', isCompletedBoard);
+
+            if (isCompletedBoard) {
+                const url = `/api/items/${itemId}/panel/expert/${expertId}`;
+                console.log('DELETE URL:', url);
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'DELETE'
+                    });
+
+                    console.log('Response Status:', response.status);
+
+                    if (response.ok) {
+                        showLocalToast('Expert removed from completed panel', 'success');
+                        // Reload to reflect changes from fresh state
+                        setTimeout(() => window.location.reload(), 1000);
+                        return;
+                    } else {
+                        const err = await response.json();
+                        console.error('Error response:', err);
+                        alert('DEBUG: Remove failed!\n\nItem ID: ' + itemId + '\nExpert ID: ' + expertId + '\nError: ' + err.error);
+                        showLocalToast('Failed to remove: ' + err.error, 'error');
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Exception:', e);
+                    alert('DEBUG: Exception occurred!\n\n' + e.message);
+                    showLocalToast('Error removing expert', 'error');
+                    return;
+                }
+            }
+
+            // Local removal for Draft mode
+            invitedPanelists = invitedPanelists.filter(p => (p._id || p.expert_id) !== expertId);
+
+            // Re-render
+            renderInvitedPanelists();
+            updateViewPanelButton();
+            updatePanelButtonCount(); // If reflected in manual selection
+
+            // Also uncheck in manual list if present
+            const checkbox = document.querySelector(`.manual-checkbox[data-expert-id="${expertId}"]`);
+            if (checkbox) checkbox.checked = false;
+
+            // Reset button in recommended grid
+            const processedId = expertId;
+            // The recommendation grid logic is a bit complex with "Accepted" state, 
+            // but simply re-enabling the button is good enough for now
+            const acceptBtns = document.querySelectorAll('.accept-btn.accepted');
+            acceptBtns.forEach(btn => {
+                // This is hard to map back without ID on button, but let's assume UI updates on next refresh or user handles it
+                // Ideally we'd find the specific card.
+                const card = btn.closest('.expert-card');
+                if (card && card.dataset.expertId === processedId) {
+                    btn.classList.remove('accepted');
+                    btn.style.background = '';
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Accept';
+                }
+            });
+
+            showLocalToast('Expert removed from panel', 'success');
+        }
+
         createPanelBtn.addEventListener('click', async () => {
             const checkedBoxes = document.querySelectorAll('.manual-checkbox:checked');
             const selectedExpertIds = [];
@@ -1332,7 +1493,7 @@
                 const expertId = box.dataset.expertId;
                 selectedExpertIds.push(expertId);
 
-                if (!invitedPanelists.find(p => p._id === expertId)) {
+                if (!invitedPanelists.find(p => (p._id || p.expert_id) === expertId)) {
                     const expert = allExperts.find(e => e._id === expertId);
                     const newInvite = { ...expert, status: 'Pending' };
                     invitedPanelists.push(newInvite);
@@ -1344,10 +1505,21 @@
             if (selectedExpertIds.length > 0) {
                 showLocalToast(`Saving panel with ${selectedExpertIds.length} expert(s)...`, 'success');
 
+                // Construct detailed experts list
+                const detailedExperts = selectedExpertIds.map(eid => {
+                    const expert = allExperts.find(e => e._id === eid);
+                    return {
+                        expertId: eid,
+                        panelRole: 'Member',
+                        relevanceScore: expert ? expert.relevanceScore : null,
+                        reason: expert ? expert.reason : null
+                    };
+                });
+
                 // Save the panel to database and mark item as completed
                 if (itemId) {
                     try {
-                        await api.items.completeBoard(itemId, selectedExpertIds);
+                        await api.items.completeBoard(itemId, selectedExpertIds, 'Final Interview Panel', detailedExperts);
                         console.log('✅ Panel saved and item marked as completed');
                         showLocalToast('🎉 Board saved successfully! Item moved to completed boards.', 'success');
 
@@ -1364,8 +1536,24 @@
             }
 
             updatePanelButtonCount();
+            updatePanelButtonCount();
             updateViewPanelButton();
         });
+
+        function updateViewPanelButton() {
+            let count = 0;
+            if (currentLoadedPanel && currentLoadedPanel.panelists) {
+                count = currentLoadedPanel.panelists.length;
+            } else if (invitedPanelists) {
+                count = invitedPanelists.length;
+            }
+
+            const btn = document.getElementById('view-panel-btn');
+            if (btn) {
+                btn.querySelector('span').textContent = `View Panel (${count})`;
+                btn.disabled = (count === 0);
+            }
+        }
 
         // Modal events
         document.getElementById('close-modal-btn').addEventListener('click', closeAiModal);
@@ -1373,7 +1561,152 @@
             if (e.target === aiModal) closeAiModal();
         });
 
+        // Panel Modal Logic
         viewPanelBtn.addEventListener('click', openPanelModal);
+
+        function openPanelModal() {
+            if (!currentLoadedPanel && invitedPanelists.length === 0) {
+                showLocalToast('No panel created yet.', 'info');
+                return;
+            }
+
+            const modalList = document.getElementById('panel-experts-list');
+            modalList.innerHTML = '';
+
+            // Combine local invitedPanelists with currentLoadedPanel source of truth
+            // Prefer currentLoadedPanel if available as it has status
+            let displayList = [];
+
+            if (currentLoadedPanel && currentLoadedPanel.panelists) {
+                displayList = currentLoadedPanel.panelists.map(p => {
+                    const expert = allExperts.find(e => e._id === p.expertId) || { _id: p.expertId, name: 'Unknown' };
+                    return {
+                        ...expert,
+                        status: p.status || 'invited',
+                        reason: p.reason
+                    };
+                });
+            } else {
+                displayList = invitedPanelists;
+            }
+
+            if (displayList.length === 0) {
+                modalList.innerHTML = '<p style="text-align:center; color: #6b7280;">No experts in panel</p>';
+            } else {
+                displayList.forEach(expert => {
+                    const row = document.createElement('div');
+                    row.className = 'expert-row';
+                    row.style.display = 'grid';
+                    row.style.gridTemplateColumns = '2fr 1.5fr 1.5fr 0.5fr';
+                    row.style.gap = '1rem';
+                    row.style.padding = '1rem';
+                    row.style.borderBottom = '1px solid #e5e7eb';
+                    row.style.alignItems = 'center';
+
+                    // Status Badge
+                    let statusBadge = `<span style="background: #eff6ff; color: #1d4ed8; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem;">Invited</span>`;
+                    if (expert.status === 'accepted') statusBadge = `<span style="background: #ecfdf5; color: #059669; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem;">Accepted</span>`;
+                    if (expert.status === 'declined') statusBadge = `<span style="background: #fef2f2; color: #b91c1c; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem;">Declined</span>`;
+
+                    row.innerHTML = `
+                        <div style="font-weight: 500; color: #1f2937;">${expert.name || expert.expert_name || 'Unknown'}</div>
+                        <div style="font-size: 0.9rem; color: #6b7280;">${expert.role || 'Member'}</div>
+                        <div>${statusBadge}</div>
+                        <button onclick="removeExpert('${expert._id}')" style="color: #ef4444; background: none; border: none; cursor: pointer;" title="Remove">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    `;
+
+                    if (expert.status === 'declined' && expert.reason) {
+                        const reasonDiv = document.createElement('div');
+                        reasonDiv.style.gridColumn = '1 / -1';
+                        reasonDiv.style.fontSize = '0.85rem';
+                        reasonDiv.style.color = '#b91c1c';
+                        reasonDiv.style.background = '#fef2f2';
+                        reasonDiv.style.padding = '0.5rem';
+                        reasonDiv.style.borderRadius = '6px';
+                        reasonDiv.style.marginTop = '0.5rem';
+                        reasonDiv.innerHTML = `<strong>Declined:</strong> ${expert.reason}`;
+                        row.appendChild(reasonDiv);
+                    }
+
+                    modalList.appendChild(row);
+                });
+            }
+
+            // Add Footer with Actions
+            const modalContent = document.querySelector('#panel-modal .modal-content');
+            let footer = document.getElementById('panel-modal-footer');
+            if (!footer) {
+                footer = document.createElement('div');
+                footer.id = 'panel-modal-footer';
+                footer.style.marginTop = '1.5rem';
+                footer.style.display = 'flex';
+                footer.style.justifyContent = 'space-between';
+                footer.style.borderTop = '1px solid #e5e7eb';
+                footer.style.paddingTop = '1rem';
+                modalContent.appendChild(footer);
+            }
+
+            footer.innerHTML = `
+                <button onclick="resetPanel()" style="background: #ef4444; color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-trash-can"></i> Reset Panel
+                </button>
+                <button onclick="completeAndPublishBoard()" style="background: #059669; color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-check-double"></i> Complete & Publish Board
+                </button>
+            `;
+
+            panelModal.classList.add('visible');
+        }
+
+        async function completeAndPublishBoard() {
+            if (!currentLoadedPanel || !currentLoadedPanel.panelists) {
+                showLocalToast('No panel data to publish.', 'error');
+                return;
+            }
+
+            // Filter accepted experts
+            const acceptedExperts = currentLoadedPanel.panelists
+                .filter(p => p.status === 'accepted')
+                .map(p => p.expertId);
+
+            if (acceptedExperts.length === 0) {
+                if (!confirm('No experts have accepted yet. Are you sure you want to complete the board with 0 members?')) return;
+            } else {
+                if (!confirm(`Publish board with ${acceptedExperts.length} accepted experts? Pending/Declined experts will be removed.`)) return;
+            }
+
+            try {
+                // Construct detailed experts list from current panel or allExperts fallback
+                const detailedExperts = acceptedExperts.map(eid => {
+                    // Try to find full object in invitedPanelists or allExperts to get score/reason
+                    const p = currentLoadedPanel.panelists.find(x => x.expertId === eid);
+                    const expert = allExperts.find(e => e._id === eid);
+                    const aiExpert = aiGeneratedPanel ? aiGeneratedPanel.find(a => a.expert_id === eid) : null;
+
+                    return {
+                        expertId: eid,
+                        panelRole: p ? p.panel_role : 'Member',
+                        relevanceScore: (p && p.relevanceScore) || (expert && expert.relevanceScore) || (aiExpert && aiExpert.relevanceScore),
+                        reason: (p && p.reason) || (expert && expert.reason) || (aiExpert && aiExpert.reason)
+                    };
+                });
+
+                // Call completeBoard logic with accepted IDs and detailed info
+                await api.items.completeBoard(itemId, acceptedExperts, 'Final Interview Panel', detailedExperts);
+                showLocalToast('Board published successfully!', 'success');
+                closePanelModal();
+                setTimeout(() => window.location.reload(), 1000);
+            } catch (e) {
+                console.error(e);
+                showLocalToast('Failed to publish: ' + e.message, 'error');
+            }
+        }
+
+        // Make global
+        window.completeAndPublishBoard = completeAndPublishBoard;
+
         document.getElementById('close-panel-modal-btn').addEventListener('click', closePanelModal);
         panelModal.addEventListener('click', (e) => {
             if (e.target === panelModal) closePanelModal();
@@ -1613,8 +1946,8 @@
                 }));
                 renderManualLists();
 
-                // If viewing a completed panel, load the saved panel
-                if (isViewingCompletedPanel && itemId) {
+                // Always try to load panel if item exists (Draft or Accepted)
+                if (itemId) {
                     await loadAcceptedPanel();
                 }
             } catch (error) {
@@ -1625,35 +1958,143 @@
             }
         }
 
-        // Load and display an accepted panel for completed boards
+        // Load an accepted panel for completed boards
+        let currentLoadedPanel = null;
         async function loadAcceptedPanel() {
             try {
                 const panel = await api.items.getPanel(itemId);
 
-                if (panel && panel.expertIds) {
-                    // Find the expert details for each expert in the panel
-                    const panelExperts = panel.expertIds.map(expertId => {
-                        return allExperts.find(e => e._id === expertId) || { _id: expertId, name: 'Unknown Expert' };
-                    });
+                if (panel && (panel.expertIds || panel.panelists)) {
+                    currentLoadedPanel = panel;
 
-                    // Display the panel
-                    displayAcceptedPanel(panelExperts, panel);
+                    // Populate invitedPanelists from the loaded panel to sync UI
+                    invitedPanelists = [];
+                    if (panel.panelists) {
+                        invitedPanelists = panel.panelists.map(p => {
+                            // Convert ObjectId to string for consistent comparison
+                            const expertIdStr = typeof p.expertId === 'object' ? (p.expertId.$oid || String(p.expertId)) : String(p.expertId);
+                            const expert = allExperts.find(e => e._id === expertIdStr) || { _id: expertIdStr, name: 'Unknown' };
+                            return {
+                                ...expert,
+                                _id: expertIdStr, // Ensure _id is always a string
+                                status: p.status, // invited, accepted, declined
+                                reason: p.reason, // Reason from saved panel
+                                relevanceScore: p.relevanceScore, // Score from saved panel
+                                invitedAt: p.invitedAt
+                            };
+                        });
+                    }
+
+                    // Update the "View Panel" button immediately
+                    updateViewPanelButton();
+
+                    // If we have a panel (Draft or Accepted), we should hide the Generate button or show it's active
+                    // This prevents the "Reset" feeling on refresh
+                    if (invitedPanelists.length > 0) {
+                        const boardSelection = document.querySelector('.board-selection-wrapper') || document.querySelector('.board-selection');
+                        if (boardSelection) {
+                            // Option 2: Show "Panel Active" state
+                            const aiGenerateBtn = document.getElementById('ai-generate-btn');
+                            if (aiGenerateBtn) {
+                                if (panel.status === 'accepted') {
+                                    aiGenerateBtn.innerHTML = '<span><i class="fa-solid fa-check"></i> Panel Generated</span>';
+                                    aiGenerateBtn.style.background = '#10b981';
+                                } else {
+                                    aiGenerateBtn.innerHTML = '<span><i class="fa-solid fa-pencil"></i> Panel Drafted</span>';
+                                    aiGenerateBtn.style.background = '#f59e0b'; // Amber for draft
+                                }
+                                aiGenerateBtn.disabled = true;
+                            }
+                        }
+                    }
+
+                    // Update header if completed
+                    if (panel.status === 'accepted') {
+                        document.getElementById('itemTitle').innerHTML = `
+                            <i class="fa-solid fa-users-viewfinder" style="color: #10b981;"></i> 
+                            ${currentItemData?.itemNo ? `Item ${currentItemData.itemNo}` : 'Item'} - <span style="color: #10b981;">Completed Board</span>
+                        `;
+
+                        const boardSelection = document.querySelector('.board-selection');
+                        if (boardSelection) boardSelection.style.display = 'none';
+
+                        // SHOW THE FINALIZED LIST ON MAIN SCREEN (User Request)
+                        // We reuse renderInvitedPanelists logic but inject it into a visible container
+                        // Or we can just use displayAcceptedPanel logic akin to what was intended
+
+                        const recommendedSection = document.getElementById('recommended-experts-section');
+                        recommendedSection.classList.remove('hidden');
+                        recommendedSection.classList.add('visible');
+
+                        // Change header
+                        const headerH3 = recommendedSection.querySelector('h3');
+                        headerH3.innerHTML = `<i class="fa-solid fa-check-double" style="color: #10b981; margin-right: 0.5rem;"></i> Finalized Interview Board (${invitedPanelists.length})`;
+
+                        // Hide "Add Expert" and "Accept All" buttons in this mode
+                        const recHeaderBtns = recommendedSection.querySelector('.recommended-header div');
+                        if (recHeaderBtns) recHeaderBtns.style.display = 'none'; // hide buttons
+
+                        // Render the cards directly here using simplified logic
+                        const grid = document.getElementById('recommended-experts-grid');
+                        grid.innerHTML = '';
+
+                        invitedPanelists.forEach(expert => {
+                            const card = document.createElement('div');
+                            card.className = 'expert-card';
+                            card.style.border = '2px solid #10b981'; // Green border for finalized
+                            card.style.background = '#f0fdf4';
+
+                            const roleBadge = expert.role ? `<span style="background: #e0f2fe; color: #0284c7; padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-top: 0.25rem; display:inline-block;">${expert.role}</span>` : '';
+
+                            card.innerHTML = `
+                                <div class="expert-card-header">
+                                    <div class="expert-info">
+                                        <h4>${expert.name || expert.expert_name}</h4>
+                                        <div style="font-size:0.85rem; color:#6b7280;">${expert.email || ''}</div>
+                                        ${roleBadge}
+                                    </div>
+                                    <div style="text-align:right;">
+                                         <div style="font-size: 1.2rem; font-weight: 700; color: ${expert.relevanceScore >= 80 ? '#10b981' : expert.relevanceScore >= 60 ? '#f59e0b' : '#ef4444'};">${expert.relevanceScore || 0}%</div>
+                                        <span style="background:#166534; color:white; padding:0.2rem 0.6rem; border-radius:12px; font-size:0.75rem;">Selected</span>
+                                    </div>
+                                </div>
+                                <div class="expert-card-footer" style="margin-top:auto; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                     <button onclick="openAiModal('${expert._id || expert.expert_id}')" 
+                                        class="card-btn details-btn" 
+                                        style="justify-content:center; font-size: 0.8rem;">
+                                        <i class="fa-regular fa-file-alt"></i> Explanation
+                                     </button>
+                                     <button onclick="removePanelist('${expert._id || expert.expert_id}')" 
+                                        class="card-btn remove-btn" 
+                                        style="justify-content:center; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.8rem;">
+                                        <i class="fa-solid fa-trash-can"></i> Remove
+                                     </button>
+                                </div>
+                             `;
+                            grid.appendChild(card);
+                        });
+                    }
+
+                    // We DO NOT render the panel to the main screen anymore, per user request.
+                    // It will be viewed via "View Panel" modal.
                 }
             } catch (error) {
-                console.log('No accepted panel found for this item:', error.message);
+                console.log('No panel found for this item:', error.message);
             }
         }
 
         // Display the accepted panel in view-only mode
         function displayAcceptedPanel(panelExperts, panelData) {
             // Update title to show this is a completed board
+            const isCompleted = panelData.status === 'accepted';
+
             document.getElementById('itemTitle').innerHTML = `
-                <i class="fa-solid fa-check-circle" style="color: #10b981;"></i> 
-                ${currentItemData?.itemNo ? `Item ${currentItemData.itemNo}` : 'Item'} - <span style="color: #10b981;">Completed Board</span>
+                <i class="fa-solid fa-users-viewfinder" style="color: ${isCompleted ? '#10b981' : '#3b82f6'};"></i> 
+                ${currentItemData?.itemNo ? `Item ${currentItemData.itemNo}` : 'Item'} - <span style="color: ${isCompleted ? '#10b981' : '#3b82f6'};">${isCompleted ? 'Completed Board' : 'Panel In Progress'}</span>
             `;
 
             // Hide the board selection and AI generation sections
-            const boardSelection = document.querySelector('.board-selection-wrapper');
+            const boardSelection = document.querySelector('.board-selection'); // Fix selector if needed
             if (boardSelection) boardSelection.style.display = 'none';
 
             // Show the accepted panel in the recommended section
@@ -1662,20 +2103,52 @@
 
             const headerH3 = recommendedSection.querySelector('h3');
             headerH3.innerHTML = `
-                <i class="fa-solid fa-check-double" style="color: #10b981; margin-right: 0.5rem;"></i> 
-                Accepted Interview Board
-                <span style="background: #d1fae5; color: #059669; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; margin-left: 0.5rem;">
-                    ${panelExperts.length} Members
-                </span>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div>
+                        <i class="fa-solid fa-users" style="color: var(--primary-blue); margin-right: 0.5rem;"></i> 
+                        Current Interview Panel
+                        <span style="background: var(--bg-blue); color: var(--primary-blue); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; margin-left: 0.5rem;">
+                            ${panelExperts.length} Members
+                        </span>
+                    </div>
+                    <button onclick="resetPanel()" style="background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                        <i class="fa-solid fa-trash-can"></i> Reset Board
+                    </button>
+                </div>
             `;
+
+            // ... (rest of render logic is same, just injecting button above)
+
 
             // Render the panel members
             recommendedGrid.innerHTML = '';
             panelExperts.forEach((expert, index) => {
                 const card = document.createElement('div');
                 card.className = 'expert-card';
-                card.style.border = '2px solid #10b981';
-                card.style.background = 'linear-gradient(to bottom, #ecfdf5, white)';
+
+                // Style based on status
+                let statusColor = '#3b82f6'; // Invited (Blue)
+                let statusBg = '#eff6ff';
+                let statusIcon = 'fa-paper-plane';
+                let statusText = 'Invited';
+                let borderColor = '#bfdbfe';
+
+                if (expert.status === 'accepted') {
+                    statusColor = '#10b981'; // Accepted (Green)
+                    statusBg = '#ecfdf5';
+                    statusIcon = 'fa-check-circle';
+                    statusText = 'Accepted';
+                    borderColor = '#10b981';
+                } else if (expert.status === 'declined') {
+                    statusColor = '#ef4444'; // Declined (Red)
+                    statusBg = '#fef2f2';
+                    statusIcon = 'fa-times-circle';
+                    statusText = 'Declined';
+                    borderColor = '#fee2e2';
+                }
+
+                card.style.border = `2px solid ${borderColor}`;
+                card.style.background = `linear-gradient(to bottom, ${statusBg}, white)`;
 
                 const categoryColors = {
                     'chairperson': { bg: '#fef3c7', color: '#d97706', label: '👑 Chairperson' },
@@ -1694,15 +2167,20 @@
                             <p>${expert.role || 'Panel Member'}</p>
                         </div>
                         <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                            <i class="fa-solid fa-check-circle" style="color: #10b981; font-size: 1.5rem;"></i>
-                            <span style="font-size: 0.75rem; color: #10b981; margin-top: 0.25rem;">Accepted</span>
+                            <i class="fa-solid ${statusIcon}" style="color: ${statusColor}; font-size: 1.5rem;"></i>
+                            <span style="font-size: 0.75rem; color: ${statusColor}; margin-top: 0.25rem; font-weight: 600;">${statusText}</span>
                         </div>
                     </div>
-                    <div class="expert-card-footer" style="justify-content: center;">
-                        <span style="color: #6b7280; font-size: 0.85rem;">
+                    <div class="expert-card-footer" style="justify-content: center; flex-direction: column; gap: 0.5rem;">
+                        <span style="color: #6b7280; font-size: 0.85rem; display: flex; align-items: center; justify-content: center;">
                             <i class="fa-solid fa-envelope" style="margin-right: 0.3rem;"></i>
                             ${expert.email || 'No email'}
                         </span>
+                        ${expert.status === 'declined' && expert.reason ?
+                        `<div style="font-size: 0.8rem; color: #b91c1c; background: #fef2f2; padding: 0.5rem; border-radius: 6px; text-align: center;">
+                                <strong>Reason:</strong> ${expert.reason}
+                            </div>` : ''
+                    }
                     </div>
                 `;
                 recommendedGrid.appendChild(card);
@@ -1728,9 +2206,34 @@
             createPanelBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Board Completed</span>';
         }
 
+        async function resetPanel() {
+            if (!confirm('Are you sure you want to RESET this board? This will remove all invited/accepted experts and clear the current panel. This cannot be undone.')) return;
+
+            try {
+                const response = await fetch(`/api/items/${itemId}/panel`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showLocalToast('Board reset successfully.', 'success');
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    const err = await response.json();
+                    showLocalToast('Failed to reset: ' + err.error, 'error');
+                }
+            } catch (error) {
+                console.error('Reset error:', error);
+                showLocalToast('Error resetting board', 'error');
+            }
+        }
+
         // Initialize
         loadData();
         loadItemDetails();
+        // Expose critical functions to window for HTML onclick binding
+        window.openPanelModal = openPanelModal;
+        window.resetPanel = resetPanel;
+
     </script>
 
 </body>

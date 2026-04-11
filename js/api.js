@@ -99,10 +99,10 @@ const api = {
             });
         },
 
-        async completeBoard(itemId, expertIds, panelType = 'Final Interview Panel') {
+        async completeBoard(itemId, expertIds, panelType = 'Final Interview Panel', detailedExperts = []) {
             return api.request(`/items/${itemId}/complete-board`, {
                 method: 'POST',
-                body: JSON.stringify({ expertIds, panelType })
+                body: JSON.stringify({ expertIds, panelType, detailedExperts })
             });
         },
 

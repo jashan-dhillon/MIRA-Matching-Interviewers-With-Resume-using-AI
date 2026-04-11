@@ -137,8 +137,8 @@ def get_captcha():
 # Initialize each blueprint with required dependencies
 init_auth_routes(users_collection, validate_captcha)
 init_adv_routes(advertisements_collection, items_collection, serialize_doc)
-init_item_routes(items_collection, serialize_doc, advertisements_collection, panels_collection)
-init_expert_routes(experts_collection, serialize_doc)
+init_item_routes(items_collection, serialize_doc, advertisements_collection, panels_collection, experts_collection)
+init_expert_routes(experts_collection, serialize_doc, panels_collection, items_collection)
 init_panel_routes(panels_collection, serialize_doc)
 init_admin_routes(
     users_collection,
@@ -169,5 +169,5 @@ if __name__ == '__main__':
     print(f"   Local: http://localhost:5001")
     print(f"   Login: http://localhost:5001/fe/login.html")
     print("\n📌 First time? Call POST /api/seed to populate database\n")
-    app.run(debug=True, port=5001)
+    app.run(debug=True, use_reloader=False, port=5001)
 

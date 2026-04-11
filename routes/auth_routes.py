@@ -58,28 +58,46 @@ def login():
     if not validate_captcha(captcha_input):
         return jsonify({'error': 'Invalid CAPTCHA. Please try again.'}), 400
     
-    user = users_collection.find_one({'email': data['email']})
+    print(f"DEBUG: Login Attempt - Email/User: {data['email']}")
+    
+    user = users_collection.find_one({
+        '$or': [
+            {'email': data['email']},
+            {'username': data['email']}
+        ]
+    })
     
     if not user:
-        return jsonify({'error': 'Invalid email or password'}), 401
+        print(f"DEBUG: User not found for {data['email']}")
+        return jsonify({'error': 'Invalid email/username or password'}), 401
+    
+    print(f"DEBUG: User found: {user.get('email', 'No Email')} | Role: {user.get('role')}")
     
     if not bcrypt.checkpw(data['password'].encode('utf-8'), user['password']):
+        print(f"DEBUG: Password mismatch for {data['email']}")
         return jsonify({'error': 'Invalid email or password'}), 401
     
     # Set session
     session['user_id'] = str(user['_id'])
     session['email'] = user['email']
     session['role'] = user['role']
-    session['fullName'] = user['fullName']
+    session['fullName'] = user.get('fullName', user.get('username'))
+    
+    response_user = {
+        'id': str(user['_id']),
+        'fullName': user.get('fullName', user.get('username')),
+        'email': user['email'],
+        'role': user['role']
+    }
+    
+    # Include expertId if available (crucial for Expert Dashboard)
+    if 'expertId' in user:
+        response_user['expertId'] = user['expertId']
+        session['expertId'] = user['expertId']
     
     return jsonify({
         'message': 'Login successful',
-        'user': {
-            'id': str(user['_id']),
-            'fullName': user['fullName'],
-            'email': user['email'],
-            'role': user['role']
-        }
+        'user': response_user
     })
 
 
